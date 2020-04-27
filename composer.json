@@ -1,0 +1,14 @@
+{
+    "name": "engrev/p5_vergne_thomas",
+    "description": "Projet 5 du parcours Développeur d'application - PHP / Symfony d'OpenClassrooms : réalisation d'un blog en php.",
+    "require": {
+        "php": ">=7.2",
+        "twig/twig": "^3.0"
+    },
+    "authors": [
+        {
+            "name": "Engrev",
+            "email": "tvergne83@gmail.com"
+        }
+    ]
+}
