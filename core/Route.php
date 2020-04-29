@@ -95,7 +95,6 @@ class Route
     }
 
     /**
-     * Fluent.
      * Save constraints.
      * '(?:' is useful for parentheses in $regexp in this method. Like that, the parentheses are not captivating.
      *
