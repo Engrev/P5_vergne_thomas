@@ -1,0 +1,11 @@
+#navbarSupportedContent .nav-link { transition: color 250ms; }
+#navbarSupportedContent .nav-link:hover { color: white; }
+#navbarDropdown { cursor: pointer; }
+#navbarDropdown:after { transition: transform 250ms ease-in-out; }
+#navbarDropdown.open:after { transform: rotate(180deg); }
+@media screen AND (min-width: 992px) {
+    #navbarSupportedContent .dropdown .dropdown-menu { display: block; opacity: 0; transition: opacity 250ms; }
+    #navbarSupportedContent .dropdown .dropdown-menu.show { opacity: 1; }
+}
+.dropdown-menu .dropdown-item { transition: padding-left 250ms; }
+.dropdown-menu .dropdown-item:hover { padding-left: 34px; }

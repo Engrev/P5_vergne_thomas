@@ -1,0 +1,66 @@
+{% set _css_ = ['navbar.css'] %}
+{% set _js_ = ['navbar.js'] %}
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="{{ head.meta_description }}">
+        <meta name="author" content="Vergne Thomas">
+        <meta name="robots" content="{{ head.meta_robots ?: 'noindex, nofollow' }}">
+        <title>{{ head.title }} - Blog</title>
+        <link rel="stylesheet" type="text/css" href="{{ _path_ }}/vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ _path_ }}/vendor/components/font-awesome/css/all.min.css">
+        {% for css in _css_ %}
+            <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/{{ css }}">
+        {% endfor %}
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="{{ _path_ }}">Projet 5 : Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item{{ page == 'accueil' ? ' active' : '' }}">
+                        <a class="nav-link" href="{{ _path_ }}">Accueil{{ page == 'accueil' ? ' <span class="sr-only">(current)</span>' : '' }}</a>
+                    </li>
+                    <li class="nav-item{{ page == 'derniers-article' ? ' active' : '' }}">
+                        <a class="nav-link" href="{{ _path_ }}/derniers-articles">Derniers articles{{ page == 'derniers-article' ? ' <span class="sr-only">(current)</span>' : '' }}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catégories</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for category in categories %}
+                                <a class="dropdown-item" href="{{ _path_ ~ '/categories/' ~ category.link }}">{{ category.name }} <span class="text-muted font-italic">{{ number_posts[category.id_category] }}</span></a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    <li class="nav-item{{ page == 'contact'  ? ' active' : ''}}">
+                        <a class="nav-link" href="{{ _path_ }}/contact">Contact{{ page == 'contact' ? ' <span class="sr-only">(current)</span>' : '' }}</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav d-block d-sm-flex ml-auto">
+                    <li class="nav-item d-inline-block d-sm-block">
+                        <a class="btn btn-outline-light mr-sm-2" href="{{ _path_ }}/inscription">S'inscrire</a>
+                    </li>
+                    <li class="nav-item d-inline-block d-sm-block">
+                        <a class="btn btn-outline-success" href="{{ _path_ }}/connexion">Se connecter</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        {% block body %}{% endblock %}
+
+        <script src="{{ _path_ }}/vendor/components/jquery/jquery.min.js"></script>
+        <script src="{{ _path_ }}/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        {% for js in _js_ %}
+            <script src="{{ _path_ }}/public/js/{{ js }}"></script>
+        {% endfor %}
+    </body>
+</html>
