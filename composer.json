@@ -6,7 +6,8 @@
         "twig/twig": "^3.0",
         "twbs/bootstrap": "4.4.1",
         "components/jquery": "3.4.1",
-        "components/font-awesome": "5.12.1"
+        "components/font-awesome": "5.12.1",
+        "ext-pdo": "*"
     },
     "authors": [
         {
@@ -18,7 +19,9 @@
         "psr-4": {
             "App\\": "",
             "App\\Core\\": "core/",
-            "App\\Controllers\\": "controllers/"
+            "App\\Controllers\\": "controllers/",
+            "App\\Managers\\": "models/",
+            "App\\Interfaces\\": "core/interfaces/"
         }
     }
 }
