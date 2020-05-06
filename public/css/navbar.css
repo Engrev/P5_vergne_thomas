@@ -1,11 +1,12 @@
-#navbarSupportedContent .nav-link { transition: color 250ms; }
+.navbar .navbar-brand, .navbar .navbar-brand:hover { color: #CC0033; }
+#navbarSupportedContent .nav-link { transition: color var(--transition-duration); }
 #navbarSupportedContent .nav-link:hover { color: white; }
 #navbarDropdown { cursor: pointer; }
-#navbarDropdown:after { transition: transform 250ms ease-in-out; }
+#navbarDropdown:after { transition: transform var(--transition-duration) ease-in-out; }
 #navbarDropdown.open:after { transform: rotate(180deg); }
 @media screen AND (min-width: 992px) {
-    #navbarSupportedContent .dropdown .dropdown-menu { display: block; opacity: 0; transition: opacity 250ms; }
+    #navbarSupportedContent .dropdown .dropdown-menu { display: block; opacity: 0; transition: opacity var(--transition-duration); }
     #navbarSupportedContent .dropdown .dropdown-menu.show { opacity: 1; }
 }
-.dropdown-menu .dropdown-item { transition: padding-left 250ms; }
+.dropdown-menu .dropdown-item { transition: padding-left var(--transition-duration); }
 .dropdown-menu .dropdown-item:hover { padding-left: 34px; }
