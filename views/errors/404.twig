@@ -8,7 +8,7 @@
             body { color: #444444; background-color: #EEEEEE; font-family: 'Trebuchet MS', sans-serif; font-size: 80%; }
             h1 {}
             h2 { font-size: 1.2em; }
-            #page{ background-color: #FFFFFF; width: 60%; margin: 24px auto; padding: 12px; }
+            #page { background-color: #FFFFFF; width: 60%; margin: 24px auto; padding: 12px; }
             #header { padding: 6px; text-align: center; }
             .status3xx { background-color: #475076; color: #FFFFFF; }
             .status4xx { background-color: #C55042; color: #FFFFFF; }
@@ -25,7 +25,11 @@
             </div>
             <div id="content">
                 <h2>L'erreur suivante est survenue :</h2>
-                <p>La page demandée n'a pas été trouvée sur ce serveur.</p>
+                {% if not error_message.use %}
+                    <p>La page demandée n'a pas été trouvée sur ce serveur.</p>
+                {% else %}
+                    <p>{{ error_message.message }}.</p>
+                {% endif %}
                 <p>Vérifiez l'URL ou contactez le webmaster.</p>
             </div>
             <div id="footer">
