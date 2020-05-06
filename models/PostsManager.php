@@ -64,7 +64,16 @@ class PostsManager implements ManagersInterface
         return $results;
     }
 
-    public function list($id, $slug)
+    /**
+     * Get a post.
+     *
+     * @param string $id
+     * @param string $slug
+     *
+     * @return mixed
+     * @throws ManagerException
+     */
+    public function list(string $id, string $slug)
     {
         $post = $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.is_active, P.date_add, P.date_upd, 
                                                   DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
@@ -86,6 +95,14 @@ class PostsManager implements ManagersInterface
         throw new ManagerException('Cet article n\'existe pas');
     }
 
+    /**
+     * Get posts from a category with pagination.
+     *
+     * @param      $id_category
+     * @param null $pagination
+     *
+     * @return array
+     */
     public function listPostsCategory($id_category, $pagination = null)
     {
         $limit = 10;

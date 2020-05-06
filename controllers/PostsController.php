@@ -25,6 +25,12 @@ class PostsController extends Controllers
         $this->render('last-posts', ['head'=>['title'=>'Les derniers articles', 'meta_description'=>''], 'page'=>'derniers-articles', 'last_posts'=>$last_posts]);
     }
 
+    /**
+     * Displays a post.
+     *
+     * @param string $id
+     * @param string $slug
+     */
     public function one(string $id, string $slug)
     {
         try {

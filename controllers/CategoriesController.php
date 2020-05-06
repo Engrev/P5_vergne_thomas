@@ -18,6 +18,12 @@ class CategoriesController extends Controllers
         parent::__construct();
     }
 
+    /**
+     * Redirects to the correct url.
+     *
+     * @param string $id
+     * @param string $slug
+     */
     public function redirect(string $id, string $slug)
     {
         $path = _PATH_.'/categories/'.$id.'-'.$slug.'/1';
@@ -25,6 +31,13 @@ class CategoriesController extends Controllers
         exit();
     }
 
+    /**
+     * Displays a category with his posts.
+     *
+     * @param string $id
+     * @param string $slug
+     * @param int    $page
+     */
     public function one(string $id, string $slug, int $page)
     {
         try {
@@ -44,7 +57,6 @@ class CategoriesController extends Controllers
         } catch (ManagerException $ManagerException) {
             $ManagerException->display(404, true);
         }
-        $this->render('category', [
-            'head'=>['title'=>$category->name, 'meta_description'=>''], 'page'=>'categorie', 'category'=>$category, 'posts'=>$posts, 'pagination_create'=>isset($pagination_create) ? $pagination_create : '']);
+        $this->render('category', ['head'=>['title'=>$category->name, 'meta_description'=>''], 'page'=>'categorie', 'category'=>$category, 'posts'=>$posts, 'pagination_create'=>isset($pagination_create) ? $pagination_create : '']);
     }
 }
