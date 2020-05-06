@@ -2,15 +2,31 @@
 namespace App\Managers;
 use App\Interfaces\ManagersInterface;
 
+/**
+ * Class PostsManager
+ * @package App\Managers
+ */
 class PostsManager implements ManagersInterface
 {
     private $db;
 
+    /**
+     * PostsManager constructor.
+     *
+     * @param \PDO $database
+     */
     public function __construct(\PDO $database)
     {
         $this->db = $database;
     }
 
+    /**
+     * Get the latest posts.
+     *
+     * @param mixed $param
+     *
+     * @return array
+     */
     public function listLasts($param)
     {
         switch ($param) {
@@ -32,6 +48,11 @@ class PostsManager implements ManagersInterface
                                           WHERE {$where}")->fetchAll();
     }
 
+    /**
+     * Counts the number of posts by category.
+     *
+     * @return array
+     */
     public function countPostsCategory()
     {
         $results = $this->db->query('SELECT id_category, COUNT(id_post) FROM b_posts GROUP BY id_category')->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);

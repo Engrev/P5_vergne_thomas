@@ -5,12 +5,19 @@ use App\Core\Session;
 use App\Managers\CategoriesManager;
 use App\Managers\PostsManager;
 
+/**
+ * Class Controllers
+ * @package App\Controllers
+ */
 class Controllers
 {
     protected $twig;
     protected $categories_manager;
     protected $posts_manager;
 
+    /**
+     * Controllers constructor.
+     */
     public function __construct()
     {
         $this->twig = Session::getInstance()->read('Twig');
@@ -18,7 +25,13 @@ class Controllers
         $this->posts_manager = new PostsManager(Database::getInstance());
     }
 
-    protected function render($template, $data)
+    /**
+     * Override Twig render() method.
+     *
+     * @param string $template
+     * @param array  $data
+     */
+    protected function render(string $template, array $data)
     {
         $data['categories'] = $this->categories_manager->listAll();
         $data['number_posts'] = $this->posts_manager->countPostsCategory();
