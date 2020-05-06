@@ -93,14 +93,14 @@ class Router
     public function run()
     {
         if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
-            throw new RouterException('REQUEST_METHOD does not exist');
+            throw new RouterException('REQUEST_METHOD n\'existe pas');
         }
         foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             if ($route->match($this->url)) {
                 return $route->call();
             }
         }
-        throw new RouterException('No matching routes');
+        throw new RouterException('Aucune route correspondante');
     }
 
     /**
@@ -115,7 +115,7 @@ class Router
     public function url($name, $params = [])
     {
         if (!isset($this->namedRoutes[$name])) {
-            throw new RouterException('No route matches this name');
+            throw new RouterException('Aucune route ne correspond à ce nom');
         }
         return $this->namedRoutes[$name]->getUrl($params);
     }

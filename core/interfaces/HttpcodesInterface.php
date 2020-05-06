@@ -22,8 +22,9 @@ interface HttpcodesInterface
      * Displays error pages.
      *
      * @param int $http_code
+     * @param bool $use_message
      *
      * @return mixed
      */
-    public function display(int $http_code);
+    public function display(int $http_code, $use_message = false);
 }

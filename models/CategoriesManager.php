@@ -1,5 +1,6 @@
 <?php
 namespace App\Managers;
+use App\Exceptions\ManagerException;
 use App\Interfaces\ManagersInterface;
 
 /**
@@ -28,5 +29,25 @@ class CategoriesManager implements ManagersInterface
     public function listAll()
     {
         return $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories')->fetchAll();
+    }
+
+    /**
+     * Get a category.
+     *
+     * @param string $id
+     * @param string $slug
+     *
+     * @return mixed
+     * @throws ManagerException
+     */
+    public function list(string $id, string $slug)
+    {
+        $category = $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories WHERE id_category = ?', [$id])->fetch();
+        if ($category->link) {
+            if ($category->link === $id.'-'.$slug) {
+                return $category;
+            }
+        }
+        throw new ManagerException('Cette catégorie n\'existe pas');
     }
 }

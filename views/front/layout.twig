@@ -12,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/fonts.css">
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/main.css">
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/navbar.css">
+        <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/pagination.css">
         {% block stylesheets %}{% endblock %}
     </head>
 
@@ -30,11 +31,11 @@
                     <li class="nav-item{{ page == 'derniers-articles' ? ' active' : '' }}">
                         <a class="nav-link" href="{{ _path_ }}/derniers-articles">Derniers articles{{ page == 'derniers-articles' ? ' <span class="sr-only">(current)</span>' : '' }}</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catégories</a>
+                    <li class="nav-item dropdown{{ page == 'categorie' ? ' active' : '' }}">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catégories{{ page == 'categorie' ? ' <span class="sr-only">(current)</span>' : '' }}</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for category in categories %}
-                                <a class="dropdown-item" href="{{ _path_ ~ '/categories/' ~ category.link }}">{{ category.name }} <span class="text-muted font-italic">{{ number_posts[category.id_category] }}</span></a>
+                                <a class="dropdown-item" href="{{ _path_ ~ '/categories/' ~ category.link }}/1">{{ category.name }} <span class="text-muted font-italic">{{ number_posts[category.id_category] }}</span></a>
                             {% endfor %}
                         </div>
                     </li>
@@ -57,6 +58,7 @@
 
         <script src="{{ _path_ }}/vendor/components/jquery/jquery.min.js"></script>
         <script src="{{ _path_ }}/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ _path_ }}/public/js/main.js"></script>
         <script src="{{ _path_ }}/public/js/navbar.js"></script>
         {% block scripts %}{% endblock %}
     </body>

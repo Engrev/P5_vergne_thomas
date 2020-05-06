@@ -5,8 +5,8 @@
 #navbarDropdown:after { transition: transform var(--transition-duration) ease-in-out; }
 #navbarDropdown.open:after { transform: rotate(180deg); }
 @media screen AND (min-width: 992px) {
-    #navbarSupportedContent .dropdown .dropdown-menu { display: block; opacity: 0; transition: opacity var(--transition-duration); }
-    #navbarSupportedContent .dropdown .dropdown-menu.show { opacity: 1; }
+    #navbarSupportedContent .dropdown .dropdown-menu { display: block; opacity: 0; z-index: -1; transition: opacity var(--transition-duration); }
+    #navbarSupportedContent .dropdown .dropdown-menu.show { opacity: 1; z-index: 1; }
 }
 .dropdown-menu .dropdown-item { transition: padding-left var(--transition-duration); }
 .dropdown-menu .dropdown-item:hover { padding-left: 34px; }

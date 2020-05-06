@@ -33,8 +33,10 @@ class Controllers
      */
     protected function render(string $template, array $data)
     {
-        $data['categories'] = $this->categories_manager->listAll();
-        $data['number_posts'] = $this->posts_manager->countPostsCategory();
-        echo $this->twig->render('front/'.$template.'.twig', $data);
+        if (is_string($template) && is_array($data)) {
+            $data['categories'] = $this->categories_manager->listAll();
+            $data['number_posts'] = $this->posts_manager->countPostsCategory();
+            echo $this->twig->render('front/'.$template.'.twig', $data);
+        }
     }
 }

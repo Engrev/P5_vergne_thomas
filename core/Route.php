@@ -40,7 +40,7 @@ class Route
 
     /**
      * Checks if the URL typed matches one of the saved routes by transforming the URL.
-     * e.g : get('/posts/:id-:slug').
+     * e.g : get('/posts/:id-:slug.:ext').
      * If so, matches are saved.
      * And check if the match is not in the constraint parameters.
      *
