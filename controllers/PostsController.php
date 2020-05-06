@@ -1,5 +1,6 @@
 <?php
 namespace App\Controllers;
+use App\Exceptions\ManagerException;
 
 /**
  * Class PostsController
@@ -22,5 +23,15 @@ class PostsController extends Controllers
     {
         $lastPosts = $this->posts_manager->listLasts(10);
         $this->render('last-posts', ['head'=>['title'=>'Les derniers articles', 'meta_description'=>''], 'page'=>'derniers-articles', 'last_posts'=>$lastPosts]);
+    }
+
+    public function one(string $id, string $slug)
+    {
+        try {
+            $post = $this->posts_manager->list($id, $slug);
+        } catch (ManagerException $ManagerException) {
+            $ManagerException->display(404, true);
+        }
+        $this->render('post', ['head'=>['title'=>$post->title, 'meta_description'=>$post->description], 'post'=>$post]);
     }
 }

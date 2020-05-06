@@ -1,0 +1,61 @@
+{% extends 'front/layout.twig' %}
+
+{% block seo %}
+    <meta name="author" content="{{ post.firstname ~ ' ' ~ post.lastname }}">
+    <link rel="canonical" href="http://blog.engrev.fr/articles/{{ post.p_link }}">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ post.title }} - Blog Engrev">
+    <meta property="og:description" content="{{ post.description }}">
+    <meta property="og:url" content="http://blog.engrev.fr/articles/{{ post.p_link }}">
+    <meta property="og:site_name" content="Blog Engrev">
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/posts.css">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "http://blog.engrev.fr/articles/{{ post.p_link }}"
+                },
+                "headline": "{{ post.title }}",
+                "datePublished": "{{ post.date_add|date('Y-m-d\\TH:i:sP') }}",
+                {% if post.date_add != post.date_upd %}
+                    "dateModified": "{{ post.date_upd|date('Y-m-d\\TH:i:sP') }}",
+                {% endif %}
+                "author": {
+                    "@type": "Person",
+                    "name": "{{ post.firstname ~ ' ' ~ post.lastname }}"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Engrev",
+                    "url": "http://engrev.fr",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "http://engrev.fr/favicon.png"
+                    }
+                },
+                "description": "{{ post.description }}"
+            }
+        </script>
+        <article class="post post-view" id="post-{{ post.id_post }}">
+            <h1 class="post-title text-center">{{ post.title }}</h1>
+            <p class="text-muted text-center post-author">
+                <i class="fas fa-user-edit"></i> {{ post.firstname ~ ' ' ~ post.lastname }}
+                | <i class="fas fa-clock"></i> {{ post.date_add_fr }}
+                {% if post.date_add != post.date_upd %} | Mis à jour le {{ post.date_upd_fr }}{% endif %}
+                | <a href="{{ _path_ ~ '/categories/' ~ post.c_link }}"><i class="fas fa-tag"></i> {{ post.name }}</a>
+            </p>
+            <h2 class="post-description">{{ post.description }}</h2>
+            <p class="post-content">{{ post.content }}</p>
+        </article>
+    </div>
+{% endblock %}

@@ -48,6 +48,7 @@ class Database extends PDO
      */
     public function query(string $query, $params = false)
     {
+        parent::query("SET lc_time_names = 'fr_FR'");
         if ($params) {
             $req = parent::prepare($query);
             $req->execute($params);

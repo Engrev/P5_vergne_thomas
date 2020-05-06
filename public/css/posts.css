@@ -1,8 +1,9 @@
 .post { border-bottom: 1px solid #ddd; background-color: white; width: 100%; padding: 20px; transition: transform var(--transition-duration); }
-.post:hover { transform: scale(0.98); }
+.post:not(.post-view):hover { transform: scale(0.98); }
 .post p { margin-bottom: 10px; }
 .post .post-title { margin-bottom: 20px; font-weight: bold; }
-.post .post-description { color: var(--theme-color); margin-bottom: 10px; }
+.post .post-author a:not(:hover) { color: #6c757d; }
+.post .post-description { color: var(--theme-color); margin: 20px 0; font-size: 20px; }
 .post .post-content a { color: var(--theme-color); }
 .post .post-read-more::after { font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f054"; margin-left: -13px; opacity: 0; transition: var(--transition-duration); }
 .post .post-read-more:hover::after { margin-left: 6px; opacity: 1; }

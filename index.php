@@ -7,7 +7,6 @@ $Twig = new Twig\Environment($Loader, [
     'debug' => true,
     'cache' => false //__DIR__.'/cache'
 ]);
-$Twig->getExtension(Twig\Extension\CoreExtension::class)->setTimezone('Europe/Paris');
 $Twig->addGlobal('_path_', _PATH_);
 if ($Twig->isDebug() === true) {
     $Twig->addExtension(new Twig\Extension\DebugExtension());
@@ -20,7 +19,7 @@ $Router = new App\Core\Router($_GET['url']);
 $Router->get('/', 'Home#display');
 
 $Router->get('/derniers-articles', 'Posts#last');
-$Router->get('/articles/:id-:slug.:ext', 'Posts#list')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+')->with('ext', '[a-z]{2,4}');
+$Router->get('/articles/:id-:slug', 'Posts#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9\.]+');
 
 $Router->get('/categories', 'Categories#listAll');
 $Router->get('/categories/:id-:slug', 'Categories#list')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+');
