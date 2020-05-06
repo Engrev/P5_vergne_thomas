@@ -1,14 +1,26 @@
 <?php
 namespace App\Core;
 
+/**
+ * Class Session
+ * @package App\Core
+ */
 class Session
 {
     static $instance;
-    
+
+    /**
+     * Session constructor.
+     */
     public function __construct() {
         session_start();
     }
 
+    /**
+     * Get instance's Session.
+     *
+     * @return Session
+     */
     static function getInstance()
     {
         if (!self::$instance) {
@@ -17,31 +29,64 @@ class Session
         return self::$instance;
     }
 
-    public function write($key, $value)
+    /**
+     * Create a session.
+     *
+     * @param string $key
+     * @param        $value
+     */
+    public function write(string $key, $value)
     {
         $_SESSION['App'][$key] = $value;
     }
-    
-    public function read($key)
+
+    /**
+     * Read a session.
+     *
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function read(string $key)
     {
         return isset($_SESSION['App'][$key]) ? $_SESSION['App'][$key] : null;
     }
-    
-    public function delete($key)
+
+    /**
+     * Delete a session.
+     *
+     * @param string $key
+     */
+    public function delete(string $key)
     {
         unset($_SESSION['App'][$key]);
     }
 
-    public function saveLink($url)
+    /**
+     * Registers an url in session especially when accessing a page requiring a connection to the account to be able to redirect later.
+     *
+     * @param string $url
+     */
+    public function saveLink(string $url)
     {
         $_SESSION['App']['link'] = $url;
     }
 
+    /**
+     * Check if there is an url in session.
+     *
+     * @return bool
+     */
     public function hasLink()
     {
         return isset($_SESSION['App']['link']);
     }
 
+    /**
+     * Get an url in session and delete it.
+     *
+     * @return mixed
+     */
     public function getLink()
     {
         $link = $_SESSION['App']['link'];

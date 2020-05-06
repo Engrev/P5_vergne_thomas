@@ -1,6 +1,10 @@
 <?php
 namespace App\Interfaces;
 
+/**
+ * Interface HttpcodesInterface
+ * @package App\Interfaces
+ */
 interface HttpcodesInterface
 {
     const codes = [
@@ -14,5 +18,12 @@ interface HttpcodesInterface
         '503' => 'Service Unavailable'
     ];
 
-    public function display($http_code);
+    /**
+     * Displays error pages.
+     *
+     * @param int $http_code
+     *
+     * @return mixed
+     */
+    public function display(int $http_code);
 }
