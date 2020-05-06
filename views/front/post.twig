@@ -49,10 +49,10 @@
         <article class="post post-view" id="post-{{ post.id_post }}">
             <h1 class="post-title text-center">{{ post.title }}</h1>
             <p class="text-muted text-center post-author">
-                <i class="fas fa-user-edit"></i> {{ post.firstname ~ ' ' ~ post.lastname }}
-                | <i class="fas fa-clock"></i> {{ post.date_add_fr }}
-                {% if post.date_add != post.date_upd %} | Mis à jour le {{ post.date_upd_fr }}{% endif %}
-                | <a href="{{ _path_ ~ '/categories/' ~ post.c_link }}"><i class="fas fa-tag"></i> {{ post.name }}</a>
+                <span data-toggle="tooltip" data-placement="bottom" title="Publié par"><i class="fas fa-user-edit"></i> {{ post.firstname ~ ' ' ~ post.lastname }}</span>
+                | <span data-toggle="tooltip" data-placement="bottom" title="Publié le"><i class="fas fa-clock"></i> {{ post.date_add_fr }}</span>
+                {% if post.date_add != post.date_upd %} | <span data-toggle="tooltip" data-placement="bottom" title="Mis à jour le"><i class="fas fa-history"></i> {{ post.date_upd_fr }}</span>{% endif %}
+                | <span data-toggle="tooltip" data-placement="bottom" title="Catégorie"><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1"><i class="fas fa-tag"></i> {{ post.name }}</a></span>
             </p>
             <h2 class="post-description">{{ post.description }}</h2>
             <p class="post-content">{{ post.content }}</p>

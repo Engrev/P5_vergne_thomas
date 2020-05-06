@@ -6,7 +6,7 @@
 ::selection { color: white; background-color: var(--theme-color); }
 body { background-color: #f5f5f5; font-family: 'Roboto', sans-serif; }
 h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 { font-family: 'Oswald', sans-serif; }
-h1 { margin: 30px 0; color: var(--theme-color); }
+h1,.h1 { margin: 30px 0; color: var(--theme-color); }
 a { color: black; transition: color var(--transition-duration); }
 a:hover { color: var(--theme-color); text-decoration: none; }
 .btn-theme { color: white; background-color: var(--theme-color); border-color: var(--theme-color); }
