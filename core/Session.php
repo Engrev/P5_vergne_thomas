@@ -48,4 +48,9 @@ class Session
         unset($_SESSION['App']['link']);
         return $link;
     }
+
+    /*public function __destruct()
+    {
+        session_destroy();
+    }*/
 }

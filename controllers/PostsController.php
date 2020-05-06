@@ -2,23 +2,21 @@
 namespace App\Controllers;
 use App\Managers\PostsManager;
 use App\Core\Database;
-use App\Core\Session;
 
-class PostsController
+class PostsController extends Controllers
 {
     private $manager;
-    private $twig;
 
     public function __construct()
     {
+        parent::__construct();
         $this->manager = new PostsManager(Database::getInstance());
-        $this->twig = Session::getInstance()->read('Twig');
     }
 
     public function last()
     {
         $lastPosts = $this->manager->listLasts(10);
         $numberOfPosts = $this->manager->countPostsCategory();
-        echo $this->twig->render('front/last-posts.twig', ['head'=>['title'=>'Derniers articles', 'meta_description'=>''], 'page'=>'derniers-articles', 'lastPosts'=>$lastPosts, 'number_posts'=>$numberOfPosts]);
+        echo $this->twig->render('front/last-posts.twig', ['head'=>['title'=>'Les derniers articles', 'meta_description'=>''], 'page'=>'derniers-articles', 'last_posts'=>$lastPosts, 'number_posts'=>$numberOfPosts]);
     }
 }

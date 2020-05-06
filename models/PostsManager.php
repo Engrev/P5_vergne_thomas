@@ -15,17 +15,21 @@ class PostsManager implements ManagersInterface
     {
         switch ($param) {
             default:
-                $where = 'is_valid = 1 ORDER BY DESC';
+                $where = 'P.is_valid = 1 ORDER BY P.id_post DESC';
                 break;
             case is_int($param):
-                $where = 'is_valid = 0 ORDER BY DESC LIMIT'.$param;
+                $where = 'P.is_valid = 1 ORDER BY P.id_post DESC LIMIT '.$param;
                 break;
         }
-        return $this->db->query('SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, C.name, C.link AS c_link
+        return $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 
+                                                 C.name, C.link AS c_link, 
+                                                 U.lastname, U.firstname
                                           FROM b_posts AS P
                                           LEFT JOIN b_categories AS C
                                             ON C.id_category = P.id_category
-                                          WHERE :where', ['where'=>$where])->fetchAll();
+                                          LEFT JOIN b_users AS U
+                                            ON U.id_user = P.author
+                                          WHERE {$where}")->fetchAll();
     }
 
     public function countPostsCategory()

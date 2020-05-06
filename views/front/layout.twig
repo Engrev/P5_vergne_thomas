@@ -1,25 +1,23 @@
-{% set _css_ = ['navbar.css'] %}
-{% set _js_ = ['navbar.js'] %}
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="{{ head.meta_description }}">
-        <meta name="author" content="Vergne Thomas">
         <meta name="robots" content="{{ head.meta_robots ?: 'noindex, nofollow' }}">
-        <title>{{ head.title }} - Blog</title>
+        <title>{{ head.title }} - Blog Engrev</title>
+        {% block seo %}{% endblock %}
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/vendor/components/font-awesome/css/all.min.css">
-        {% for css in _css_ %}
-            <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/{{ css }}">
-        {% endfor %}
+        <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/fonts.css">
+        <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/main.css">
+        <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/navbar.css">
+        {% block stylesheets %}{% endblock %}
     </head>
 
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{ _path_ }}">Projet 5 : Blog</a>
+            <span class="navbar-brand">Projet 5 : Blog</span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -59,8 +57,7 @@
 
         <script src="{{ _path_ }}/vendor/components/jquery/jquery.min.js"></script>
         <script src="{{ _path_ }}/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        {% for js in _js_ %}
-            <script src="{{ _path_ }}/public/js/{{ js }}"></script>
-        {% endfor %}
+        <script src="{{ _path_ }}/public/js/navbar.js"></script>
+        {% block scripts %}{% endblock %}
     </body>
 </html>

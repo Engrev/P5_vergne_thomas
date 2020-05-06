@@ -1,0 +1,28 @@
+{% extends 'front/layout.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/sign.css">
+{% endblock %}
+
+{% block body %}
+    <div class="container container-sign">
+        <form action="{{ _path_ }}/admin/signin" method="POST" class="form-signin">
+            <h1 class="h3 mb-3 text-center">Connexion</h1>
+
+            <label for="email" class="sr-only">Adresse email</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email" required autofocus>
+
+            <label for="password" class="sr-only">Mot de passe</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" required>
+
+            <a href="{{ _path_ }}/mot-de-passe-oublie">Mot de passe oublié ?</a>
+
+            <div class="custom-control custom-checkbox my-3">
+                <input type="checkbox" class="custom-control-input" name="remember-me" id="remember-me">
+                <label class="custom-control-label" for="remember-me">Se souvenir de moi</label>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-theme btn-block">Se connecter</button>
+        </form>
+    </div>
+{% endblock %}
