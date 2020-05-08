@@ -1,5 +1,6 @@
 <?php
 namespace App\Core;
+use App\Traits\Libs;
 
 /**
  * Class ReCaptcha

@@ -43,7 +43,7 @@ class UsersController extends Controllers
         } else {
             $this->session->writeFlash('danger', "L'adresse mail n'est pas ou est mal renseignée.");
         }
-        $this->render('forgot-password', ['head'=>['title'=>'Mot de passe oublié', 'meta_description'=>'']]);
+        $this->render('front', 'forgot-password', ['head'=>['title'=>'Mot de passe oublié', 'meta_description'=>'']]);
     }
 
     /**
@@ -109,7 +109,7 @@ class UsersController extends Controllers
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
         $_post = $this->getPost($_POST);
-        $this->render('sign-up', ['head'=>['title'=>'Inscription', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
+        $this->render('front', 'sign-up', ['head'=>['title'=>'Inscription', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
     }
 
     /**
@@ -124,7 +124,7 @@ class UsersController extends Controllers
         if ($checkvalidAccount) {
             $this->users_manager->validAccount($id_user);
             $method = __FUNCTION__;
-            $this->session->read('Mail')->validAccount($_POST['email']);
+            $this->session->read('Mail')->validAccount($checkvalidAccount->email);
             $this->session->writeFlash('success', "Votre compte a bien été validé.");
             $this->redirect('admin/dashboard');
         } else {

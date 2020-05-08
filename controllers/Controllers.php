@@ -33,10 +33,11 @@ class Controllers
     /**
      * Override Twig render() method.
      *
+     * @param string $type
      * @param string $template
      * @param array  $data
      */
-    protected function render(string $template, array $data)
+    protected function render(string $type, string $template, array $data)
     {
         if (is_string($template) && is_array($data)) {
             if (!empty($this->session->hasFlashes())) {
@@ -44,7 +45,7 @@ class Controllers
             }
             $data['categories'] = $this->categories_manager->listAll();
             $data['number_posts'] = $this->posts_manager->countPostsCategory();
-            echo $this->twig->render('front/'.$template.'.twig', $data);
+            echo $this->twig->render($type.'/'.$template.'.twig', $data);
         }
     }
 }
