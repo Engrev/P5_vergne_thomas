@@ -4,6 +4,11 @@
     <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/sign.css">
 {% endblock %}
 
+{% block scripts %}
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdhVPQUAAAAAMWgEIy0r15HgmtjcBt1XPo2isEP"></script>
+    <script src="{{ _path_ }}/public/js/signin.js"></script>
+{% endblock %}
+
 {% block body %}
     <div class="container container-sign">
         <form action="" method="POST" class="form-signin needs-validation" novalidate>
@@ -23,6 +28,8 @@
                 <input type="checkbox" class="custom-control-input" name="remember-me" id="remember-me">
                 <label class="custom-control-label" for="remember-me">Se souvenir de moi</label>
             </div>
+
+            <input type="hidden" name="recaptcha_response" id="recaptcha_response">
 
             <button type="submit" class="btn btn-lg btn-theme btn-block">Se connecter</button>
         </form>
