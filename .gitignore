@@ -3,3 +3,6 @@
 
 #Files
 /composer.lock
+/dkim.private.key
+/dkim.public.key
+/core/mail.txt
