@@ -2,12 +2,13 @@
 namespace App\Exceptions;
 use App\Core\Session;
 use App\Interfaces\HttpcodesInterface;
+use PHPMailer\PHPMailer\Exception;
 
 /**
- * Class ManagerException
+ * Class MailException
  * @package App\Exceptions
  */
-class ManagerException extends \PDOException implements HttpcodesInterface
+class MailException extends Exception implements HttpcodesInterface
 {
     /**
      * Displays error pages.
@@ -17,11 +18,11 @@ class ManagerException extends \PDOException implements HttpcodesInterface
      *
      * @return mixed|void
      */
-    public function display(int $http_code, $use_message = false)
+    public function display($http_code, $use_message = false, $error_info = '')
     {
         if (is_int($http_code) && array_key_exists($http_code, self::codes)) {
             header('HTTP/1.1 '.$http_code.' '.self::codes[$http_code]);
-            echo Session::getInstance()->read('Twig')->render('errors/'.$http_code.'.twig', ['error_message'=>['use'=>$use_message, 'message'=>$this->getMessage()]]);
+            echo Session::getInstance()->read('Twig')->render('errors/'.$http_code.'.twig', ['error_message'=>['use'=>$use_message, 'message'=>$error_info]]);
             exit();
         }
     }

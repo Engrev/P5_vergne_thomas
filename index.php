@@ -14,6 +14,8 @@ if ($Twig->isDebug() === true) {
 $Session = App\Core\Session::getInstance();
 $Session->write('Twig', $Twig);
 $Router = new App\Core\Router($_GET['url']);
+$Mail = new App\core\Mail();
+$Session->write('Mail', $Mail);
 
 // FRONT
 $Router->get('/', 'Home#display');
@@ -24,15 +26,21 @@ $Router->get('/articles/:id-:slug', 'Posts#one')->with('id', '[0-9]+')->with('sl
 $Router->get('/categories/:id-:slug', 'Categories#redirect')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+');
 $Router->get('/categories/:id-:slug/:page', 'Categories#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+')->with('page', '[0-9]+');
 
-/*$Router->get('/contact', function () use ($Twig) { echo $Twig->render('front/contact.twig'); });*/
 $Router->get('/connexion', 'Home#displaySignin');
+$Router->post('/connexion', 'Users#signIn');
+
 $Router->get('/inscription', 'Home#displaySignup');
-$Router->get('/mot-de-passe-oublie', 'Users#forgotPassword');
+$Router->post('/inscription', 'Users#signUp');
+
+$Router->get('/mot-de-passe-oublie', 'Home#displayForgotPassword');
+$Router->post('/mot-de-passe-oublie', 'Users#forgotPassword');
+
+$Router->get('/reinitialisation-mot-de-passe/:id-:token', 'Home#displayResetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
+$Router->post('/reinitialisation-mot-de-passe/:id-:token', 'Users#resetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
+/*$Router->get('/contact', function () use ($Twig) { echo $Twig->render('front/contact.twig'); });*/
 
 // ADMIN
 $Router->get('/admin/dashboard', function () use ($Twig) { echo $Twig->render('admin/dashboard.twig'); });
-$Router->post('/admin/signin', 'Users#signIn');
-$Router->post('/admin/signup', 'Users#signUp');
 
 /*$Router->get('/admin/articles', 'PostsAdmin#listAll');
 $Router->get('/admin/article/ajouter', 'PostsAdmin#create');
