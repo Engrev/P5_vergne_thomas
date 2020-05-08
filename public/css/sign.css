@@ -1,13 +1,15 @@
 .container-sign { height: calc(100vh - 56px); display: -ms-flexbox; display: flex; flex-direction: column; justify-content: center; }
 form { width: 100%; max-width: 400px; padding: 15px; margin: auto; }
+form .invalid-feedback { margin: 10px 0; }
 .form-signin .checkbox { font-weight: 400; }
 .form-signin .form-control { position: relative; box-sizing: border-box; height: auto; padding: 10px; font-size: 16px; }
 .form-signin .form-control:focus { z-index: 2; }
 .form-signin input[type="email"] { margin-bottom: -1px; border-bottom-right-radius: 0; border-bottom-left-radius: 0; }
-.form-signin input[type="password"] { margin-bottom: 16px; border-top-left-radius: 0; border-top-right-radius: 0; }
+.form-signin input[type="password"] { border-top-left-radius: 0; border-top-right-radius: 0; }
 .form-signin .custom-control-input:focus ~ .custom-control-label::before { box-shadow: 0 0 0 .2rem var(--theme-color-alpha); }
 .form-signin .custom-control-input:checked ~ .custom-control-label::before { border-color: var(--theme-color); background-color: var(--theme-color); }
 .form-signin .custom-control-input:focus:not(:checked) ~ .custom-control-label::before { border-color: var(--theme-color); }
 .form-signin .custom-control-input ~ .custom-control-label { cursor: pointer; }
 .form-signin .custom-control-label { transition: color var(--transition-duration); }
 .form-signin .custom-control-label:hover { color: var(--theme-color); }
+.form-signup input { margin-bottom: 10px; }

@@ -1,5 +1,6 @@
 .post { border-bottom: 1px solid #ddd; background-color: white; width: 100%; padding: 20px; transition: transform var(--transition-duration); }
 .post:not(.post-view):hover { transform: scale(0.98); }
+.post-view { margin-top: 30px; }
 .post p { margin-bottom: 10px; }
 .post .post-title { margin-bottom: 20px; font-weight: bold; }
 .post .post-author a:not(:hover) { color: #6c757d; }

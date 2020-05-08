@@ -63,6 +63,39 @@ class Session
     }
 
     /**
+     * Check if there is a flash message in session.
+     *
+     * @return bool
+     */
+    public function hasFlashes()
+    {
+        return isset($_SESSION['Flash']);
+    }
+
+    /**
+     * Read a flash message.
+     *
+     * @return array
+     */
+    public function readFlash()
+    {
+        $flash = $_SESSION['Flash'];
+        unset($_SESSION['Flash']);
+        return $flash;
+    }
+
+    /**
+     * Create a flash message.
+     *
+     * @param string $alert
+     * @param string $message
+     */
+    public function writeFlash(string $alert, string $message)
+    {
+        $_SESSION['Flash'][$alert][] = $message;
+    }
+
+    /**
      * Registers an url in session especially when accessing a page requiring a connection to the account to be able to redirect later.
      *
      * @param string $url
@@ -87,7 +120,7 @@ class Session
      *
      * @return mixed
      */
-    public function getLink()
+    public function readLink()
     {
         $link = $_SESSION['App']['link'];
         unset($_SESSION['App']['link']);

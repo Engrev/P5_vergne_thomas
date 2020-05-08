@@ -19,7 +19,7 @@
                     {% if post.date_add != post.date_upd %} | <span data-toggle="tooltip" data-placement="top" title="Mis à jour le"><i class="fas fa-history"></i> {{ post.date_upd_fr }}</span>{% endif %}
                     | <span data-toggle="tooltip" data-placement="top" title="Catégorie"><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1"><i class="fas fa-tag"></i> {{ post.name }}</a></span>
                 </p>
-                <p class="post-preview">{{ post.content|slice(0,100) }}{% if post.content|length > 100 %}...{% endif %}</p>
+                <p class="post-preview">{{ post.description|slice(0,100) }}{% if post.description|length > 100 %}...{% endif %}</p>
                 <a href="{{ _path_ }}/articles/{{ post.p_link }}" class="btn btn-secondary post-read-more">Lire la suite</a>
             </article>
         {% endfor %}
