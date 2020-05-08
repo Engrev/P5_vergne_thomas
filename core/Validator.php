@@ -49,6 +49,32 @@ class Validator
     }
 
     /**
+     * Check if the password fields is a good match.
+     *
+     * @param        $field
+     * @param string $errorMsg
+     */
+    public function isPassword($field, $errorMsg = '')
+    {
+        if (!preg_match('#^[a-zA-Z0-9_-]+$#', $this->getField($field)) && !preg_match('#^[a-zA-Z0-9_-]+$#', $this->getField($field . '_confirm'))) {
+            $this->errors[$field] = $errorMsg;
+        }
+    }
+
+    /**
+     * Check if an email field has the correct form.
+     *
+     * @param $field
+     * @param string $errorMsg
+     */
+    public function isEmail($field, $errorMsg = '')
+    {
+        if (!filter_var($this->getField($field), FILTER_VALIDATE_EMAIL)) {
+            $this->errors[$field] = $errorMsg;
+        }
+    }
+
+    /**
      * Checks if there is no error in validator.
      *
      * @return bool

@@ -22,6 +22,72 @@ class UsersManager implements ManagersInterface
     }
 
     /**
+     * @param string $email
+     *
+     * @return bool
+     */
+    public function checkUserExist(string $email)
+    {
+        $user = $this->db->query('SELECT id_user FROM b_users WHERE email = ?', [$email])->fetch();
+        if (!$user) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks the validity of an account validation token.
+     *
+     * @param int    $id_user
+     * @param string $token
+     *
+     * @return mixed
+     */
+    public function checkValidAccount(int $id_user, string $token)
+    {
+        return $this->db->query('SELECT email
+                                          FROM b_users
+                                          WHERE id_user = ? AND create_token IS NOT NULL AND create_token = ? AND date_create_token > DATE_SUB(NOW(), INTERVAL 30 MINUTE)', [$id_user, $token])->fetch();
+    }
+
+    /**
+     * Validates an account.
+     *
+     * @param int $id_user
+     */
+    public function validAccount(int $id_user)
+    {
+        $this->db->query('UPDATE b_users SET id_group = 3, create_token = NULL, date_create_token = NULL, date_upd = NOW() WHERE id_user = ?', [$id_user]);
+    }
+
+    /**
+     * Creates a token for creating an account.
+     *
+     * @param string $lastname
+     * @param string $firstname
+     * @param string $email
+     * @param string $password
+     */
+    public function create(string $lastname, string $firstname, string $email, string $password)
+    {
+        $create_token = $this->token(60);
+        $password = $this->hashPassword($password);
+        $params = [
+            'id_group' => 4,
+            'lastname' => $lastname,
+            'firstname' => $firstname,
+            'email' => $email,
+            'password' => $password,
+            'create_token' => $create_token
+        ];
+        $this->db->query('INSERT INTO b_users (id_group, lastname, firstname, email, password, create_token, date_create_token)
+                                   VALUES (:id_group, :lastname, :firstname, :email, :password, :create_token, NOW())', $params);
+        $id_user = $this->db->lastInsertId();
+        $method = __FUNCTION__.'User';
+        Session::getInstance()->read('Mail')->$method($email, $id_user, $create_token);
+    }
+
+    /**
      * Creates a token for resetting a password.
      *
      * @param string $email
@@ -51,7 +117,9 @@ class UsersManager implements ManagersInterface
      */
     public function checkResetPassword(int $id_user, string $token)
     {
-        return $this->db->query('SELECT email FROM b_users WHERE id_user = ? AND reset_token IS NOT NULL AND reset_token = ? AND date_reset_token > DATE_SUB(NOW(), INTERVAL 30 MINUTE)', [$id_user, $token])->fetch();
+        return $this->db->query('SELECT email
+                                          FROM b_users
+                                          WHERE id_user = ? AND reset_token IS NOT NULL AND reset_token = ? AND date_reset_token > DATE_SUB(NOW(), INTERVAL 30 MINUTE)', [$id_user, $token])->fetch();
     }
 
     /**
