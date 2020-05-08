@@ -23,7 +23,8 @@
             "App\\Exceptions\\": "core/exceptions/",
             "App\\Controllers\\": "controllers/",
             "App\\Managers\\": "models/",
-            "App\\Interfaces\\": "core/interfaces/"
+            "App\\Interfaces\\": "core/interfaces/",
+            "App\\Traits\\": "core/traits/"
         }
     }
 }

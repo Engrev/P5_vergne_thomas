@@ -97,14 +97,66 @@ class Mail extends PHPMailer
                  <br>
                  <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
         $alt_body = "Bonjour,
-                     Votre mot de passe a bien été modifié.
+                     Votre mot de passe a été modifié avec succès.
                      Ceci est un mail automatique, merci de ne pas y répondre.";
         try {
             $this->setFrom("no-reply@$domain", 'Blog Engrev');
             //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
             $this->addAddress($to);
             $this->isHTML(true);
-            $this->Subject = 'Mot de passe réinitialisé';
+            $this->Subject = 'Réinitialisation de votre mot de passe';
+            $this->Body    = $body;
+            $this->AltBody = $alt_body;
+            $this->DKIM_identity = $this->From;
+            $this->send();
+        } catch (MailException $MailException) {
+            $MailException->display(500, true, $this->ErrorInfo);
+        }
+    }
+
+    public function createUser(string $to, int $id_user, string $token)
+    {
+        $domain = _DOMAIN_NAME_;
+        $body = "<p>Bonjour,</p>
+                 <p>Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : <a href='http://{$domain}/validation-compte/{$id_user}-{$token}'>http://{$domain}/validation-compte/{$id_user}-{$token}</a>.</p>
+                 <p>Pour votre sécurité, ce lien restera actif pour une durée de <b>30 min</b>. Après ce délai, il vous faudra renouveler votre demande.</p>
+                 <br>
+                 <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
+        $alt_body = "Bonjour,
+                     Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : http://{$domain}/validation-compte/{$id_user}-{$token}.
+                     Pour votre sécurité, ce lien restera actif pour une durée de 30 min. Après ce délai, il vous faudra renouveler votre demande.
+                     Ceci est un mail automatique, merci de ne pas y répondre.";
+        try {
+            $this->setFrom("no-reply@$domain", 'Blog Engrev');
+            //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
+            $this->addAddress($to);
+            $this->isHTML(true);
+            $this->Subject = 'Validation de votre compte';
+            $this->Body    = $body;
+            $this->AltBody = $alt_body;
+            $this->DKIM_identity = $this->From;
+            $this->send();
+        } catch (MailException $MailException) {
+            $MailException->display(500, true, $this->ErrorInfo);
+        }
+    }
+
+    public function validAccount(string $to)
+    {
+        $domain = _DOMAIN_NAME_;
+        $body = "<p>Bonjour,</p>
+                 <p>Votre compte a été validé avec succès.</p>
+                 <br>
+                 <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
+        $alt_body = "Bonjour,
+                     Votre compte a été validé avec succès.
+                     Ceci est un mail automatique, merci de ne pas y répondre.";
+        try {
+            $this->setFrom("no-reply@$domain", 'Blog Engrev');
+            //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
+            $this->addAddress($to);
+            $this->isHTML(true);
+            $this->Subject = 'Validation de votre compte';
             $this->Body    = $body;
             $this->AltBody = $alt_body;
             $this->DKIM_identity = $this->From;

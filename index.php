@@ -37,7 +37,10 @@ $Router->post('/mot-de-passe-oublie', 'Users#forgotPassword');
 
 $Router->get('/reinitialisation-mot-de-passe/:id-:token', 'Home#displayResetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
 $Router->post('/reinitialisation-mot-de-passe/:id-:token', 'Users#resetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
-/*$Router->get('/contact', function () use ($Twig) { echo $Twig->render('front/contact.twig'); });*/
+
+$Router->post('/validation-compte/:id-:token', 'Users#validAccount')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
+
+/*$Router->get('/contact', 'Home#displayContact');*/
 
 // ADMIN
 $Router->get('/admin/dashboard', function () use ($Twig) { echo $Twig->render('admin/dashboard.twig'); });

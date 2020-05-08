@@ -4,29 +4,36 @@
     <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/sign.css">
 {% endblock %}
 
+{% block scripts %}
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdhVPQUAAAAAMWgEIy0r15HgmtjcBt1XPo2isEP"></script>
+    <script src="{{ _path_ }}/public/js/recaptcha.js"></script>
+{% endblock %}
+
 {% block body %}
     <div class="container container-sign">
         <form action="" method="POST" class="form-signup needs-validation" novalidate>
             <h1 class="h3 mb-3 text-center">Inscription</h1>
 
             <label for="lastname" class="sr-only">Nom</label>
-            <input type="text" class="form-control" name="email" id="lastname" placeholder="Nom" aria-describedby="lastnameHelpBlock" required autofocus pattern="^[a-zA-Z\s-]+$">
+            <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nom" {% if _post.lastname %}value="{{ _post.lastname }}"{% endif %} aria-describedby="lastnameHelpBlock" required autofocus pattern="^[a-zA-Z\s-]+$">
             <div class="invalid-feedback">Votre nom peut être uniquement avec des lettres, minuscules ou majuscules et/ou un espace et/ou un tiret.</div>
 
             <label for="firstname" class="sr-only">Prénom</label>
-            <input type="text" class="form-control" name="email" id="firstname" placeholder="Prénom" aria-describedby="firstnameHelpBlock" required pattern="^[a-zA-Z\s-]+$">
+            <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Prénom" {% if _post.firstname %}value="{{ _post.firstname }}"{% endif %} aria-describedby="firstnameHelpBlock" required pattern="^[a-zA-Z\s-]+$">
             <div class="invalid-feedback">Votre prénom peut être uniquement avec des lettres, minuscules ou majuscules et/ou un espace et/ou un tiret.</div>
 
             <label for="email" class="sr-only">Adresse email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email" aria-describedby="emailHelpBlock" required pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email" {% if _post.email %}value="{{ _post.email }}"{% endif %} aria-describedby="emailHelpBlock" required pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
             <div class="invalid-feedback">Votre adresse email doit être de la forme : email@exemple.com.</div>
 
             <label for="password" class="sr-only">Mot de passe</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" aria-describedby="passwordHelpBlock" required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" {% if _post.password %}value="{{ _post.password }}"{% endif %} aria-describedby="passwordHelpBlock" required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
             <div class="invalid-feedback">Votre mot de passe et votre confirmation de mot de passe doivent contenir entre 8 et 20 caractères. Ils peuvent être avec des lettres, minuscules ou majuscules et/ou des chiffres et/ou un tiret bas et/ou un tiret.</div>
 
             <label for="password_confirm" class="sr-only">Confirmer le mot de passe</label>
-            <input type="password" class="form-control" name="password_confirm" id="password_confirm" placeholder="Confirmer le mot de passe" aria-describedby="passwordHelpBlock" required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
+            <input type="password" class="form-control" name="password_confirm" id="password_confirm" placeholder="Confirmer le mot de passe" {% if _post.password_confirm %}value="{{ _post.password_confirm }}"{% endif %} aria-describedby="passwordHelpBlock" required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
+
+            <input type="hidden" name="recaptcha_response" id="recaptcha_response">
 
             <button type="submit" class="btn btn-lg btn-theme btn-block mt-3">S'inscrire</button>
         </form>
