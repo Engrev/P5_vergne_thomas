@@ -57,6 +57,6 @@ class CategoriesController extends Controllers
         } catch (ManagerException $ManagerException) {
             $ManagerException->display(404, true);
         }
-        $this->render('front', 'category', ['head'=>['title'=>$category->name, 'meta_description'=>''], 'page'=>'categorie', 'category'=>$category, 'posts'=>$posts, 'pagination_create'=>isset($pagination_create) ? $pagination_create : '']);
+        $this->render('category', ['head'=>['title'=>$category->name, 'meta_description'=>''], 'page'=>'categorie', 'category'=>$category, 'posts'=>$posts, 'pagination_create'=>isset($pagination_create) ? $pagination_create : '']);
     }
 }

@@ -22,6 +22,6 @@ class AdminController extends Controllers
      */
     public function displayDashboard()
     {
-        $this->render(self::TEMPLATE_TYPE, 'dashboard', ['head'=>['title'=>'Dashboard', 'meta_description'=>'']]);
+        $this->render('dashboard', ['head'=>['title'=>'Dashboard', 'meta_description'=>'']], self::TEMPLATE_TYPE);
     }
 }

@@ -33,11 +33,11 @@ class Controllers
     /**
      * Override Twig render() method.
      *
-     * @param string $type
      * @param string $template
      * @param array  $data
+     * @param string $type
      */
-    protected function render(string $type, string $template, array $data)
+    protected function render(string $template, array $data, $type = 'front')
     {
         if (is_string($template) && is_array($data)) {
             if (!empty($this->session->hasFlashes())) {

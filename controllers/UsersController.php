@@ -43,7 +43,7 @@ class UsersController extends Controllers
         } else {
             $this->session->writeFlash('danger', "L'adresse mail n'est pas ou est mal renseignée.");
         }
-        $this->render('front', 'forgot-password', ['head'=>['title'=>'Mot de passe oublié', 'meta_description'=>'']]);
+        $this->render('forgot-password', ['head'=>['title'=>'Mot de passe oublié', 'meta_description'=>'']]);
     }
 
     /**
@@ -109,7 +109,7 @@ class UsersController extends Controllers
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
         $_post = $this->getPost($_POST);
-        $this->render('front', 'sign-up', ['head'=>['title'=>'Inscription', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
+        $this->render('sign-up', ['head'=>['title'=>'Inscription', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
     }
 
     /**
