@@ -4,25 +4,32 @@
     <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/sign.css">
 {% endblock %}
 
+{% block scripts %}
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdhVPQUAAAAAMWgEIy0r15HgmtjcBt1XPo2isEP"></script>
+    <script src="{{ _path_ }}/public/js/signin.js"></script>
+{% endblock %}
+
 {% block body %}
     <div class="container container-sign">
         <form action="" method="POST" class="form-signin needs-validation" novalidate>
             <h1 class="h3 mb-3 text-center">Connexion</h1>
 
             <label for="email" class="sr-only">Adresse email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email" required autofocus pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email" {% if _post.email %}value="{{ _post.email }}"{% endif %} required autofocus pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
             <div class="invalid-feedback">Votre adresse email doit être de la forme : email@exemple.com.</div>
 
             <label for="password" class="sr-only">Mot de passe</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" {% if _post.password %}value="{{ _post.password }}"{% endif %} required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
             <div class="invalid-feedback">Votre mot de passe doit contenir entre 8 et 20 caractères. Ils peuvent être avec des lettres, minuscules ou majuscules et/ou des chiffres et/ou un tiret bas et/ou un tiret.</div>
 
             <a href="{{ _path_ }}/mot-de-passe-oublie" class="d-block mt-3">Mot de passe oublié ?</a>
 
             <div class="custom-control custom-checkbox my-3">
-                <input type="checkbox" class="custom-control-input" name="remember-me" id="remember-me">
-                <label class="custom-control-label" for="remember-me">Se souvenir de moi</label>
+                <input type="checkbox" class="custom-control-input" name="remember_me" id="remember_me">
+                <label class="custom-control-label" for="remember_me">Se souvenir de moi</label>
             </div>
+
+            <input type="hidden" name="recaptcha_response" id="recaptcha_response">
 
             <button type="submit" class="btn btn-lg btn-theme btn-block">Se connecter</button>
         </form>

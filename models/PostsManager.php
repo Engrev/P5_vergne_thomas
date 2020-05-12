@@ -35,7 +35,7 @@ class PostsManager implements ManagersInterface
                 $where = 'P.is_valid = 1 ORDER BY P.id_post DESC';
                 break;
             case is_int($param):
-                $where = 'P.is_valid = 1 ORDER BY P.id_post DESC LIMIT '.$param;
+                $where = 'P.is_valid = 1 ORDER BY P.id_post DESC LIMIT '.intval($param);
                 break;
         }
         return $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 

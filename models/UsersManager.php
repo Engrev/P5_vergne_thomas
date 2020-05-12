@@ -2,6 +2,7 @@
 namespace App\Managers;
 use App\Interfaces\ManagersInterface;
 use App\Core\Session;
+use App\Core\User;
 
 /**
  * Class UsersManager
@@ -9,6 +10,7 @@ use App\Core\Session;
  */
 class UsersManager implements ManagersInterface
 {
+    const TOKEN_SHA1 = '7s0upk';
     private $db;
 
     /**
@@ -22,6 +24,8 @@ class UsersManager implements ManagersInterface
     }
 
     /**
+     * Check if an account already exists with this email address.
+     *
      * @param string $email
      *
      * @return bool
@@ -85,6 +89,65 @@ class UsersManager implements ManagersInterface
         $id_user = $this->db->lastInsertId();
         $method = __FUNCTION__.'User';
         Session::getInstance()->read('Mail')->$method($email, $id_user, $create_token);
+    }
+
+    /**
+     * Connect an user.
+     *
+     * @param string $email
+     * @param string $password
+     * @param bool   $remember_me
+     *
+     * @return User|string
+     */
+    public function connect($email, $password, $remember_me)
+    {
+        $user = $this->db->query('SELECT id_user, id_group, lastname, firstname, email, password, create_token FROM b_users WHERE email = ?', [$email])->fetch();
+        if (!empty($user)) {
+            if (is_null($user->create_token)) {
+                if (password_verify($password, $user->password)) {
+                    if ($remember_me) {
+                        $this->remember($user->id_user);
+                    }
+                    return new User($user);
+                }
+                return 'Mot de passe incorrect.';
+            }
+            return 'Ce compte n\'a pas été validé.';
+        }
+        return 'Aucun compte n\'est lié à cette adresse email.';
+    }
+
+    /**
+     * Connect an user with the cookie.
+     *
+     * @return User|bool
+     */
+    public function connectFromCookie()
+    {
+        if (isset($_COOKIE['remember'])) {
+            $remember_token = $_COOKIE['remember'];
+            $parts = explode('#', $remember_token);
+            $id_user = $parts[0];
+            $user = $this->db->query('SELECT id_user, id_group, lastname, firstname, email, password, remember_token FROM b_users WHERE id_user = ?', [$id_user])->fetch();
+            if ($user) {
+                $expected = $id_user . '#' . $user->remember_token . sha1($id_user . self::TOKEN_SHA1);
+                if ($expected == $remember_token) {
+                    $this->remember($id_user);
+                    return new User($user);
+                }
+            }
+            setcookie('remember', null, -1);
+        }
+        return false;
+    }
+
+    /**
+     * Disconnect an user.
+     */
+    public function disconnect()
+    {
+        setcookie('remember', null, -1);
     }
 
     /**
@@ -162,5 +225,17 @@ class UsersManager implements ManagersInterface
     {
         $alphabet = '0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN';
         return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
+    }
+
+    /**
+     * Creates a cookie for the connection.
+     *
+     * @param int $id_user
+     */
+    public function remember(int $id_user)
+    {
+        $remember_token = $this->token(250);
+        $this->db->query('UPDATE b_users SET remember_token = ? WHERE id_user = ?', [$remember_token, $id_user]);
+        setcookie('remember', $id_user . '#' . $remember_token . sha1($id_user . self::TOKEN_SHA1), time() + (30*24*3600), _COOKIE_PATH_, _COOKIE_DOMAIN_, false, true);
     }
 }

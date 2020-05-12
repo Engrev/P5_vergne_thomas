@@ -22,6 +22,7 @@
             "App\\Core\\": "core/",
             "App\\Exceptions\\": "core/exceptions/",
             "App\\Controllers\\": "controllers/",
+            "App\\Admin\\Controllers\\": "controllers/admin/",
             "App\\Managers\\": "models/",
             "App\\Interfaces\\": "core/interfaces/",
             "App\\Traits\\": "core/traits/"

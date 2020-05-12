@@ -4,7 +4,7 @@
     --transition-duration: 250ms;
 }
 ::selection { color: white; background-color: var(--theme-color); }
-body { background-color: #f5f5f5; font-family: 'Roboto', sans-serif; }
+body { background-color: #f5f5f5; font-family: 'Roboto', sans-serif; position: relative; }
 h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 { font-family: 'Oswald', sans-serif; }
 h1,.h1 { margin: 30px 0; color: var(--theme-color); }
 a { color: black; transition: color var(--transition-duration); }

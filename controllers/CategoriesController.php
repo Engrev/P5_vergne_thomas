@@ -24,7 +24,7 @@ class CategoriesController extends Controllers
      * @param string $id
      * @param string $slug
      */
-    public function redirect(string $id, string $slug)
+    public function redirectWithPage(string $id, string $slug)
     {
         $path = _PATH_.'/categories/'.$id.'-'.$slug.'/1';
         header('Location:'.$path);
@@ -57,6 +57,6 @@ class CategoriesController extends Controllers
         } catch (ManagerException $ManagerException) {
             $ManagerException->display(404, true);
         }
-        $this->render('front', 'category', ['head'=>['title'=>$category->name, 'meta_description'=>''], 'page'=>'categorie', 'category'=>$category, 'posts'=>$posts, 'pagination_create'=>isset($pagination_create) ? $pagination_create : '']);
+        $this->render('category', ['head'=>['title'=>$category->name, 'meta_description'=>''], 'page'=>'categorie', 'category'=>$category, 'posts'=>$posts, 'pagination_create'=>isset($pagination_create) ? $pagination_create : '']);
     }
 }

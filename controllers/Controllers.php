@@ -31,17 +31,37 @@ class Controllers
     }
 
     /**
+     * Checks the url.
+     *
+     * @param string $page
+     */
+    protected function redirect(string $page)
+    {
+        $path = _PATH_.'/'.$page;
+        header('Location:'.$path);
+        exit();
+    }
+
+    /**
      * Override Twig render() method.
      *
-     * @param string $type
      * @param string $template
      * @param array  $data
+     * @param string $type
      */
-    protected function render(string $type, string $template, array $data)
+    protected function render(string $template, array $data, $type = 'front')
     {
         if (is_string($template) && is_array($data)) {
             if (!empty($this->session->hasFlashes())) {
                 $data['flashes'] = $this->session->readFlash();
+            }
+            $UserFromCookie = $this->users_manager->connectFromCookie();
+            if ($UserFromCookie !== false) {
+                $this->session->write('User', $UserFromCookie);
+            }
+            $User = $this->session->read('User');
+            if (!is_null($User)) {
+                $data['user'] = '';
             }
             $data['categories'] = $this->categories_manager->listAll();
             $data['number_posts'] = $this->posts_manager->countPostsCategory();

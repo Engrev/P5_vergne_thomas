@@ -23,11 +23,12 @@ $Router->get('/', 'Home#display');
 $Router->get('/derniers-articles', 'Posts#last');
 $Router->get('/articles/:id-:slug', 'Posts#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9\.]+');
 
-$Router->get('/categories/:id-:slug', 'Categories#redirect')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+');
+$Router->get('/categories/:id-:slug', 'Categories#redirectWithPage')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+');
 $Router->get('/categories/:id-:slug/:page', 'Categories#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+')->with('page', '[0-9]+');
 
 $Router->get('/connexion', 'Home#displaySignin');
 $Router->post('/connexion', 'Users#signIn');
+$Router->get('/deconnexion', 'Users#signOut');
 
 $Router->get('/inscription', 'Home#displaySignup');
 $Router->post('/inscription', 'Users#signUp');
@@ -43,22 +44,22 @@ $Router->get('/validation-compte/:id-:token', 'Users#validAccount')->with('id', 
 /*$Router->get('/contact', 'Home#displayContact');*/
 
 // ADMIN
-$Router->get('/admin/dashboard', 'Admin#displayDashboard');
+$Router->get('/dashboard', 'Admin#displayDashboard');
 
-/*$Router->get('/admin/articles', 'PostsAdmin#listAll');
-$Router->get('/admin/article/ajouter', 'PostsAdmin#create');
-$Router->get('/admin/article/modifier/:id', 'PostsAdmin#update')->with('id', '[0-9]+');
-$Router->get('/admin/article/supprimer/:id', 'PostsAdmin#delete')->with('id', '[0-9]+');
+/*$Router->get('/articles', 'PostsAdmin#listAll');
+$Router->get('/article/ajouter', 'PostsAdmin#create');
+$Router->get('/article/modifier/:id', 'PostsAdmin#update')->with('id', '[0-9]+');
+$Router->get('/article/supprimer/:id', 'PostsAdmin#delete')->with('id', '[0-9]+');
 
-$Router->get('/admin/categories', 'CategoriesAdmin#listAll');
-$Router->get('/admin/categories/ajouter', 'CategoriesAdmin#create');
-$Router->get('/admin/categories/modifier/:id', 'CategoriesAdmin#update')->with('id', '[0-9]+');
-$Router->get('/admin/categories/supprimer/:id', 'CategoriesAdmin#delete')->with('id', '[0-9]+');
+$Router->get('/categories', 'CategoriesAdmin#listAll');
+$Router->get('/categories/ajouter', 'CategoriesAdmin#create');
+$Router->get('/categories/modifier/:id', 'CategoriesAdmin#update')->with('id', '[0-9]+');
+$Router->get('/categories/supprimer/:id', 'CategoriesAdmin#delete')->with('id', '[0-9]+');
 
-$Router->get('/admin/users', 'UsersAdmin#listAll');
-$Router->get('/admin/users/ajouter', 'UsersAdmin#create');
-$Router->get('/admin/users/modifier/:id', 'UsersAdmin#update')->with('id', '[0-9]+');
-$Router->get('/admin/users/desactiver/:id', 'UsersAdmin#deactivate')->with('id', '[0-9]+');*/
+$Router->get('/users', 'UsersAdmin#listAll');
+$Router->get('/users/ajouter', 'UsersAdmin#create');
+$Router->get('/users/modifier/:id', 'UsersAdmin#update')->with('id', '[0-9]+');
+$Router->get('/users/desactiver/:id', 'UsersAdmin#deactivate')->with('id', '[0-9]+');*/
 
 try {
     // EXEC

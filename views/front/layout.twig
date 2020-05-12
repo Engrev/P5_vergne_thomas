@@ -44,12 +44,26 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav d-block d-sm-flex ml-auto">
-                    <li class="nav-item d-inline-block d-sm-block">
-                        <a class="btn btn-outline-light mr-sm-2" href="{{ _path_ }}/inscription">S'inscrire</a>
-                    </li>
-                    <li class="nav-item d-inline-block d-sm-block">
-                        <a class="btn btn-outline-success" href="{{ _path_ }}/connexion">Se connecter</a>
-                    </li>
+                    {% if user is defined %}
+                        <button type="button" class="navbar-avatar" title="Mon compte">
+                            <img src="" alt="">
+                        </button>
+                        <div id="sidebar" class="bg-dark">
+                            <img src="" alt="" class="sidebar-avatar">
+                            <div class="list-group list-group-flush">
+                                <a href="{{ _path_ }}/dashboard" class="list-group-item list-group-item-action{{ page == 'dashboard' ? ' active' : '' }}"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
+                                <a href="{{ _path_ }}/profil" class="list-group-item list-group-item-action{{ page == 'profil' ? ' active' : '' }}"><i class="fas fa-user"></i> Mon profil</a>
+                                <a href="{{ _path_ }}/deconnexion" class="list-group-item list-group-item-action"><i class="fas fa-sign-out-alt text-danger"></i> Me déconnecter</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <li class="nav-item d-inline-block d-sm-block">
+                            <a class="btn btn-outline-light mr-sm-2" href="{{ _path_ }}/inscription">S'inscrire</a>
+                        </li>
+                        <li class="nav-item d-inline-block d-sm-block">
+                            <a class="btn btn-outline-success" href="{{ _path_ }}/connexion">Se connecter</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
