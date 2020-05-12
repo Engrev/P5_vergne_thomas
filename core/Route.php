@@ -86,7 +86,11 @@ class Route
     {
         if (is_string($this->callable)) {
             $params = explode('#', $this->callable);
-            $controller = 'App\\Controllers\\'.$params[0].'Controller';
+            if (preg_match('#^Admin#', $params[0])) {
+                $controller = 'App\\Admin\\Controllers\\'.$params[0].'Controller';
+            } else {
+                $controller = 'App\\Controllers\\'.$params[0].'Controller';
+            }
             $Controller = new $controller();
             return call_user_func_array([$Controller, $params[1]], $this->matches);
         } else {

@@ -24,7 +24,7 @@ class CategoriesController extends Controllers
      * @param string $id
      * @param string $slug
      */
-    public function redirect(string $id, string $slug)
+    public function redirectWithPage(string $id, string $slug)
     {
         $path = _PATH_.'/categories/'.$id.'-'.$slug.'/1';
         header('Location:'.$path);

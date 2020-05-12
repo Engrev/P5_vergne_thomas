@@ -18,18 +18,6 @@ class UsersController extends Controllers
     }
 
     /**
-     * Checks the url.
-     *
-     * @param string $page
-     */
-    public function redirect(string $page)
-    {
-        $path = _PATH_.'/'.$page;
-        header('Location:'.$path);
-        exit();
-    }
-
-    /**
      * Send an email to reset the password.
      */
     public function forgotPassword()
@@ -79,6 +67,9 @@ class UsersController extends Controllers
         $this->redirect("reinitialisation-mot-de-passe/{$id_user}-{$token}");
     }
 
+    /**
+     * Creates an account.
+     */
     public function signUp()
     {
         if (isset($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password'], $_POST['password_confirm'], $_POST['recaptcha_response'])) {
@@ -126,14 +117,20 @@ class UsersController extends Controllers
             $method = __FUNCTION__;
             $this->session->read('Mail')->validAccount($checkvalidAccount->email);
             $this->session->writeFlash('success', "Votre compte a bien été validé.");
-            $this->redirect('admin/dashboard');
-        } else {
-            $this->session->writeFlash('danger', "Ce token est invalide.");
+            $this->redirect('dashboard');
         }
+        $this->session->writeFlash('danger', "Ce token est invalide.");
         $this->redirect("validation-compte/{$id_user}-{$token}");
     }
 
-    private function getPost($_post)
+    /**
+     * Get the values of $_POST for forms.
+     *
+     * @param array $_post
+     *
+     * @return mixed
+     */
+    private function getPost(array $_post)
     {
         foreach ($_post as $key => $value) {
             if ($key !== 'recaptcha_response') {
@@ -141,5 +138,46 @@ class UsersController extends Controllers
             }
         }
         return $posts;
+    }
+
+    /**
+     * Connect an user.
+     */
+    public function signIn()
+    {
+        if (isset($_POST['email'], $_POST['password'])) {
+            if (!empty($_POST['email']) && !empty($_POST['password'])) {
+                $remember_me = isset($_POST['remember_me']) ? true : false;
+                $User = $this->users_manager->connect($_POST['email'], $_POST['password'], $remember_me);
+                if (!is_string($User)) {
+                    $this->session->write('User', $User);
+                    $welcome = date('H') >= '18' ? 'Bonsoir ' : 'Bonjour ';
+                    $this->session->writeFlash('success', $welcome.$User->getFirstname().' !');
+                    if ($this->session->hasLink()) {
+                        $saved_link = $this->session->readLink();
+                        $this->redirect($saved_link);
+                    } else {
+                        $this->redirect('dashboard');
+                    }
+                } else {
+                    $this->session->writeFlash('danger', $User);
+                }
+            } else {
+                $this->session->writeFlash('danger', "Certains champs sont vides.");
+            }
+            $_post = $this->getPost($_POST);
+            $this->render('sign-in', ['head'=>['title'=>'Connexion', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
+        }
+    }
+
+    /**
+     * Disconnect an user.
+     */
+    public function signOut()
+    {
+        $this->session->delete('User');
+        $this->users_manager->disconnect();
+        $this->session->writeFlash('success', "Vous êtes maintenant déconnecté.");
+        $this->redirect('');
     }
 }
