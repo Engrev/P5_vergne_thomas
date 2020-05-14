@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="{{ head.meta_description }}">
         <meta name="robots" content="{{ head.meta_robots ?: 'noindex, nofollow' }}">
-        <title>{{ head.title }} - Blog Engrev</title>
+        <title>{{ head.title }} &bull; Blog Engrev</title>
         {% block seo %}{% endblock %}
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="{{ _path_ }}/vendor/components/font-awesome/css/all.min.css">
@@ -46,10 +46,10 @@
                 <ul class="navbar-nav d-block d-sm-flex ml-auto">
                     {% if user is defined %}
                         <button type="button" class="navbar-avatar" title="Mon compte">
-                            <img src="" alt="">
+                            <img src="{{ user.avatar }}" alt="Photo de profil">
                         </button>
                         <div id="sidebar" class="bg-dark">
-                            <img src="" alt="" class="sidebar-avatar">
+                            <div class="sidebar-avatar" style="background: url('{{ user.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
                             <div class="list-group list-group-flush">
                                 <a href="{{ _path_ }}/dashboard" class="list-group-item list-group-item-action{{ page == 'dashboard' ? ' active' : '' }}"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
                                 <a href="{{ _path_ }}/profil" class="list-group-item list-group-item-action{{ page == 'profil' ? ' active' : '' }}"><i class="fas fa-user"></i> Mon profil</a>
@@ -68,11 +68,11 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container alert-messages">
             <div class="row d-block">
                 <div class="col-xs">
                     {% for key, messages in flashes %}
-                        <div class="alert alert-{{ key }} alert-dismissible fade show mt-5 mb-0" role="alert">
+                        <div class="alert alert-{{ key }} alert-dismissible fade show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

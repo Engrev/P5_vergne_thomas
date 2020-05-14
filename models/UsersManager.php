@@ -61,7 +61,7 @@ class UsersManager implements ManagersInterface
      */
     public function validAccount(int $id_user)
     {
-        $this->db->query('UPDATE b_users SET id_group = 3, create_token = NULL, date_create_token = NULL, date_upd = NOW() WHERE id_user = ?', [$id_user]);
+        $this->db->query('UPDATE b_users SET id_group = 3, is_active = 1, create_token = NULL, date_create_token = NULL, date_upd = NOW() WHERE id_user = ?', [$id_user]);
     }
 
     /**
@@ -87,8 +87,102 @@ class UsersManager implements ManagersInterface
         $this->db->query('INSERT INTO b_users (id_group, lastname, firstname, email, password, create_token, date_create_token)
                                    VALUES (:id_group, :lastname, :firstname, :email, :password, :create_token, NOW())', $params);
         $id_user = $this->db->lastInsertId();
-        $method = __FUNCTION__.'User';
+        $this->db->query('INSERT INTO b_users_infos (id_user) VALUES (:id_user)', ['id_user'=>$id_user]);
+        $method = __FUNCTION__.'Account';
         Session::getInstance()->read('Mail')->$method($email, $id_user, $create_token);
+    }
+
+    /**
+     * Updates an account and an user instance.
+     *
+     * @param string    $lastname user mode
+     * @param string    $firstname user mode
+     * @param string    $email user mode
+     * @param string    $password user mode
+     * @param User|null $user user mode
+     * @param int|null  $id_user admin mode
+     * @param int|null  $id_group admin mode
+     * @param int|null  $is_active admin mode
+     */
+    public function update(string $lastname, string $firstname, string $email, string $password = null, User $user = null, int $id_user = null, int $id_group = null, int $is_active = null)
+    {
+        if (!is_null($password)) { // user mode
+            $password = $this->hashPassword($password);
+            $this->db->query('UPDATE b_users SET password = ? WHERE id_user = ?', [$password, $user->getIdUser()]);
+        }
+        if (!is_null($id_user)) {
+            $id_user = intval($id_user); // admin mode
+        } else {
+            $id_user = $user->getIdUser(); // user mode
+        }
+        if (!is_null($id_group)) {
+            $id_group = intval($id_group); // admin mode
+        } else {
+            $id_group = $user->getIdGroup(); // user mode
+        }
+        if (!is_null($is_active)) {
+            $is_active = intval($is_active); // admin mode
+        } else {
+            $is_active = 1; // user mode
+        }
+        $params = [
+            'id_group' => $id_group,
+            'lastname' => strval($lastname),
+            'firstname' => strval($firstname),
+            'email' => strval($email),
+            'is_active' => $is_active,
+            'id_user' => $id_user
+        ];
+        $this->db->query('UPDATE b_users SET id_group = :id_group, lastname = :lastname, firstname = :firstname, email = :email, is_active = :is_active, date_upd = NOW() WHERE id_user = :id_user', $params);
+        if (!is_null($user)) { // user mode
+            $user->setLastname($lastname);
+            $user->setFirstname($firstname);
+            $user->setEmail($email);
+        }
+    }
+
+    /**
+     * Updates user information.
+     *
+     * @param array $infos
+     * @param int   $id_user
+     */
+    public function updateInfos(array $infos, int $id_user)
+    {
+        $params = [
+            'website' => strval($infos['website']),
+            'linkedin' => strval($infos['linkedin']),
+            'github' => strval($infos['github']),
+            'id_user' => $id_user
+        ];
+        $this->db->query('UPDATE b_users_infos SET website = :website, linkedin = :linkedin, github = :github WHERE id_user = :id_user', $params);
+        $this->db->query('UPDATE b_users SET date_upd = NOW() WHERE id_user = ?', [$id_user]);
+    }
+
+    /**
+     * Delete an account.
+     *
+     * @param int    $id_user
+     * @param string $email
+     */
+    public function delete(int $id_user, string $email)
+    {
+        $this->disconnect();
+        $this->db->query('DELETE FROM b_users WHERE id_user = ?', [$id_user]);
+        $method = __FUNCTION__.'Account';
+        Session::getInstance()->read('Mail')->$method($email);
+    }
+
+    /**
+     * Get user information (the social part).
+     *
+     * @param int $id_user
+     *
+     * @return mixed
+     */
+    public function getInfos(int $id_user)
+    {
+        return $this->db->query('SELECT website, linkedin, github FROM b_users_infos WHERE id_user = ?', [$id_user])->fetch();
     }
 
     /**
@@ -100,18 +194,26 @@ class UsersManager implements ManagersInterface
      *
      * @return User|string
      */
-    public function connect($email, $password, $remember_me)
+    public function connect(string $email, string $password, bool $remember_me)
     {
-        $user = $this->db->query('SELECT id_user, id_group, lastname, firstname, email, password, create_token FROM b_users WHERE email = ?', [$email])->fetch();
+        $user = $this->db->query('SELECT U.id_user, U.id_group, U.lastname, U.firstname, U.email, U.password, U.is_active, U.create_token, F.path AS avatar
+                                           FROM b_users AS U
+                                           LEFT JOIN b_files AS F
+                                             ON F.id_file = U.avatar
+                                           WHERE U.email = ?', [$email])->fetch();
         if (!empty($user)) {
+            $is_active = $user->is_active == 1 ? true : false;
             if (is_null($user->create_token)) {
-                if (password_verify($password, $user->password)) {
-                    if ($remember_me) {
-                        $this->remember($user->id_user);
+                if ($is_active) {
+                    if (password_verify($password, $user->password)) {
+                        if ($remember_me) {
+                            $this->remember($user->id_user);
+                        }
+                        return new User($user);
                     }
-                    return new User($user);
+                    return 'Mot de passe incorrect.';
                 }
-                return 'Mot de passe incorrect.';
+                return 'Ce compte est désactivé.';
             }
             return 'Ce compte n\'a pas été validé.';
         }
@@ -129,12 +231,19 @@ class UsersManager implements ManagersInterface
             $remember_token = $_COOKIE['remember'];
             $parts = explode('#', $remember_token);
             $id_user = $parts[0];
-            $user = $this->db->query('SELECT id_user, id_group, lastname, firstname, email, password, remember_token FROM b_users WHERE id_user = ?', [$id_user])->fetch();
+            $user = $this->db->query('SELECT U.id_user, U.id_group, U.lastname, U.firstname, U.email, U.password, U.is_active, U.remember_token, F.path AS avatar
+                                               FROM b_users AS U
+                                               LEFT JOIN b_files AS F
+                                                 ON F.id_file = U.avatar
+                                               WHERE U.id_user = ?', [$id_user])->fetch();
             if ($user) {
-                $expected = $id_user . '#' . $user->remember_token . sha1($id_user . self::TOKEN_SHA1);
-                if ($expected == $remember_token) {
-                    $this->remember($id_user);
-                    return new User($user);
+                $is_active = $user->is_active == 1 ? true : false;
+                if ($is_active) {
+                    $expected = $id_user . '#' . $user->remember_token . sha1($id_user . self::TOKEN_SHA1);
+                    if ($expected == $remember_token) {
+                        $this->remember($id_user);
+                        return new User($user);
+                    }
                 }
             }
             setcookie('remember', null, -1);
@@ -147,6 +256,7 @@ class UsersManager implements ManagersInterface
      */
     public function disconnect()
     {
+        Session::getInstance()->delete('User');
         setcookie('remember', null, -1);
     }
 
@@ -237,5 +347,18 @@ class UsersManager implements ManagersInterface
         $remember_token = $this->token(250);
         $this->db->query('UPDATE b_users SET remember_token = ? WHERE id_user = ?', [$remember_token, $id_user]);
         setcookie('remember', $id_user . '#' . $remember_token . sha1($id_user . self::TOKEN_SHA1), time() + (30*24*3600), _COOKIE_PATH_, _COOKIE_DOMAIN_, false, true);
+    }
+
+    //Saves uploaded files to the database.
+    public function saveUpload(array $file, int $id)
+    {
+        $params = [
+            'path' => $file['path'],
+            'name' => $file['name'],
+            'uploaded_name' => $file['uploaded_name']
+        ];
+        $this->db->query('INSERT INTO b_files (path, name, uploaded_name, date_add, date_upd) VALUES (:path, :name, :uploaded_name, NOW(), NOW())', $params);
+        $id_file = $this->db->lastInsertId();
+        $this->db->query('UPDATE b_users SET avatar = ? WHERE id_user = ?', [$id_file, $id]);
     }
 }

@@ -24,7 +24,9 @@ class AdminController extends Controllers
     public function restrict($id_group = null)
     {
         $User = $this->session->read('User');
-        $restriction = !is_null($id_group) ? $id_group < $User->getIdGroup() : false;
+        if (!is_null($User)) {
+            $restriction = !is_null($id_group) ? $id_group < $User->getIdGroup() : false;
+        }
         if (is_null($User) || !$User->getOnline() || $restriction) {
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
                 exit();
@@ -43,5 +45,16 @@ class AdminController extends Controllers
     {
         $this->restrict(3);
         $this->render('dashboard', ['head'=>['title'=>'Tableau de bord', 'meta_description'=>''], 'page'=>'dashboard'], 'admin');
+    }
+
+    /**
+     * Displays admin profil page.
+     */
+    public function displayProfil()
+    {
+        $this->restrict(3);
+        $User = $this->session->read('User');
+        $infos = $this->users_manager->getInfos($User->getIdUser());
+        $this->render('profil', ['head'=>['title'=>'Profil', 'meta_description'=>''], 'page'=>'profil', 'user_social'=>$infos], 'admin');
     }
 }

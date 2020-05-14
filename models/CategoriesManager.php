@@ -50,4 +50,10 @@ class CategoriesManager implements ManagersInterface
         }
         throw new ManagerException('Cette catégorie n\'existe pas');
     }
+
+    //Saves uploaded files to the database.
+    public function saveUpload(array $file, int $id)
+    {
+        // TODO: Implement saveUpload() method.
+    }
 }

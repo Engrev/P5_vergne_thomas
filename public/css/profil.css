@@ -1,0 +1,12 @@
+h2 { margin: 60px 0 30px 0; line-height: 0.5; }
+h2::after { content: ''; border-bottom: 1px solid #ced4da; display: inline-block; width: 100%; }
+label { font-size: 1.5rem; }
+.profil-avatar { width: 200px; height: 200px; border-radius: 50%; border: 2px solid #343a40; display: block; margin: 60px auto 0 auto; }
+#avatar { border: 1px solid #ced4da; border-radius: .3rem; background-color: white; color: #495057; transition: border-color 150ms ease-in-out, box-shadow 150ms ease-in-out; }
+#avatar:focus { border-color: #80bdff; box-shadow: 0 0 0 .2rem rgba(0,123,255,.25); }
+form:last-child { margin-bottom: 60px; }
+@media screen AND (max-width: 576px) {
+    .btn { display: block; width: 100%; margin-top: 20px; }
+    .jconfirm.jconfirm-light .jconfirm-box .jconfirm-buttons { float: none; }
+    .profil-avatar { margin: 0 auto 30px auto; }
+}
