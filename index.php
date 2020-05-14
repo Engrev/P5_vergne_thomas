@@ -41,10 +41,13 @@ $Router->post('/reinitialisation-mot-de-passe/:id-:token', 'Users#resetPassword'
 
 $Router->get('/validation-compte/:id-:token', 'Users#validAccount')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
 
-/*$Router->get('/contact', 'Home#displayContact');*/
+//$Router->get('/contact', 'Home#displayContact');
 
 // ADMIN
 $Router->get('/dashboard', 'Admin#displayDashboard');
+
+$Router->get('/profil', 'Admin#displayProfil');
+$Router->post('/profil', 'Users#profil');
 
 /*$Router->get('/articles', 'PostsAdmin#listAll');
 $Router->get('/article/ajouter', 'PostsAdmin#create');

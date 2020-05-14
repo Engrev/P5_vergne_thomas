@@ -78,7 +78,7 @@ class UsersController extends Controllers
                 $Validator = new Validator($_POST);
                 $Validator->isPassword('password', "Les mot de passe ne sont pas valides.");
                 $Validator->isEmail('email', "L'adresse email doit être une adresse email valide.");
-                $Validator->isConfirmed('password', "Vous devez entrer des mot de passe valides.");
+                $Validator->isConfirmed('password', "Les mot de passe sont différents.");
                 if ($Validator->isValid()) {
                     $checkUserExist = $this->users_manager->checkUserExist($_POST['email']);
                     if ($checkUserExist) {
@@ -175,9 +175,89 @@ class UsersController extends Controllers
      */
     public function signOut()
     {
-        $this->session->delete('User');
         $this->users_manager->disconnect();
         $this->session->writeFlash('success', "Vous êtes maintenant déconnecté.");
         $this->redirect('');
+    }
+
+    /**
+     * Manages the forms on the profile page.
+     */
+    public function profil()
+    {
+        $User = $this->session->read('User');
+
+        if (isset($_POST['compte'])) {
+            if (isset($_POST['compte']['lastname'], $_POST['compte']['firstname'], $_POST['compte']['email'], $_POST['compte']['password'], $_POST['compte']['password_confirm'])) {
+                if (!empty($_POST['compte']['lastname']) && !empty($_POST['compte']['firstname']) && !empty($_POST['compte']['email'])) {
+                    $Validator = new Validator($_POST['compte']);
+                    $Validator->isEmail('email', "L'adresse email doit être une adresse email valide.");
+                    if (!empty($_POST['compte']['password'])) {
+                        if (!empty($_POST['compte']['password_confirm'])) {
+                            $Validator->isPassword('password', "Les mot de passe ne sont pas valides.");
+                            $Validator->isConfirmed('password', "Les mot de passe sont différents.");
+                        } else {
+                            $this->session->writeFlash('danger', "Le champ confirmation du mot de passe est vide alors que le champ mot de passe ne l'est pas.");
+                        }
+                    } else {
+                        $_POST['compte']['password'] = $_POST['compte']['password_confirm'] = null;
+                    }
+                    if ($Validator->isValid()) {
+                        $this->users_manager->update($_POST['compte']['lastname'], $_POST['compte']['firstname'], $_POST['compte']['email'], $_POST['compte']['password'], $User);
+                        $this->session->writeFlash('success', "Vos informations ont été mise à jour avec succès.");
+                    } else {
+                        $errors = $Validator->getErrors();
+                        foreach ($errors as $champs => $message) {
+                            $this->session->writeFlash('danger', $message);
+                        }
+                    }
+                } else {
+                    $this->session->writeFlash('danger', "Certains champs sont vides.");
+                }
+            } else {
+                $this->session->writeFlash('danger', "Certains champs sont manquants.");
+            }
+            $_post = $this->getPost($_POST['compte']);
+            $this->render('profil', ['head'=>['title'=>'Profil', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : ''], 'admin');
+        }
+
+        if (isset($_POST['social'])) {
+            $empty_link = 0;
+            foreach ($_POST['social'] as $link) {
+                if (empty($link)) {
+                    $empty_link++;
+                }
+            }
+            if ($empty_link === count($_POST['social']) && empty($_FILES['avatar']['name'][0])) {
+                $this->session->writeFlash('danger', "Vous avez soumis le formulaire Social sans rien remplir.");
+            }
+
+            if ($empty_link < count($_POST['social'])) {
+                $this->users_manager->updateInfos($_POST['social'], $User->getIdUser());
+                $this->session->writeFlash('success', "Vos informations ont été mise à jour avec succès.");
+            }
+
+            if (!empty($_FILES['avatar']['name'][0])) {
+                $files = $this->upload('avatar', $_FILES['avatar'], $User->getIdUser());
+                if (empty($files['response'])) {
+                    $this->users_manager->saveUpload($files['moved_files'], $User->getIdUser());
+                    $this->session->writeFlash('success', "Votre photo de profil a été mise à jour avec succès.");
+                }
+            }
+
+            $this->render('profil', ['head'=>['title'=>'Profil', 'meta_description'=>'']], 'admin');
+        }
+
+        if (isset($_POST['delete'])) {
+            $id_user = intval($_POST['delete']);
+            if ($id_user === $User->getIdUser()) {
+                //$this->posts_manager->deletedAuthor($id_user);
+                //$this->users_manager->delete($User->getIdUser(), $User->getEmail());
+                $this->session->writeFlash('success', "Votre compte a été supprimé avec succès. Un mail de confirmation vous sera envoyé.");
+                $this->redirect('accueil');
+            }
+            $this->session->writeFlash('danger', "Le numéro d'utilisateur pour la suppression du compte ne vous correspond pas.");
+            $this->render('profil', ['head'=>['title'=>'Profil', 'meta_description'=>'']], 'admin');
+        }
     }
 }

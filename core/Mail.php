@@ -10,6 +10,8 @@ use App\Exceptions\MailException;
  */
 class Mail extends PHPMailer
 {
+    const DOMAIN = _DOMAIN_NAME_;
+
     /**
      * Mail constructor.
      */
@@ -57,18 +59,17 @@ class Mail extends PHPMailer
      */
     public function resetToken(string $to, int $id_user, string $token)
     {
-        $domain = _DOMAIN_NAME_;
         $body = "<p>Bonjour,</p>
-                 <p>Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : <a href='http://{$domain}/reinitialisation-mot-de-passe/{$id_user}-{$token}'>http://{$domain}/reinitialisation-mot-de-passe/{$id_user}-{$token}</a>.</p>
+                 <p>Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : <a href='http://".self::DOMAIN."/reinitialisation-mot-de-passe/{$id_user}-{$token}'>http://".self::DOMAIN."/reinitialisation-mot-de-passe/{$id_user}-{$token}</a>.</p>
                  <p>Pour votre sécurité, ce lien restera actif pour une durée de <b>30 min</b>. Après ce délai, il vous faudra renouveler votre demande.</p>
                  <br>
                  <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
         $alt_body = "Bonjour,
-                     Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : http://{$domain}/reinitialisation-mot-de-passe/{$id_user}-{$token}.
+                     Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : http://".self::DOMAIN."/reinitialisation-mot-de-passe/{$id_user}-{$token}.
                      Pour votre sécurité, ce lien restera actif pour une durée de 30 min. Après ce délai, il vous faudra renouveler votre demande.
                      Ceci est un mail automatique, merci de ne pas y répondre.";
         try {
-            $this->setFrom("no-reply@$domain", 'Blog Engrev');
+            $this->setFrom('no-reply@'.self::DOMAIN, 'Blog Engrev');
             //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
             $this->addAddress($to);
             $this->isHTML(true);
@@ -91,7 +92,6 @@ class Mail extends PHPMailer
      */
     public function resetPassword(string $to)
     {
-        $domain = _DOMAIN_NAME_;
         $body = "<p>Bonjour,</p>
                  <p>Votre mot de passe a été modifié avec succès.</p>
                  <br>
@@ -100,7 +100,7 @@ class Mail extends PHPMailer
                      Votre mot de passe a été modifié avec succès.
                      Ceci est un mail automatique, merci de ne pas y répondre.";
         try {
-            $this->setFrom("no-reply@$domain", 'Blog Engrev');
+            $this->setFrom('no-reply@'.self::DOMAIN, 'Blog Engrev');
             //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
             $this->addAddress($to);
             $this->isHTML(true);
@@ -114,20 +114,59 @@ class Mail extends PHPMailer
         }
     }
 
-    public function createUser(string $to, int $id_user, string $token)
+    /**
+     * Sends an email to confirm the creation of the account.
+     *
+     * @param string $to
+     * @param int    $id_user
+     * @param string $token
+     *
+     * @throws MailException
+     */
+    public function createAccount(string $to, int $id_user, string $token)
     {
-        $domain = _DOMAIN_NAME_;
         $body = "<p>Bonjour,</p>
-                 <p>Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : <a href='http://{$domain}/validation-compte/{$id_user}-{$token}'>http://{$domain}/validation-compte/{$id_user}-{$token}</a>.</p>
+                 <p>Afin de valider votre compte, merci de cliquer sur ce lien : <a href='http://".self::DOMAIN."/validation-compte/{$id_user}-{$token}'>http://".self::DOMAIN."/validation-compte/{$id_user}-{$token}</a>.</p>
                  <p>Pour votre sécurité, ce lien restera actif pour une durée de <b>30 min</b>. Après ce délai, il vous faudra renouveler votre demande.</p>
                  <br>
                  <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
         $alt_body = "Bonjour,
-                     Afin de réinitialiser votre mot de passe, merci de cliquer sur ce lien : http://{$domain}/validation-compte/{$id_user}-{$token}.
+                     Afin de valider votre compte, merci de cliquer sur ce lien : http://".self::DOMAIN."/validation-compte/{$id_user}-{$token}.
                      Pour votre sécurité, ce lien restera actif pour une durée de 30 min. Après ce délai, il vous faudra renouveler votre demande.
                      Ceci est un mail automatique, merci de ne pas y répondre.";
         try {
-            $this->setFrom("no-reply@$domain", 'Blog Engrev');
+            $this->setFrom('no-reply@'.self::DOMAIN, 'Blog Engrev');
+            //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
+            $this->addAddress($to);
+            $this->isHTML(true);
+            $this->Subject = 'Création de votre compte';
+            $this->Body    = $body;
+            $this->AltBody = $alt_body;
+            $this->DKIM_identity = $this->From;
+            $this->send();
+        } catch (MailException $MailException) {
+            $MailException->display(500, true, $this->ErrorInfo);
+        }
+    }
+
+    /**
+     * Sends an email to confirm the validation of the account.
+     *
+     * @param string $to
+     *
+     * @throws MailException
+     */
+    public function validAccount(string $to)
+    {
+        $body = "<p>Bonjour,</p>
+                 <p>Votre compte a été validé avec succès.</p>
+                 <br>
+                 <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
+        $alt_body = "Bonjour,
+                     Votre compte a été validé avec succès.
+                     Ceci est un mail automatique, merci de ne pas y répondre.";
+        try {
+            $this->setFrom('no-reply@'.self::DOMAIN, 'Blog Engrev');
             //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
             $this->addAddress($to);
             $this->isHTML(true);
@@ -141,22 +180,28 @@ class Mail extends PHPMailer
         }
     }
 
-    public function validAccount(string $to)
+    /**
+     * Sends an email to confirm the deletion of the account.
+     *
+     * @param string $to
+     *
+     * @throws MailException
+     */
+    public function deleteAccount(string $to)
     {
-        $domain = _DOMAIN_NAME_;
         $body = "<p>Bonjour,</p>
-                 <p>Votre compte a été validé avec succès.</p>
+                 <p>Votre compte a été supprimé avec succès.</p>
                  <br>
                  <p>Ceci est un mail automatique, merci de ne pas y répondre.</p>";
         $alt_body = "Bonjour,
-                     Votre compte a été validé avec succès.
+                     Votre compte a été supprimé avec succès.
                      Ceci est un mail automatique, merci de ne pas y répondre.";
         try {
-            $this->setFrom("no-reply@$domain", 'Blog Engrev');
+            $this->setFrom('no-reply@'.self::DOMAIN, 'Blog Engrev');
             //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
             $this->addAddress($to);
             $this->isHTML(true);
-            $this->Subject = 'Validation de votre compte';
+            $this->Subject = 'Suppression de votre compte';
             $this->Body    = $body;
             $this->AltBody = $alt_body;
             $this->DKIM_identity = $this->From;

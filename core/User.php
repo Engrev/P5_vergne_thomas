@@ -12,6 +12,7 @@ class User
     private $lastname;
     private $firstname;
     private $email;
+    private $avatar;
     private $online = false;
 
     /**
@@ -26,6 +27,7 @@ class User
         $this->setLastname($user->lastname);
         $this->setFirstname($user->firstname);
         $this->setEmail($user->email);
+        $this->setAvatar($user->avatar);
         $this->setOnline(true);
     }
 
@@ -123,5 +125,21 @@ class User
     public function setOnline($online)
     {
         $this->online = boolval($online);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param string $avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = strval($avatar);
     }
 }

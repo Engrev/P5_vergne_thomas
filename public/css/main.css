@@ -11,3 +11,6 @@ a { color: black; transition: color var(--transition-duration); }
 a:hover { color: var(--theme-color); text-decoration: none; }
 .btn-theme { color: white; background-color: var(--theme-color); border-color: var(--theme-color); }
 .btn-theme:hover { color: white; box-shadow: 0 0 0 .2rem var(--theme-color-alpha); }
+form .form-control-file { cursor: pointer; }
+.alert-messages .alert:first-child { margin-top: 50px; }
+.alert-messages .alert:last-child { margin-bottom: 50px; }

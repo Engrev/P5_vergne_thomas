@@ -8,6 +8,7 @@
         "components/jquery": "3.4.1",
         "components/font-awesome": "5.12.1",
         "ext-pdo": "*",
+        "ext-gd": "*",
         "phpmailer/phpmailer": "^6.1"
     },
     "authors": [

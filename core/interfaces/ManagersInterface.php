@@ -13,4 +13,14 @@ interface ManagersInterface
      * @param \PDO $database
      */
     public function __construct(\PDO $database);
+
+    /**
+     * Saves uploaded files to the database.
+     *
+     * @param array $file
+     * @param int   $id
+     *
+     * @return mixed
+     */
+    public function saveUpload(array $file, int $id);
 }

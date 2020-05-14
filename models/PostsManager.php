@@ -75,7 +75,7 @@ class PostsManager implements ManagersInterface
      */
     public function list(string $id, string $slug)
     {
-        $post = $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.is_active, P.date_add, P.date_upd, 
+        $post = $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 
                                                   DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
                                                   C.name, C.link AS c_link, 
                                                   U.lastname, U.firstname
@@ -98,18 +98,18 @@ class PostsManager implements ManagersInterface
     /**
      * Get posts from a category with pagination.
      *
-     * @param      $id_category
-     * @param null $pagination
+     * @param int        $id_category
+     * @param array|null $pagination
      *
      * @return array
      */
-    public function listPostsCategory($id_category, $pagination = null)
+    public function listPostsCategory(int $id_category, array $pagination = null)
     {
         $limit = 10;
         if (is_array($pagination)) {
             $limit = "{$pagination['limit']} OFFSET {$pagination['offset']}";
         }
-        return $this->db->query("SELECT SQL_CALC_FOUND_ROWS P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.is_active, P.date_add, P.date_upd, 
+        return $this->db->query("SELECT SQL_CALC_FOUND_ROWS P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 
                                                  DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
                                                  C.name, C.link AS c_link, 
                                                  U.lastname, U.firstname
@@ -121,5 +121,21 @@ class PostsManager implements ManagersInterface
                                           WHERE P.id_category = ?
                                           ORDER BY P.id_post DESC
                                           LIMIT {$limit}", [$id_category])->fetchAll();
+    }
+
+    /**
+     * Change the author of a post when its author has deleted his account.
+     *
+     * @param int $id_author
+     */
+    public function deletedAuthor(int $id_author)
+    {
+        $this->db->query('UPDATE b_posts SET author = 0 WHERE author = ?', [$id_author]);
+    }
+
+    //Saves uploaded files to the database.
+    public function saveUpload(array $file, int $id)
+    {
+        // TODO: Implement saveUpload() method.
     }
 }
