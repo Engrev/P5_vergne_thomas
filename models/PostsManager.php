@@ -87,7 +87,7 @@ class PostsManager implements ManagersInterface
                                            WHERE P.id_post = ?", [$id])->fetch();
         if ($post->p_link) {
             if ($post->p_link === $id.'-'.$slug) {
-                if ($post->is_valid == 1 && $post->is_active == 1) {
+                if ($post->is_valid == 1) {
                     return $post;
                 }
             }
@@ -121,6 +121,23 @@ class PostsManager implements ManagersInterface
                                           WHERE P.id_category = ?
                                           ORDER BY P.id_post DESC
                                           LIMIT {$limit}", [$id_category])->fetchAll();
+    }
+
+    /**
+     * Get all of a user's posts.
+     *
+     * @param int $id_user
+     *
+     * @return array
+     */
+    public function listAll(int $id_user)
+    {
+        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, P.is_valid, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
+                                          FROM b_posts AS P
+                                          INNER JOIN b_categories AS C
+                                            ON C.id_category = P.id_category
+                                          WHERE P.author = ?
+                                          ORDER BY P.date_add DESC", [$id_user])->fetchAll();
     }
 
     /**

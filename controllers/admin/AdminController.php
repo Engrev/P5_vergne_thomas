@@ -44,7 +44,10 @@ class AdminController extends Controllers
     public function displayDashboard()
     {
         $this->restrict(3);
-        $this->render('dashboard', ['head'=>['title'=>'Tableau de bord', 'meta_description'=>''], 'page'=>'dashboard'], 'admin');
+        $User = $this->session->read('User');
+        $posts = $this->posts_manager->listAll($User->getIdUser());
+        $categories = $this->categories_manager->listAll();
+        $this->render('dashboard', ['head'=>['title'=>'Tableau de bord', 'meta_description'=>''], 'page'=>'dashboard', 'posts'=>$posts, 'categories'=>$categories], 'admin');
     }
 
     /**
