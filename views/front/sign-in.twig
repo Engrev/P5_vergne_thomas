@@ -15,11 +15,11 @@
             <h1 class="h3 mb-3 text-center">Connexion</h1>
 
             <label for="email" class="sr-only">Adresse email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email" {% if _post.email %}value="{{ _post.email }}"{% endif %} required autofocus pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Adresse email"{% if _post.email %} value="{{ _post.email }}"{% endif %} required autofocus pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
             <div class="invalid-feedback">Votre adresse email doit être de la forme : email@exemple.com.</div>
 
             <label for="password" class="sr-only">Mot de passe</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe" {% if _post.password %}value="{{ _post.password }}"{% endif %} required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe"{% if _post.password %} value="{{ _post.password }}"{% endif %} required minlength="8" maxlength="20" pattern="^[a-zA-Z0-9_-]+$">
             <div class="invalid-feedback">Votre mot de passe doit contenir entre 8 et 20 caractères. Ils peuvent être avec des lettres, minuscules ou majuscules et/ou des chiffres et/ou un tiret bas et/ou un tiret.</div>
 
             <a href="{{ _path_ }}/mot-de-passe-oublie" class="d-block mt-3">Mot de passe oublié ?</a>
