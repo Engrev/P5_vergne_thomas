@@ -1,4 +1,5 @@
 .post { border-bottom: 1px solid #ddd; background-color: white; width: 100%; padding: 20px; transition: transform var(--transition-duration); }
+.post:last-child { margin-bottom: 30px; }
 .post:not(.post-view):hover { transform: scale(0.98); }
 .post-view { margin-top: 30px; }
 .post-view .post-content a { color: var(--theme-color); }

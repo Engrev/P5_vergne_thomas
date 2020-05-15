@@ -63,9 +63,6 @@
                         </div>
                     {% else %}
                         <li class="nav-item d-inline-block d-sm-block">
-                            <a class="btn btn-outline-light mr-sm-2" href="{{ _path_ }}/inscription">S'inscrire</a>
-                        </li>
-                        <li class="nav-item d-inline-block d-sm-block">
                             <a class="btn btn-outline-success" href="{{ _path_ }}/connexion">Se connecter</a>
                         </li>
                     {% endif %}
@@ -93,6 +90,32 @@
         </div>
 
         {% block body %}{% endblock %}
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-4">
+                        <p class="nom">Thomas Vergne</p>
+                        <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab beatae doloribus id nam quasi repudiandae tempora veniam voluptatibus. Eaque, sed sunt? Dolorum laborum nulla placeat quae, repellat sapiente veritatis. Corporis.</p>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <h6>Mes réseaux</h6>
+                        <ul class="reseaux">
+                            <li><a href="https://github.com/Engrev/P5_vergne_thomas" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                            <li><a href="https://www.linkedin.com/in/thomas-vergne" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                            <li><a href="#"><i class="fas fa-link"></i> Site web</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <h6>Accès</h6>
+                        <ul class="acces">
+                            <li><a href="mailto:local@blog.engrev.fr"><i class="fas fa-envelope"></i> M'envoyer un mail</a></li>
+                            <li><a href="{{ _path_ }}/connexion"><i class="fas fa-lock"></i> Administration</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <script src="{{ _path_ }}/vendor/components/jquery/jquery.min.js"></script>
         <script src="{{ _path_ }}/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -28,6 +28,9 @@ class HomeController extends Controllers
      */
     public function displaySignin()
     {
+        if (!is_null($this->session->read('User'))) {
+            $this->redirect('dashboard');
+        }
         $this->render('sign-in', ['head'=>['title'=>'Connexion', 'meta_description'=>'']]);
     }
 
