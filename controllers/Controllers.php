@@ -62,12 +62,13 @@ class Controllers
             $User = $this->session->read('User');
             if (!is_null($User)) {
                 $data['user']['id'] = $User->getIdUser();
+                $data['user']['id_group'] = $User->getIdGroup();
                 $data['user']['lastname'] = $User->getLastname();
                 $data['user']['firstname'] = $User->getFirstname();
                 $data['user']['email'] = $User->getEmail();
                 $data['user']['avatar'] = $User->getAvatar();
             }
-            $data['categories'] = $this->categories_manager->listAll();
+            $data['categoriesL'] = $this->categories_manager->listAll();
             $data['number_posts'] = $this->posts_manager->countPostsCategory();
             echo $this->twig->render($type.'/'.$template.'.twig', $data);
         }

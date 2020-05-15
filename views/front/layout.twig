@@ -34,8 +34,10 @@
                     <li class="nav-item dropdown{{ page == 'categorie' ? ' active' : '' }}">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catégories{{ page == 'categorie' ? ' <span class="sr-only">(current)</span>' : '' }}</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% for category in categories %}
-                                <a class="dropdown-item" href="{{ _path_ ~ '/categories/' ~ category.link }}/1">{{ category.name }} <span class="text-muted font-italic">{{ number_posts[category.id_category] }}</span></a>
+                            {% for categorie in categoriesL %}
+                                <a class="dropdown-item{{ categorie.name == category.name ? ' active' : '' }}" href="{{ _path_ ~ '/categories/' ~ categorie.link }}/1">
+                                    {{ categorie.name }} <span class="text-muted font-italic">{{ number_posts[categorie.id_category] }}</span>
+                                </a>
                             {% endfor %}
                         </div>
                     </li>
@@ -46,13 +48,16 @@
                 <ul class="navbar-nav d-block d-sm-flex ml-auto">
                     {% if user is defined %}
                         <button type="button" class="navbar-avatar" title="Mon compte">
-                            <img src="{{ user.avatar }}" alt="Photo de profil">
+                            <img src="{{ _path_ ~ '/' ~ user.avatar|replace({'\\':'/'}) }}" alt="Photo de profil">
                         </button>
                         <div id="sidebar" class="bg-dark">
-                            <div class="sidebar-avatar" style="background: url('{{ user.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
+                            <div class="sidebar-avatar" style="background: url('{{ _path_ ~ '/' ~ user.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
                             <div class="list-group list-group-flush">
                                 <a href="{{ _path_ }}/dashboard" class="list-group-item list-group-item-action{{ page == 'dashboard' ? ' active' : '' }}"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
                                 <a href="{{ _path_ }}/profil" class="list-group-item list-group-item-action{{ page == 'profil' ? ' active' : '' }}"><i class="fas fa-user"></i> Mon profil</a>
+                                {% if user.id_group == 1 %}
+                                    <a href="{{ _path_ }}/utilisateurs" class="list-group-item list-group-item-action{{ page == 'utilisateurs' ? ' active' : '' }}"><i class="fas fa-users"></i> Utilisateurs</a>
+                                {% endif %}
                                 <a href="{{ _path_ }}/deconnexion" class="list-group-item list-group-item-action"><i class="fas fa-sign-out-alt text-danger"></i> Me déconnecter</a>
                             </div>
                         </div>

@@ -11,7 +11,7 @@
         {% for post in last_posts %}
             <article class="post" id="post-{{ post.id_post }}">
                 <h2 class="post-title">
-                    <a href="{{ _path_ }}/articles/{{ post.p_link }}">{{ post.title }}</a>
+                    <a href="{{ _path_ ~ '/articles/' ~ post.p_link }}">{{ post.title }}</a>
                 </h2>
                 <p class="text-muted post-author">
                     <span data-toggle="tooltip" data-placement="top" title="Publié par"><i class="fas fa-user-edit"></i> {{ post.firstname ~ ' ' ~ post.lastname }}</span>
@@ -19,8 +19,8 @@
                     {% if post.date_add != post.date_upd %} | <span data-toggle="tooltip" data-placement="top" title="Mis à jour le"><i class="fas fa-history"></i> {{ post.date_upd_fr }}</span>{% endif %}
                     | <span data-toggle="tooltip" data-placement="top" title="Catégorie"><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1"><i class="fas fa-tag"></i> {{ post.name }}</a></span>
                 </p>
-                <p class="post-preview">{{ post.description|slice(0,100) }}{% if post.description|length > 100 %}...{% endif %}</p>
-                <a href="{{ _path_ }}/articles/{{ post.p_link }}" class="btn btn-secondary post-read-more">Lire la suite</a>
+                <p class="post-preview">{{ post.description|slice(0,300)|raw }}{% if post.description|length > 300 %}...{% endif %}</p>
+                <a href="{{ _path_ }}/articles/{{ post.p_link }}" class="btn btn-theme post-read-more">Lire la suite</a>
             </article>
         {% endfor %}
     </div>
