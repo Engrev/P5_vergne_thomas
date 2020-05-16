@@ -60,4 +60,46 @@ class AdminController extends Controllers
         $infos = $this->users_manager->getInfos($User->getIdUser());
         $this->render('profil', ['head'=>['title'=>'Profil', 'meta_description'=>''], 'page'=>'profil', 'user_social'=>$infos], 'admin');
     }
+
+    /**
+     * Displays admin post page.
+     */
+    public function displayCreatePost()
+    {
+        $this->restrict();
+        $categories = $this->categories_manager->listAll();
+        $this->render('admin_post', ['head'=>['title'=>'Création d\'un article', 'meta_description'=>''], 'categories'=>$categories], 'admin');
+    }
+
+    /**
+     * Displays admin post page.
+     */
+    public function displayEditPost($id_post)
+    {
+        $this->restrict();
+        $User = $this->session->read('User');
+        $post = $this->posts_manager->list($id_post);
+        if ($User->getIdUser() != $post->author) {
+            $this->session->writeFlash('danger', "Vous ne pouvez pas accéder à cette page.");
+            $this->redirect('');
+        }
+        $categories = $this->categories_manager->listAll();
+        $this->render('admin_post', ['head'=>['title'=>'Modification d\'un article', 'meta_description'=>''], 'categories'=>$categories, 'post'=>$post], 'admin');
+    }
+
+    /**
+     * Displays admin category page.
+     */
+    public function displayCreateCategory()
+    {
+        $this->render('add_category', ['head'=>['title'=>'Création d\'une catégorie', 'meta_description'=>'']], 'admin');
+    }
+
+    /**
+     * Displays admin category page.
+     */
+    public function displayEditCategory()
+    {
+        $this->render('edit_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>'']], 'admin');
+    }
 }

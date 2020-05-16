@@ -1,7 +1,13 @@
 {% extends 'front/layout.twig' %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/jquery-confirm.min.css">
     <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/dashboard.css">
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ _path_ }}/public/js/jquery-confirm.min.js"></script>
+    <script src="{{ _path_ }}/public/js/dashboard.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -34,7 +40,7 @@
 
         <section class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/articles/add"><i class="fas fa-plus"></i> Créer un article</a>
+                <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/articles/creer"><i class="fas fa-plus"></i> Créer un article</a>
                 <table class="table table-hover table-responsive-md" id="posts">
                     <thead class="thead-dark">
                         <tr>
@@ -42,7 +48,7 @@
                             <th>Titre</th>
                             <th>Catégorie</th>
                             <th>Dernière mise à jour</th>
-                            <th>Actif</th>
+                            <th>Publié</th>
                             <th>Commentaires</th>
                             <th>Actions</th>
                         </tr>
@@ -54,7 +60,9 @@
                                 <td width="25%"><a href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank">{{ post.title }}</a></td>
                                 <td width="10%"><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1" target="_blank">{{ post.name }}</a></td>
                                 <td width="20%">{% if post.date_add != post.date_upd %}{{ post.date_upd }}{% else %}{{ post.date_add }}{% endif %}</td>
-                                <td width="5%">{% if post.is_valid == 1 %}Oui{% else %}Non{% endif %}</td>
+                                <td width="5%">
+                                    {% if post.published == 1 %}Oui{% else %}<span data-toggle="tooltip" data-placement="bottom" title="Cet article ne sera visible que par vous">Non</span>{% endif %}
+                                </td>
                                 <td width="10%"></td>
                                 <td width="10%">
                                     <div class="dropdown">
@@ -62,10 +70,9 @@
                                             Actions
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item text-primary" href="{{ _path_  ~ '/articles/' ~ post.p_link }}"><i class="fas fa-eye"></i> Voir <i class="fas fa-external-link-alt"></i></a>
-                                            <a class="dropdown-item text-info" href="{{ _path_  ~ '/articles/' ~ post.p_link }}"><i class="fas fa-eye"></i> Brouillon</a>
-                                            <a class="dropdown-item text-warning" href="{{ _path_  ~ '/articles/edit/' ~ post.id_post }}"><i class="fas fa-edit"></i> Modifier</a>
-                                            <a class="dropdown-item text-danger" href="{{ _path_  ~ '/articles/delete/' ~ post.id_post }}"><i class="fas fa-times"></i> Supprimer</a>
+                                            <a class="dropdown-item text-success" href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank"><i class="fas fa-eye"></i> Voir <i class="fas fa-external-link-alt"></i></a>
+                                            <a class="dropdown-item text-warning" href="{{ _path_  ~ '/articles/modifier/' ~ post.id_post }}"><i class="fas fa-edit"></i> Modifier</a>
+                                            <a class="dropdown-item text-danger link-delete" href="{{ _path_  ~ '/articles/supprimer/' ~ post.id_post }}"><i class="fas fa-times"></i> Supprimer</a>
                                         </div>
                                     </div>
                                 </td>
@@ -75,8 +82,8 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="categories-tab">
-                <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/categories/add"><i class="fas fa-plus"></i> Créer une catégorie</a>
-                <table class="table table-hover table-responsive-md" id="posts">
+                <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/categories/creer"><i class="fas fa-plus"></i> Créer une catégorie</a>
+                <table class="table table-hover table-responsive-md" id="categories">
                     <thead class="thead-dark">
                     <tr>
                         <th>#</th>
@@ -96,8 +103,8 @@
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item text-primary" href="{{ _path_  ~ '/categories/' ~ category_d.link }}"><i class="fas fa-eye"></i> Voir <i class="fas fa-external-link-alt"></i></a>
-                                        <a class="dropdown-item text-warning" href="{{ _path_  ~ '/categories/edit/' ~ category_d.id_category }}"><i class="fas fa-pen"></i> Modifier</a>
-                                        <a class="dropdown-item text-danger" href="{{ _path_  ~ '/categories/delete/' ~ category_d.id_category }}"><i class="fas fa-times"></i> Supprimer</a>
+                                        <a class="dropdown-item text-warning" href="{{ _path_  ~ '/categories/modifier/' ~ category_d.id_category }}"><i class="fas fa-pen"></i> Modifier</a>
+                                        <a class="dropdown-item text-danger link-delete" href="{{ _path_  ~ '/categories/supprimer/' ~ category_d.id_category }}"><i class="fas fa-times"></i> Supprimer</a>
                                     </div>
                                 </div>
                             </td>

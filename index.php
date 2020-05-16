@@ -49,17 +49,19 @@ $Router->get('/dashboard', 'Admin#displayDashboard');
 $Router->get('/profil', 'Admin#displayProfil');
 $Router->post('/profil', 'Users#profil');
 
-/*$Router->get('/articles', 'PostsAdmin#listAll');
-$Router->get('/article/ajouter', 'PostsAdmin#create');
-$Router->get('/article/modifier/:id', 'PostsAdmin#update')->with('id', '[0-9]+');
-$Router->get('/article/supprimer/:id', 'PostsAdmin#delete')->with('id', '[0-9]+');
+$Router->get('/articles/creer', 'Admin#displayCreatePost');
+$Router->post('/articles/creer', 'Posts#createPost');
+$Router->get('/articles/modifier/:id', 'Admin#displayEditPost')->with('id', '[0-9]+');
+$Router->post('/articles/modifier/:id', 'Posts#editPost')->with('id', '[0-9]+');
+$Router->get('/articles/supprimer/:id', 'Posts#deletePost')->with('id', '[0-9]+');
 
-$Router->get('/categories', 'CategoriesAdmin#listAll');
-$Router->get('/categories/ajouter', 'CategoriesAdmin#create');
-$Router->get('/categories/modifier/:id', 'CategoriesAdmin#update')->with('id', '[0-9]+');
-$Router->get('/categories/supprimer/:id', 'CategoriesAdmin#delete')->with('id', '[0-9]+');
+$Router->get('/categories/creer', 'Admin#displayCreateCategory');
+$Router->post('/categories/creer', 'Categories#createCategory');
+$Router->get('/categories/modifier/:id', 'Admin#displayEditCategory')->with('id', '[0-9]+');
+$Router->post('/categories/modifier/:id', 'Categories#editCategory')->with('id', '[0-9]+');
+$Router->get('/categories/supprimer/:id', 'Categories#deleteCategory')->with('id', '[0-9]+');
 
-$Router->get('/users', 'UsersAdmin#listAll');
+/*$Router->get('/users', 'UsersAdmin#listAll');
 $Router->get('/users/ajouter', 'UsersAdmin#create');
 $Router->get('/users/modifier/:id', 'UsersAdmin#update')->with('id', '[0-9]+');
 $Router->get('/users/desactiver/:id', 'UsersAdmin#deactivate')->with('id', '[0-9]+');*/

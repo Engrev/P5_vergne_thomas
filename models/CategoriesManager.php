@@ -28,7 +28,7 @@ class CategoriesManager implements ManagersInterface
      */
     public function listAll()
     {
-        return $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories')->fetchAll();
+        return $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories ORDER BY name')->fetchAll();
     }
 
     /**
