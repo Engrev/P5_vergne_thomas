@@ -22,6 +22,113 @@ class PostsManager implements ManagersInterface
     }
 
     /**
+     * Create a post.
+     *
+     * @param array $posts
+     * @param int   $id_user
+     */
+    public function create(array $posts, int $id_user)
+    {
+        $title = htmlspecialchars($posts['title']);
+        $description = htmlspecialchars($posts['description']);
+        $id_category = intval($posts['categorie']);
+        $publish = intval($posts['publish']);
+        $link = $this->transformToUrl($posts['title']);
+        $params = [
+            'id_category' => $id_category,
+            'link' => '#',
+            'title' => $title,
+            'description' => $description,
+            'content' => $posts['content'],
+            'author' => $id_user,
+            'published' => $publish
+        ];
+        $this->db->query('INSERT INTO b_posts (id_category, link, title, description, content, author, published, date_add, date_upd)
+                                   VALUES (:id_category, :link, :title, :description, :content, :author, :published, NOW(), NOW())', $params);
+        $id_post = $this->db->lastInsertId();
+        $link = strval($id_post).'-'.$link;
+        $this->db->query('UPDATE b_posts SET link = ? WHERE id_post = ?', [$link, $id_post]);
+    }
+
+    /**
+     * Edit a post.
+     *
+     * @param array $posts
+     * @param int   $id_post
+     */
+    public function update(array $posts, int $id_post)
+    {
+        $title = htmlspecialchars($posts['title']);
+        $description = htmlspecialchars($posts['description']);
+        $id_category = intval($posts['categorie']);
+        $publish = intval($posts['publish']);
+        $link = $this->transformToUrl($posts['title']);
+        $link = strval($id_post).'-'.$link;
+        $params = [
+            'id_category' => $id_category,
+            'link' => $link,
+            'title' => $title,
+            'description' => $description,
+            'content' => $posts['content'],
+            'published' => $publish,
+            'id_post' => $id_post
+        ];
+        $this->db->query('UPDATE b_posts
+                                   SET id_category = :id_category, link = :link, title = :title, description = :description, content = :content, published = :published, date_upd = NOW()
+                                   WHERE id_post = :id_post', $params);
+    }
+
+    /**
+     * Delete a post.
+     *
+     * @param int $id_post
+     */
+    public function delete(int $id_post)
+    {
+        $this->db->query('DELETE FROM b_posts WHERE id_post = ?', [$id_post]);
+    }
+
+    /**
+     * Create the post link from the title.
+     *
+     * @param string $title
+     *
+     * @return string
+     */
+    private function transformToUrl(string $title)
+    {
+        /*
+         * https://www.webmaster-hub.com/publications/transformer-un-texte-en-url/
+        $string = utf8_encode($title);
+        $reg = '#&(.)(acute|grave|circ|uml|cedil|ring|tilde|slash);#';
+        $without_accents = preg_replace($reg, '1', htmlentities($string, ENT_COMPAT, 'UTF-8'));
+
+        $string = str_replace('ß', 'ss', $without_accents);
+        $reg = '#&([a-zA-Z]{2})lig;#';
+        $without_ligature = preg_replace($reg, '1', $string);
+
+        $reg = '#(&[a-zA-Z0-9]*;)#U';
+        $without_special_characters = preg_replace($reg, '-', $without_ligature);
+
+        $to_lower = strtolower($without_special_characters);
+
+        $reg = '#([^a-z0-9]+)#';
+        $remaining = preg_replace($reg, '-', $to_lower);
+
+        $without_dashes = trim($remaining, '-');
+        return $without_dashes.'.html';*/
+        /*
+         * https://www.webmaster-hub.com/topic/43505-transformer-un-texte-en-url/page/2/?tab=comments#comment-337105
+         */
+        $str = preg_replace('~[^\\pL\d]+~u', '-', $title);
+        $str = trim($str, '-');
+        $str = iconv('utf-8', 'us-ascii//TRANSLIT', $str);
+        $str = strtolower($str);
+        $str = preg_replace('~[^-\w]+~', '', $str);
+        return $str.'.html';
+    }
+
+    /**
      * Get the latest posts.
      *
      * @param mixed $param
@@ -32,13 +139,13 @@ class PostsManager implements ManagersInterface
     {
         switch ($param) {
             default:
-                $where = 'P.is_valid = 1 ORDER BY P.id_post DESC';
+                $where = 'P.published = 1 ORDER BY P.id_post DESC';
                 break;
             case is_int($param):
-                $where = 'P.is_valid = 1 ORDER BY P.id_post DESC LIMIT '.intval($param);
+                $where = 'P.published = 1 ORDER BY P.id_post DESC LIMIT '.intval($param);
                 break;
         }
-        return $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 
+        return $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.published, P.date_add, P.date_upd, 
                                                  DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
                                                  C.name, C.link AS c_link, 
                                                  U.lastname, U.firstname
@@ -69,13 +176,14 @@ class PostsManager implements ManagersInterface
      *
      * @param string $id
      * @param string $slug
+     * @param int    $id_user
      *
      * @return mixed
      * @throws ManagerException
      */
-    public function list(string $id, string $slug)
+    public function display(string $id, string $slug, int $id_user)
     {
-        $post = $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 
+        $post = $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.published, P.date_add, P.date_upd, 
                                                   DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
                                                   C.name, C.link AS c_link, 
                                                   U.lastname, U.firstname
@@ -87,10 +195,29 @@ class PostsManager implements ManagersInterface
                                            WHERE P.id_post = ?", [$id])->fetch();
         if ($post->p_link) {
             if ($post->p_link === $id.'-'.$slug) {
-                if ($post->is_valid == 1) {
+                if ($post->published == 1 || $post->published == 0 && $post->author == $id_user) {
                     return $post;
                 }
             }
+        }
+        throw new ManagerException('Cet article n\'existe pas');
+    }
+
+    /**
+     * Get a post.
+     *
+     * @param string $id
+     *
+     * @return mixed
+     * @throws ManagerException
+     */
+    public function list(int $id)
+    {
+        $post = $this->db->query("SELECT id_post, id_category, link, title, description, content, author, published
+                                           FROM b_posts
+                                           WHERE id_post = ?", [$id])->fetch();
+        if (!empty($post)) {
+            return $post;
         }
         throw new ManagerException('Cet article n\'existe pas');
     }
@@ -109,7 +236,7 @@ class PostsManager implements ManagersInterface
         if (is_array($pagination)) {
             $limit = "{$pagination['limit']} OFFSET {$pagination['offset']}";
         }
-        return $this->db->query("SELECT SQL_CALC_FOUND_ROWS P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.is_valid, P.date_add, P.date_upd, 
+        return $this->db->query("SELECT SQL_CALC_FOUND_ROWS P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.published, P.date_add, P.date_upd, 
                                                  DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
                                                  C.name, C.link AS c_link, 
                                                  U.lastname, U.firstname
@@ -132,7 +259,7 @@ class PostsManager implements ManagersInterface
      */
     public function listAll(int $id_user)
     {
-        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, P.is_valid, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
+        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, P.published, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
                                           FROM b_posts AS P
                                           INNER JOIN b_categories AS C
                                             ON C.id_category = P.id_category
