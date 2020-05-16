@@ -124,23 +124,6 @@ class UsersController extends Controllers
     }
 
     /**
-     * Get the values of $_POST for forms.
-     *
-     * @param array $_post
-     *
-     * @return mixed
-     */
-    private function getPost(array $_post)
-    {
-        foreach ($_post as $key => $value) {
-            if ($key !== 'recaptcha_response') {
-                $posts[$key] = $value;
-            }
-        }
-        return $posts;
-    }
-
-    /**
      * Connect an user.
      */
     public function signIn()
