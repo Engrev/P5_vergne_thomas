@@ -7,7 +7,7 @@ namespace App\Core;
  */
 class Session
 {
-    static $instance;
+    private static $instance;
 
     /**
      * Session constructor.

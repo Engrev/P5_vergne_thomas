@@ -75,6 +75,23 @@ class Controllers
     }
 
     /**
+     * Get the values of $_POST for forms.
+     *
+     * @param array $_post
+     *
+     * @return mixed
+     */
+    protected function getPost(array $_post)
+    {
+        foreach ($_post as $key => $value) {
+            if ($key !== 'recaptcha_response') {
+                $posts[$key] = $value;
+            }
+        }
+        return $posts;
+    }
+
+    /**
      * Upload pictures.
      *
      * @param string $type
