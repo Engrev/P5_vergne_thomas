@@ -1,0 +1,4 @@
+form { margin-bottom: 30px; }
+textarea { resize: vertical; }
+input[type="radio"] + label, input[type="checkbox"] + label, #users .user-active { cursor: pointer; }
+table .dropdown-menu .dropdown-item:active { color: white!important; }

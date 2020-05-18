@@ -1,0 +1,65 @@
+{% extends 'front/layout.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/admin.css">
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ _path_ }}/public/js/users.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Utilisateurs</h1>
+
+        <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/utilisateurs/creer"><i class="fas fa-user-plus"></i> Créer un utilisateur</a>
+        <table class="table table-hover table-responsive-md" id="users">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Groupe</th>
+                    <th class="text-center">Actif</th>
+                    <th>Dernières connexion</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td width="5%">{{ user.id_user }}</td>
+                        <td width="10%">{{ user.lastname }}</td>
+                        <td width="10%">{{ user.firstname }}</td>
+                        <td width="25%">{{ user.email }}</td>
+                        <td width="10%">{{ user.group_name }}</td>
+                        <td width="10%" class="text-center">
+                            {% if user.active == true %}
+                                <i class="fas fa-check text-success{% if user.id_user != 0 %} user-active{% endif %}"{% if user.id_user != 0 %} data-state="{{ user.active ~ '#' ~ user.id_user }}" data-toggle="tooltip" data-placement="bottom" title="Désactiver ?"{% endif %}></i>
+                            {% else %}
+                                <i class="fas fa-times text-danger user-active"{% if user.id_user != 0 %} data-state="{{ user.active ~ '#' ~ user.id_user }}" data-toggle="tooltip" data-placement="bottom" title="Activer ?"{% endif %}></i>
+                            {% endif %}
+                        </td>
+                        <td width="20%">{{ user.last_connection }}</td>
+                        <td width="10%">
+                            {% if user.id_user != 0 %}
+                                <div class="dropdown">
+                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item text-warning" href="{{ _path_  ~ '/utilisateurs/modifier/' ~ user.id_user }}"><i class="fas fa-user-edit"></i> Modifier</a>
+                                        {% if user.id_user != 1 %}
+                                            <a class="dropdown-item text-danger link-delete" href="{{ _path_  ~ '/utilisateurs/supprimer/' ~ user.id_user }}"><i class="fas fa-user-minus"></i> Supprimer</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

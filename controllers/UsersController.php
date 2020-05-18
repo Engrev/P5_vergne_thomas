@@ -18,6 +18,99 @@ class UsersController extends Controllers
     }
 
     /**
+     * Creates an account.
+     */
+    public function createUser()
+    {
+        if (isset($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password'], $_POST['password_confirm'], $_POST['group'])) {
+            if (!empty($_POST['lastname']) && !empty($_POST['firstname']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['password_confirm'] && !empty($_POST['group']))) {
+                $Validator = new Validator($_POST);
+                $Validator->isPassword('password', "Les mot de passe ne sont pas valides.");
+                $Validator->isEmail('email', "L'adresse mail doit être une adresse email valide.");
+                $Validator->isConfirmed('password', "Les mot de passe sont différents.");
+                if ($Validator->isValid()) {
+                    $checkUserExist = $this->users_manager->checkUserExist($_POST['email']);
+                    if ($checkUserExist) {
+                        $this->users_manager->create($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password'], $_POST['group']);
+                        $this->session->writeFlash('success', "Le compte a été créé avec succès.");
+                        $this->redirect('utilisateurs');
+                    }
+                    $this->session->writeFlash('danger', "Un compte existe déjà avec cette adresse mail.");
+                } else {
+                    $errors = $Validator->getErrors();
+                    foreach ($errors as $champs => $message) {
+                        $this->session->writeFlash('danger', $message);
+                    }
+                }
+            } else {
+                $this->session->writeFlash('danger', "Certains champs sont vides.");
+            }
+        } else {
+            $this->session->writeFlash('danger', "Certains champs sont manquants.");
+        }
+        $_post = $this->getPost($_POST);
+        $this->render('admin_user', ['head'=>['title'=>'Création d\'un utilisateur', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
+    }
+
+    /**
+     * Edit an account.
+     *
+     * @param int $id_user
+     */
+    public function editUser(int $id_user)
+    {
+        $User = $this->session->read('User');
+
+        if (isset($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password'], $_POST['password_confirm'], $_POST['group'])) {
+            if (!empty($_POST['lastname']) && !empty($_POST['firstname']) && !empty($_POST['email']) && !empty($_POST['group'])) {
+                $Validator = new Validator($_POST);
+                $Validator->isEmail('email', "L'adresse mail doit être une adresse email valide.");
+                if (!empty(trim($_POST['password']))) {
+                    if (!empty(trim($_POST['password_confirm']))) {
+                        $Validator->isPassword('password', "Les mot de passe ne sont pas valides.");
+                        $Validator->isConfirmed('password', "Les mot de passe sont différents.");
+                    } else {
+                        $this->session->writeFlash('danger', "Le champ confirmation du mot de passe est vide alors que le champ mot de passe ne l'est pas.");
+                    }
+                } else {
+                    $_POST['password'] = $_POST['password_confirm'] = null;
+                }
+                if ($Validator->isValid()) {
+                    $user = $User->getIdUser() == $id_user ? $User : null;
+                    $is_active = isset($_POST['activation']) ? $_POST['activation'] : null;
+                    $this->users_manager->update($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password'], $user, $id_user, $_POST['group'], $is_active);
+                    $this->session->writeFlash('success', "Le compte a été modifié avec succès.");
+                    $this->redirect('utilisateurs');
+                } else {
+                    $errors = $Validator->getErrors();
+                    foreach ($errors as $champs => $message) {
+                        $this->session->writeFlash('danger', $message);
+                    }
+                }
+            } else {
+                $this->session->writeFlash('danger', "Certains champs sont vides.");
+            }
+        } else {
+            $this->session->writeFlash('danger', "Certains champs sont manquants.");
+        }
+        $_post = $this->getPost($_POST);
+        $this->render('admin_user', ['head'=>['title'=>'Modification d\'un utilisateur', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : ''], 'admin');
+    }
+
+    /**
+     * Delete an account.
+     *
+     * @param int $id_user
+     */
+    public function deleteUser(int $id_user)
+    {
+        $this->posts_manager->deletedAuthor($id_user);
+        $this->users_manager->delete($id_user);
+        $this->session->writeFlash('success', "Le compte a été supprimé avec succès.");
+        $this->redirect('utilisateurs');
+    }
+
+    /**
      * Send an email to reset the password.
      */
     public function forgotPassword()
@@ -68,68 +161,13 @@ class UsersController extends Controllers
     }
 
     /**
-     * Creates an account.
-     */
-    public function signUp()
-    {
-        if (isset($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password'], $_POST['password_confirm'], $_POST['recaptcha_response'])) {
-            if (!empty($_POST['lastname']) && !empty($_POST['firstname']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['password_confirm']) && !empty($_POST['recaptcha_response'])) {
-                $ReCaptcha = new ReCaptcha($_POST['recaptcha_response']);
-                $Validator = new Validator($_POST);
-                $Validator->isPassword('password', "Les mot de passe ne sont pas valides.");
-                $Validator->isEmail('email', "L'adresse email doit être une adresse email valide.");
-                $Validator->isConfirmed('password', "Les mot de passe sont différents.");
-                if ($Validator->isValid()) {
-                    $checkUserExist = $this->users_manager->checkUserExist($_POST['email']);
-                    if ($checkUserExist) {
-                        $this->users_manager->create($_POST['lastname'], $_POST['firstname'], $_POST['email'], $_POST['password']);
-                        $this->session->writeFlash('success', "Les instructions pour valider votre compte vous ont été envoyées par email, vous avez 30 minutes pour le faire.");
-                    } else {
-                        $this->session->writeFlash('danger', "Un compte existe déjà avec cette adresse email.");
-                    }
-                } else {
-                    $errors = $Validator->getErrors();
-                    foreach ($errors as $champs => $message) {
-                        $this->session->writeFlash('danger', $message);
-                    }
-                }
-            } else {
-                $this->session->writeFlash('danger', "Certains champs sont vides.");
-            }
-        } else {
-            $this->session->writeFlash('danger', "Certains champs sont manquants.");
-        }
-        $_post = $this->getPost($_POST);
-        $this->render('sign-up', ['head'=>['title'=>'Inscription', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
-    }
-
-    /**
-     * Check the token and valid an account.
-     *
-     * @param int    $id_user
-     * @param string $token
-     */
-    public function validAccount(int $id_user, string $token)
-    {
-        $checkvalidAccount = $this->users_manager->checkValidAccount($id_user, $token);
-        if ($checkvalidAccount) {
-            $this->users_manager->validAccount($id_user);
-            $method = __FUNCTION__;
-            $this->session->read('Mail')->validAccount($checkvalidAccount->email);
-            $this->session->writeFlash('success', "Votre compte a bien été validé.");
-            $this->redirect('dashboard');
-        }
-        $this->session->writeFlash('danger', "Ce token est invalide.");
-        $this->redirect("validation-compte/{$id_user}-{$token}");
-    }
-
-    /**
      * Connect an user.
      */
     public function signIn()
     {
-        if (isset($_POST['email'], $_POST['password'])) {
-            if (!empty($_POST['email']) && !empty($_POST['password'])) {
+        if (isset($_POST['email'], $_POST['password'], $_POST['recaptcha_response'])) {
+            if (!empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['recaptcha_response'])) {
+                $ReCaptcha = new ReCaptcha($_POST['recaptcha_response']);
                 $remember_me = isset($_POST['remember_me']) ? true : false;
                 $User = $this->users_manager->connect($_POST['email'], $_POST['password'], $remember_me);
                 if (!is_string($User)) {
@@ -175,8 +213,8 @@ class UsersController extends Controllers
                 if (!empty($_POST['compte']['lastname']) && !empty($_POST['compte']['firstname']) && !empty($_POST['compte']['email'])) {
                     $Validator = new Validator($_POST['compte']);
                     $Validator->isEmail('email', "L'adresse email doit être une adresse email valide.");
-                    if (!empty($_POST['compte']['password'])) {
-                        if (!empty($_POST['compte']['password_confirm'])) {
+                    if (!empty(trim($_POST['compte']['password']))) {
+                        if (!empty(trim($_POST['compte']['password_confirm']))) {
                             $Validator->isPassword('password', "Les mot de passe ne sont pas valides.");
                             $Validator->isConfirmed('password', "Les mot de passe sont différents.");
                         } else {
@@ -234,8 +272,8 @@ class UsersController extends Controllers
         if (isset($_POST['delete'])) {
             $id_user = intval($_POST['delete']);
             if ($id_user === $User->getIdUser()) {
-                //$this->posts_manager->deletedAuthor($id_user);
-                //$this->users_manager->delete($User->getIdUser(), $User->getEmail());
+                $this->posts_manager->deletedAuthor($id_user);
+                $this->users_manager->delete($User->getIdUser(), $User->getEmail());
                 $this->session->writeFlash('success', "Votre compte a été supprimé avec succès. Un mail de confirmation vous sera envoyé.");
                 $this->redirect('accueil');
             }

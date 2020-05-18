@@ -40,60 +40,41 @@ class UsersManager implements ManagersInterface
     }
 
     /**
-     * Checks the validity of an account validation token.
+     * Get all groups.
      *
-     * @param int    $id_user
-     * @param string $token
-     *
-     * @return mixed
+     * @return array
      */
-    public function checkValidAccount(int $id_user, string $token)
+    public function getGroups()
     {
-        return $this->db->query('SELECT email
-                                          FROM b_users
-                                          WHERE id_user = ? AND create_token IS NOT NULL AND create_token = ? AND date_create_token > DATE_SUB(NOW(), INTERVAL 30 MINUTE)', [$id_user, $token])->fetch();
+        return $this->db->query('SELECT id_group, name FROM b_groups ORDER BY name')->fetchAll();
     }
 
     /**
-     * Validates an account.
-     *
-     * @param int $id_user
-     */
-    public function validAccount(int $id_user)
-    {
-        $this->db->query('UPDATE b_users SET id_group = 3, is_active = 1, create_token = NULL, date_create_token = NULL, date_upd = NOW() WHERE id_user = ?', [$id_user]);
-    }
-
-    /**
-     * Creates a token for creating an account.
+     * Creates an account.
      *
      * @param string $lastname
      * @param string $firstname
      * @param string $email
      * @param string $password
+     * @param int $password
      */
-    public function create(string $lastname, string $firstname, string $email, string $password)
+    public function create(string $lastname, string $firstname, string $email, string $password, int $group)
     {
-        $create_token = $this->token(60);
         $password = $this->hashPassword($password);
         $params = [
-            'id_group' => 4,
+            'id_group' => $group,
             'lastname' => $lastname,
             'firstname' => $firstname,
             'email' => $email,
-            'password' => $password,
-            'create_token' => $create_token
+            'password' => $password
         ];
-        $this->db->query('INSERT INTO b_users (id_group, lastname, firstname, email, password, create_token, date_create_token)
-                                   VALUES (:id_group, :lastname, :firstname, :email, :password, :create_token, NOW())', $params);
+        $this->db->query('INSERT INTO b_users (id_group, lastname, firstname, email, password) VALUES (:id_group, :lastname, :firstname, :email, :password)', $params);
         $id_user = $this->db->lastInsertId();
         $this->db->query('INSERT INTO b_users_infos (id_user) VALUES (:id_user)', ['id_user'=>$id_user]);
-        $method = __FUNCTION__.'Account';
-        Session::getInstance()->read('Mail')->$method($email, $id_user, $create_token);
     }
 
     /**
-     * Updates an account and an user instance.
+     * Updates an account and a user instance.
      *
      * @param string    $lastname user mode
      * @param string    $firstname user mode
@@ -106,7 +87,7 @@ class UsersManager implements ManagersInterface
      */
     public function update(string $lastname, string $firstname, string $email, string $password = null, User $user = null, int $id_user = null, int $id_group = null, int $is_active = null)
     {
-        if (!is_null($password)) { // user mode
+        if (!is_null($password)) {
             $password = $this->hashPassword($password);
             $this->db->query('UPDATE b_users SET password = ? WHERE id_user = ?', [$password, $user->getIdUser()]);
         }
@@ -134,7 +115,7 @@ class UsersManager implements ManagersInterface
             'id_user' => $id_user
         ];
         $this->db->query('UPDATE b_users SET id_group = :id_group, lastname = :lastname, firstname = :firstname, email = :email, is_active = :is_active, date_upd = NOW() WHERE id_user = :id_user', $params);
-        if (!is_null($user)) { // user mode
+        if (!is_null($user)) {
             $user->setLastname($lastname);
             $user->setFirstname($firstname);
             $user->setEmail($email);
@@ -163,14 +144,37 @@ class UsersManager implements ManagersInterface
      * Delete an account.
      *
      * @param int    $id_user
-     * @param string $email
+     * @param string|null $email
      */
-    public function delete(int $id_user, string $email)
+    public function delete(int $id_user, string $email = null)
     {
-        $this->disconnect();
+        if (!is_null($email)) {
+            $this->disconnect();
+        }
+        $this->db->query('DELETE FROM b_users_infos WHERE id_user = ?', [$id_user]);
         $this->db->query('DELETE FROM b_users WHERE id_user = ?', [$id_user]);
-        $method = __FUNCTION__.'Account';
-        Session::getInstance()->read('Mail')->$method($email);
+        if (!is_null($email)) {
+            $method = __FUNCTION__.'Account';
+            Session::getInstance()->read('Mail')->$method($email);
+        }
+    }
+
+    /**
+     * Enables or disables a user.
+     *
+     * @param int $state
+     * @param int $id_user
+     */
+    public function activate(int $state, int $id_user)
+    {
+        switch ($state) {
+            case 0:
+                $this->db->query('UPDATE b_users SET is_active = 1, date_upd = NOW() WHERE id_user = ?', [$id_user]);
+                break;
+            case 1:
+                $this->db->query('UPDATE b_users SET is_active = 0, date_upd = NOW() WHERE id_user = ?', [$id_user]);
+                break;
+        }
     }
 
     /**
@@ -186,7 +190,33 @@ class UsersManager implements ManagersInterface
     }
 
     /**
-     * Connect an user.
+     * Get all users.
+     *
+     * @return array
+     */
+    public function listAll()
+    {
+        return $this->db->query("SELECT U.id_user, U.lastname, U.firstname, U.email, DATE_FORMAT(U.last_connection, '%d/%m/%Y %H:%i:%s') AS last_connection, IF(U.is_active = 1, true, false) AS active, G.name AS group_name
+                                          FROM b_users AS U
+                                          INNER JOIN b_groups AS G
+                                            ON U.id_group = G.id_group
+                                          ORDER BY U.lastname")->fetchAll();
+    }
+
+    /**
+     * Get a user.
+     *
+     * @param int $id_user
+     *
+     * @return mixed
+     */
+    public function list(int $id_user)
+    {
+        return $this->db->query('SELECT id_user, id_group, lastname, firstname, email, is_active FROM b_users WHERE id_user = ?', [$id_user])->fetch();
+    }
+
+    /**
+     * Connect a user.
      *
      * @param string $email
      * @param string $password
@@ -196,32 +226,30 @@ class UsersManager implements ManagersInterface
      */
     public function connect(string $email, string $password, bool $remember_me)
     {
-        $user = $this->db->query('SELECT U.id_user, U.id_group, U.lastname, U.firstname, U.email, U.password, U.is_active, U.create_token, F.path AS avatar
+        $user = $this->db->query('SELECT U.id_user, U.id_group, U.lastname, U.firstname, U.email, U.password, U.is_active, F.path AS avatar
                                            FROM b_users AS U
                                            LEFT JOIN b_files AS F
                                              ON F.id_file = U.avatar
                                            WHERE U.email = ?', [$email])->fetch();
         if (!empty($user)) {
             $is_active = $user->is_active == 1 ? true : false;
-            if (is_null($user->create_token)) {
-                if ($is_active) {
-                    if (password_verify($password, $user->password)) {
-                        if ($remember_me) {
-                            $this->remember($user->id_user);
-                        }
-                        return new User($user);
+            if ($is_active) {
+                if (password_verify($password, $user->password)) {
+                    if ($remember_me) {
+                        $this->remember($user->id_user);
                     }
-                    return 'Mot de passe incorrect.';
+                    $this->db->query('UPDATE b_users SET last_connection = NOW() WHERE id_user = ?', [$user->id_user]);
+                    return new User($user);
                 }
-                return 'Ce compte est désactivé.';
+                return 'Mot de passe incorrect.';
             }
-            return 'Ce compte n\'a pas été validé.';
+            return 'Ce compte est désactivé.';
         }
         return 'Aucun compte n\'est lié à cette adresse email.';
     }
 
     /**
-     * Connect an user with the cookie.
+     * Connect a user with the cookie.
      *
      * @return User|bool
      */
@@ -230,7 +258,7 @@ class UsersManager implements ManagersInterface
         if (isset($_COOKIE['remember'])) {
             $remember_token = $_COOKIE['remember'];
             $parts = explode('#', $remember_token);
-            $id_user = $parts[0];
+            $id_user = intval($parts[0]);
             $user = $this->db->query('SELECT U.id_user, U.id_group, U.lastname, U.firstname, U.email, U.password, U.is_active, U.remember_token, F.path AS avatar
                                                FROM b_users AS U
                                                LEFT JOIN b_files AS F
@@ -241,6 +269,7 @@ class UsersManager implements ManagersInterface
                 if ($is_active) {
                     $expected = $id_user . '#' . $user->remember_token . sha1($id_user . self::TOKEN_SHA1);
                     if ($expected == $remember_token) {
+                        $this->db->query('UPDATE b_users SET last_connection = NOW() WHERE id_user = ?', [$id_user]);
                         $this->remember($id_user);
                         return new User($user);
                     }
@@ -252,7 +281,7 @@ class UsersManager implements ManagersInterface
     }
 
     /**
-     * Disconnect an user.
+     * Disconnect a user.
      */
     public function disconnect()
     {

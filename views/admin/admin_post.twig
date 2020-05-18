@@ -1,7 +1,7 @@
 {% extends 'front/layout.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/admin_post_category.css">
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/admin.css">
 {% endblock %}
 
 {% block scripts %}
@@ -15,26 +15,26 @@
 
         <form action="" method="POST" class="needs-validation" novalidate>
             <div class="form-group">
-                <label for="title">Titre</label>
+                <label for="title">Titre <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="title" id="title"{% if _post.title %} value="{{ _post.title }}"{% elseif post.title %} value="{{ post.title }}"{% endif %} required autofocus autocomplete="off">
                 <div class="invalid-feedback">Ce champs doit être remplis.</div>
             </div>
 
             <div class="form-group">
-                <label for="description">Description (ou châpo)</label>
+                <label for="description">Description (ou châpo) <span class="text-danger">*</span></label>
                 <textarea class="form-control" name="description" id="description" rows="5" required>{% if _post.description %}{{ _post.description }}{% elseif post.description %}{{ post.description }}{% endif %}</textarea>
                 <div class="invalid-feedback">Ce champs doit être remplis.</div>
             </div>
 
             <div class="form-group">
-                <label for="content">Contenu</label>
+                <label for="content">Contenu <span class="text-danger">*</span></label>
                 <textarea class="mce" name="content" id="content">{% if _post.content %}{{ _post.content }}{% elseif post.content %}{{ post.content }}{% endif %}</textarea>
                 <div class="invalid-feedback">Ce champs doit être remplis.</div>
             </div>
 
             <div class="form-row">
                 <div class="col-12 col-sm-2">
-                    <label for="category">Catégorie</label>
+                    <label for="category">Catégorie <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-sm-4">
                     <select class="custom-select" name="categorie" id="categorie" required>
@@ -44,7 +44,7 @@
                     </select>
                 </div>
                 <div class="col-12 col-sm-2">
-                    <label for="publish" class="ml-3">Publier l'article</label>
+                    <label for="publish" class="ml-3">Publier l'article <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-sm-4">
                     <div class="custom-control custom-radio custom-control-inline">
@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            {% if head.title is same as("Modification d'un article") %}
+            {% if post %}
                 <button type="submit" class="btn btn-theme btn-block mt-4">Mettre à jour l'article</button>
             {% else %}
                 <button type="submit" class="btn btn-theme btn-block mt-4">Créer l'article</button>

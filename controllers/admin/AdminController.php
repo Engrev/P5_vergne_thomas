@@ -102,7 +102,29 @@ class AdminController extends Controllers
     public function displayEditCategory(int $id_category)
     {
         $this->restrict(1);
-        $category = $this->categories_manager->list($id_category);
-        $this->render('admin_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>''], 'category'=>$category], 'admin');
+        $category_a = $this->categories_manager->list($id_category);
+        $this->render('admin_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>''], 'category_a'=>$category_a], 'admin');
+    }
+
+    public function displayUsers()
+    {
+        $this->restrict(1);
+        $users = $this->users_manager->listAll();
+        $this->render('users', ['head'=>['title'=>'Utilisateurs', 'meta_description'=>''], 'page'=>'utilisateurs', 'users'=>$users], 'admin');
+    }
+
+    public function displayCreateUser()
+    {
+        $this->restrict(1);
+        $groups = $this->users_manager->getGroups();
+        $this->render('admin_user', ['head'=>['title'=>'Création d\'un utilisateur', 'meta_description'=>''], 'groups'=>$groups], 'admin');
+    }
+
+    public function displayEditUser(int $id_user)
+    {
+        $this->restrict(1);
+        $groups = $this->users_manager->getGroups();
+        $user_a = $this->users_manager->list($id_user);
+        $this->render('admin_user', ['head'=>['title'=>'Modification d\'un utilisateur', 'meta_description'=>''], 'groups'=>$groups, 'user_a'=>$user_a], 'admin');
     }
 }

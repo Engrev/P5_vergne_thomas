@@ -46,16 +46,16 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav d-block d-sm-flex ml-auto">
-                    {% if user is defined %}
+                    {% if userL is defined %}
                         <button type="button" class="navbar-avatar" title="Mon compte">
-                            <img src="{{ _path_ ~ '/' ~ user.avatar|replace({'\\':'/'}) }}" alt="Photo de profil">
+                            <img src="{{ _path_ ~ '/' ~ userL.avatar|replace({'\\':'/'}) }}" alt="Photo de profil">
                         </button>
                         <div id="sidebar" class="bg-dark">
                             <div class="sidebar-avatar" style="background: url('{{ _path_ ~ '/' ~ user.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
                             <div class="list-group list-group-flush">
                                 <a href="{{ _path_ }}/dashboard" class="list-group-item list-group-item-action{{ page == 'dashboard' ? ' active' : '' }}"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
                                 <a href="{{ _path_ }}/profil" class="list-group-item list-group-item-action{{ page == 'profil' ? ' active' : '' }}"><i class="fas fa-user"></i> Mon profil</a>
-                                {% if user.id_group == 1 %}
+                                {% if userL.id_group == 1 %}
                                     <a href="{{ _path_ }}/utilisateurs" class="list-group-item list-group-item-action{{ page == 'utilisateurs' ? ' active' : '' }}"><i class="fas fa-users"></i> Utilisateurs</a>
                                 {% endif %}
                                 <a href="{{ _path_ }}/deconnexion" class="list-group-item list-group-item-action"><i class="fas fa-sign-out-alt text-danger"></i> Me déconnecter</a>

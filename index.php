@@ -30,16 +30,11 @@ $Router->get('/connexion', 'Home#displaySignin');
 $Router->post('/connexion', 'Users#signIn');
 $Router->get('/deconnexion', 'Users#signOut');
 
-$Router->get('/inscription', 'Home#displaySignup');
-$Router->post('/inscription', 'Users#signUp');
-
 $Router->get('/mot-de-passe-oublie', 'Home#displayForgotPassword');
 $Router->post('/mot-de-passe-oublie', 'Users#forgotPassword');
 
 $Router->get('/reinitialisation-mot-de-passe/:id-:token', 'Home#displayResetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
 $Router->post('/reinitialisation-mot-de-passe/:id-:token', 'Users#resetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
-
-$Router->get('/validation-compte/:id-:token', 'Users#validAccount')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
 
 //$Router->get('/contact', 'Home#displayContact');
 
@@ -61,10 +56,12 @@ $Router->get('/categories/modifier/:id', 'Admin#displayEditCategory')->with('id'
 $Router->post('/categories/modifier/:id', 'Categories#editCategory')->with('id', '[0-9]+');
 $Router->get('/categories/supprimer/:id', 'Categories#deleteCategory')->with('id', '[0-9]+');
 
-/*$Router->get('/users', 'UsersAdmin#listAll');
-$Router->get('/users/ajouter', 'UsersAdmin#create');
-$Router->get('/users/modifier/:id', 'UsersAdmin#update')->with('id', '[0-9]+');
-$Router->get('/users/desactiver/:id', 'UsersAdmin#deactivate')->with('id', '[0-9]+');*/
+$Router->get('/utilisateurs', 'Admin#displayUsers');
+$Router->get('/utilisateurs/creer', 'Admin#displayCreateUser');
+$Router->post('/utilisateurs/creer', 'Users#createUser');
+$Router->get('/utilisateurs/modifier/:id', 'Admin#displayEditUser')->with('id', '[0-9]+');
+$Router->post('/utilisateurs/modifier/:id', 'Users#editUser')->with('id', '[0-9]+');
+$Router->get('/utilisateurs/supprimer/:id', 'Users#deleteUser')->with('id', '[0-9]+');
 
 try {
     // EXEC
