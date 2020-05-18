@@ -1,0 +1,25 @@
+{% extends 'front/layout.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/admin_post_category.css">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ head.title }}</h1>
+
+        <form action="" method="POST" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="name">Nom</label>
+                <input type="text" class="form-control" name="name" id="name"{% if _post.name %} value="{{ _post.name }}"{% elseif category.name %} value="{{ category.name }}"{% endif %} required autofocus autocomplete="off">
+                <div class="invalid-feedback">Ce champs doit être remplis.</div>
+            </div>
+
+            {% if head.title is same as("Modification d'une catégorie") %}
+                <button type="submit" class="btn btn-theme btn-block mt-4">Mettre à jour la catégorie</button>
+            {% else %}
+                <button type="submit" class="btn btn-theme btn-block mt-4">Créer la catégorie</button>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

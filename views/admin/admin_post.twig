@@ -1,7 +1,7 @@
 {% extends 'front/layout.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/admin_post.css">
+    <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/admin_post_category.css">
 {% endblock %}
 
 {% block scripts %}
@@ -16,7 +16,7 @@
         <form action="" method="POST" class="needs-validation" novalidate>
             <div class="form-group">
                 <label for="title">Titre</label>
-                <input type="text" class="form-control" name="title" id="title"{% if _post.title %} value="{{ _post.title }}"{% elseif post.title %} value="{{ post.title }}"{% endif %} required>
+                <input type="text" class="form-control" name="title" id="title"{% if _post.title %} value="{{ _post.title }}"{% elseif post.title %} value="{{ post.title }}"{% endif %} required autofocus autocomplete="off">
                 <div class="invalid-feedback">Ce champs doit être remplis.</div>
             </div>
 

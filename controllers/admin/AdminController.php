@@ -74,7 +74,7 @@ class AdminController extends Controllers
     /**
      * Displays admin post page.
      */
-    public function displayEditPost($id_post)
+    public function displayEditPost(int $id_post)
     {
         $this->restrict();
         $User = $this->session->read('User');
@@ -92,14 +92,17 @@ class AdminController extends Controllers
      */
     public function displayCreateCategory()
     {
-        $this->render('add_category', ['head'=>['title'=>'Création d\'une catégorie', 'meta_description'=>'']], 'admin');
+        $this->restrict(1);
+        $this->render('admin_category', ['head'=>['title'=>'Création d\'une catégorie', 'meta_description'=>'']], 'admin');
     }
 
     /**
      * Displays admin category page.
      */
-    public function displayEditCategory()
+    public function displayEditCategory(int $id_category)
     {
-        $this->render('edit_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>'']], 'admin');
+        $this->restrict(1);
+        $category = $this->categories_manager->list($id_category);
+        $this->render('admin_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>''], 'category'=>$category], 'admin');
     }
 }

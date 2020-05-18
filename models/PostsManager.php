@@ -172,7 +172,7 @@ class PostsManager implements ManagersInterface
     }
 
     /**
-     * Get a post.
+     * Display a post.
      *
      * @param string $id
      * @param string $slug
@@ -275,6 +275,11 @@ class PostsManager implements ManagersInterface
     public function deletedAuthor(int $id_author)
     {
         $this->db->query('UPDATE b_posts SET author = 0 WHERE author = ?', [$id_author]);
+    }
+
+    public function deletedCategory(int $id_category)
+    {
+        $this->db->query('UPDATE b_posts SET id_category = 1 WHERE id_category = ?', [$id_category]);
     }
 
     //Saves uploaded files to the database.
