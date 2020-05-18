@@ -1,6 +1,5 @@
 <?php
-namespace App\Admin\Controllers;
-use App\Controllers\Controllers;
+namespace App\Controllers;
 
 /**
  * Class AdminController

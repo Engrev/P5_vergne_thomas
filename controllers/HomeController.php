@@ -35,14 +35,6 @@ class HomeController extends Controllers
     }
 
     /**
-     * Displays sign-up page.
-     */
-    public function displaySignup()
-    {
-        $this->render('sign-up', ['head'=>['title'=>'Inscription', 'meta_description'=>'']]);
-    }
-
-    /**
      * Displays forgot password page.
      */
     public function displayForgotPassword()

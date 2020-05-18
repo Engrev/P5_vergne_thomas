@@ -22,21 +22,21 @@
                     <div class="col-12 col-sm-4">
                         <div class="form-group">
                             <label for="lastname">Nom <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" name="compte[lastname]" id="lastname" value="{{ user.lastname }}" required pattern="^[a-zA-Z\s-]+$">
+                            <input type="text" class="form-control form-control-lg" name="compte[lastname]" id="lastname" value="{{ userL.lastname }}" required pattern="^[a-zA-Z\s-]+$">
                             <div class="invalid-feedback">Votre nom peut être uniquement avec des lettres, minuscules ou majuscules et/ou un espace et/ou un tiret.</div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="form-group">
                             <label for="firstname">Prénom <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" name="compte[firstname]" id="firstname" value="{{ user.firstname }}" required pattern="^[a-zA-Z\s-]+$">
+                            <input type="text" class="form-control form-control-lg" name="compte[firstname]" id="firstname" value="{{ userL.firstname }}" required pattern="^[a-zA-Z\s-]+$">
                             <div class="invalid-feedback">Votre prénom peut être uniquement avec des lettres, minuscules ou majuscules et/ou un espace et/ou un tiret.</div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="form-group">
                             <label for="email">Adresse email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control form-control-lg" name="compte[email]" id="email" value="{{ user.email }}" required pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
+                            <input type="email" class="form-control form-control-lg" name="compte[email]" id="email" value="{{ userL.email }}" required pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
                             <div class="invalid-feedback">Votre adresse email doit être de la forme : email@exemple.com.</div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-12 d-block d-sm-none">
-                        <div class="profil-avatar" style="background: url('{{ user.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
+                        <div class="profil-avatar" style="background: url('{{ userL.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group">
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 d-none d-sm-block">
-                        <div class="profil-avatar" style="background: url('{{ user.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
+                        <div class="profil-avatar" style="background: url('{{ userL.avatar|replace({'\\':'/'}) }}') center center no-repeat;"></div>
                     </div>
                 </div>
 
