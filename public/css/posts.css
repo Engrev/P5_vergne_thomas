@@ -10,6 +10,8 @@
 .post .post-preview { margin-bottom: 20px; }
 .post .post-description { color: var(--theme-color); margin: 30px 0; font-size: 20px; }
 .post .post-content a { color: var(--theme-color); }
+.post .post-content iframe { display: block; margin: 0 auto; }
+.post .post-content code { display: block; padding: 20px 10px; background-color: #2d2d2d; color: white; }
 .post .post-read-more::after { font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f054"; margin-left: -13px; opacity: 0; transition: var(--transition-duration); }
 .post .post-read-more:hover::after { margin-left: 6px; opacity: 1; }
 .post .post-read-more { min-width: 110px; }

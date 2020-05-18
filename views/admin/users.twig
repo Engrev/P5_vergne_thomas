@@ -16,33 +16,33 @@
         <table class="table table-hover table-responsive-md" id="users">
             <thead class="thead-dark">
                 <tr>
-                    <th>#</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Groupe</th>
-                    <th class="text-center">Actif</th>
-                    <th>Dernières connexion</th>
-                    <th>Actions</th>
+                    <th width="5%">#</th>
+                    <th width="10%">Nom</th>
+                    <th width="10%">Prénom</th>
+                    <th width="25%">Email</th>
+                    <th width="10%">Groupe</th>
+                    <th width="10%" class="text-center">Actif</th>
+                    <th width="20%">Dernières connexion</th>
+                    <th width="10%">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                     <tr>
-                        <td width="5%">{{ user.id_user }}</td>
-                        <td width="10%">{{ user.lastname }}</td>
-                        <td width="10%">{{ user.firstname }}</td>
-                        <td width="25%">{{ user.email }}</td>
-                        <td width="10%">{{ user.group_name }}</td>
-                        <td width="10%" class="text-center">
+                        <td>{{ user.id_user }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.group_name }}</td>
+                        <td class="text-center">
                             {% if user.active == true %}
                                 <i class="fas fa-check text-success{% if user.id_user != 0 %} user-active{% endif %}"{% if user.id_user != 0 %} data-state="{{ user.active ~ '#' ~ user.id_user }}" data-toggle="tooltip" data-placement="bottom" title="Désactiver ?"{% endif %}></i>
                             {% else %}
                                 <i class="fas fa-times text-danger user-active"{% if user.id_user != 0 %} data-state="{{ user.active ~ '#' ~ user.id_user }}" data-toggle="tooltip" data-placement="bottom" title="Activer ?"{% endif %}></i>
                             {% endif %}
                         </td>
-                        <td width="20%">{{ user.last_connection }}</td>
-                        <td width="10%">
+                        <td>{{ user.last_connection }}</td>
+                        <td>
                             {% if user.id_user != 0 %}
                                 <div class="dropdown">
                                     <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

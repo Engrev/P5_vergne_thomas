@@ -44,27 +44,31 @@
                 <table class="table table-hover table-responsive-md" id="posts">
                     <thead class="thead-dark">
                         <tr>
-                            <th>#</th>
-                            <th>Titre</th>
-                            <th>Catégorie</th>
-                            <th>Dernière mise à jour</th>
-                            <th>Publié</th>
-                            <th>Commentaires</th>
-                            <th>Actions</th>
+                            <th width="5%">#</th>
+                            <th width="30%">Titre</th>
+                            <th width="20%">Catégorie</th>
+                            <th width="20%">Dernière mise à jour</th>
+                            <th width="5%" class="text-center">Publié</th>
+                            <th width="10%">Commentaires</th>
+                            <th width="10%">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for post in posts %}
                             <tr>
-                                <td width="5%">{{ post.id_post }}</td>
-                                <td width="25%"><a href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank">{{ post.title }}</a></td>
-                                <td width="10%"><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1" target="_blank">{{ post.name }}</a></td>
-                                <td width="20%">{% if post.date_add != post.date_upd %}{{ post.date_upd }}{% else %}{{ post.date_add }}{% endif %}</td>
-                                <td width="5%">
-                                    {% if post.published == 1 %}Oui{% else %}<span data-toggle="tooltip" data-placement="bottom" title="Cet article ne sera visible que par vous">Non</span>{% endif %}
+                                <td>{{ post.id_post }}</td>
+                                <td><a href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank">{{ post.title }}</a></td>
+                                <td><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1" target="_blank">{{ post.name }}</a></td>
+                                <td>{% if post.date_add != post.date_upd %}{{ post.date_upd }}{% else %}{{ post.date_add }}{% endif %}</td>
+                                <td class="text-center">
+                                    {% if post.published == true %}
+                                        <i class="fas fa-check text-success post-published" data-state="{{ post.published ~ '#' ~ post.id_post }}" data-toggle="tooltip" data-placement="bottom" title="Dépublier ?"></i>
+                                    {% else %}
+                                        <i class="fas fa-times text-danger post-published" data-state="{{ post.published ~ '#' ~ post.id_post }}" data-toggle="tooltip" data-placement="bottom" title="Publié ?"></i>
+                                    {% endif %}
                                 </td>
-                                <td width="10%"></td>
-                                <td width="10%">
+                                <td></td>
+                                <td>
                                     <div class="dropdown">
                                         <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Actions
@@ -86,17 +90,17 @@
                 <table class="table table-hover table-responsive-md" id="categories">
                     <thead class="thead-dark">
                     <tr>
-                        <th>#</th>
-                        <th>Nom</th>
-                        <th>Actions</th>
+                        <th width="5%">#</th>
+                        <th width="85%">Nom</th>
+                        <th width="10%">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for category_d in categories %}
                         <tr>
-                            <td width="5%">{{ category_d.id_category }}</td>
-                            <td width="85%"><a href="{{ _path_  ~ '/categories/' ~ category_d.link }}" target="_blank">{{ category_d.name }}</a></td>
-                            <td width="10%">
+                            <td>{{ category_d.id_category }}</td>
+                            <td><a href="{{ _path_  ~ '/categories/' ~ category_d.link }}" target="_blank">{{ category_d.name }}</a></td>
+                            <td>
                                 <div class="dropdown">
                                     <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Actions

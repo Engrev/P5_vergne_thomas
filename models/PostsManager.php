@@ -204,6 +204,24 @@ class PostsManager implements ManagersInterface
     }
 
     /**
+     * Enables or disables a post.
+     *
+     * @param int $state
+     * @param int $id_post
+     */
+    public function activate(int $state, int $id_post)
+    {
+        switch ($state) {
+            case 0:
+                $this->db->query('UPDATE b_posts SET published = 1, date_upd = NOW() WHERE id_post = ?', [$id_post]);
+                break;
+            case 1:
+                $this->db->query('UPDATE b_posts SET published = 0, date_upd = NOW() WHERE id_post = ?', [$id_post]);
+                break;
+        }
+    }
+
+    /**
      * Get a post.
      *
      * @param string $id
@@ -259,7 +277,7 @@ class PostsManager implements ManagersInterface
      */
     public function listAll(int $id_user)
     {
-        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, P.published, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
+        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, IF(P.published = 1, true, false) AS published, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
                                           FROM b_posts AS P
                                           INNER JOIN b_categories AS C
                                             ON C.id_category = P.id_category

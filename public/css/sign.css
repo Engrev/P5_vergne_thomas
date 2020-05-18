@@ -12,4 +12,3 @@ form .invalid-feedback { margin: 10px 0; }
 .form-signin .custom-control-input ~ .custom-control-label { cursor: pointer; }
 .form-signin .custom-control-label { transition: color var(--transition-duration); }
 .form-signin .custom-control-label:hover { color: var(--theme-color); }
-.form-signup input { margin-bottom: 10px; }

@@ -33,4 +33,32 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).on('click', '.post-published', function () {
+        var obj = $(this);
+        obj.tooltip('hide');
+        var state = obj.data('state').split('#');
+        var published = state[0];
+        var id_post = state[1];
+        var parent = obj.parent();
+        parent.html('<i class="fas fa-spinner fa-spin"></i>');
+
+        $.ajax({
+            url: 'core/ajax/posts.php',
+            dataType: 'json',
+            method: 'POST',
+            data: {action: 'activate', published: published, id_post: id_post},
+            success: function (d) {
+                switch (published) {
+                    case '0':
+                        parent.html('<i class="fas fa-check text-success post-published" data-state="1#'+id_post+'" data-toggle="tooltip" data-placement="bottom" title="Publié ?"></i>');
+                        break;
+                    case '1':
+                        parent.html('<i class="fas fa-times text-danger post-published" data-state="0#'+id_post+'" data-toggle="tooltip" data-placement="bottom" title="Dépublié ?"></i>');
+                        break;
+                }
+                parent.children().tooltip('enable');
+            }
+        });
+    });
 });

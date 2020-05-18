@@ -48,11 +48,11 @@
                 </div>
                 <div class="col-12 col-sm-4">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" name="publish" id="publish1" value="1"{{ _post.publish == 1 or post.published == 1 ? ' checked' : '' }} required>
+                        <input type="radio" class="custom-control-input" name="publish" id="publish1" value="1"{{ _post.publish == '1' or post.published == '1' ? ' checked' : '' }} required>
                         <label class="custom-control-label" for="publish1">Oui</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline mb-3">
-                        <input type="radio" class="custom-control-input" name="publish" id="publish2" value="0"{{ _post.publish == 0 or post.published == 0 ? ' checked' : '' }} required>
+                        <input type="radio" class="custom-control-input" name="publish" id="publish2" value="0"{{ _post.publish == '0' or post.published == '0' ? ' checked' : '' }} required>
                         <label class="custom-control-label" for="publish2">Non</label>
                         <div class="invalid-feedback ml-4">Oui ou Non ?</div>
                     </div>
