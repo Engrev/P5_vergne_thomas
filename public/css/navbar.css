@@ -15,6 +15,9 @@
 .navbar-avatar { border: 0; padding: 0; background-color: transparent; transition: transform var(--transition-duration); }
 .navbar-avatar:hover { transform: scale(1.2); }
 .navbar-avatar img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; }
+@media screen AND (min-width: 576px) {
+    #navbar-btn-signout { display: none; }
+}
 #sidebar { width: 200px; min-width: auto; height: calc(100vh); position: fixed; top: 0; right: 0; transform: translateX(200px); transition: transform 500ms cubic-bezier(.17,.67,.83,.67); }
 .navbar-avatar:focus + #sidebar { transform: translateX(0); }
 #sidebar .sidebar-avatar { width: 100px; height: 100px; border-radius: 50%; border: 2px solid white; display: block; margin: 30px auto; }

@@ -174,14 +174,14 @@ class PostsManager implements ManagersInterface
     /**
      * Display a post.
      *
-     * @param string $id
-     * @param string $slug
-     * @param int    $id_user
+     * @param string   $id
+     * @param string   $slug
+     * @param int|null $id_user
      *
      * @return mixed
      * @throws ManagerException
      */
-    public function display(string $id, string $slug, int $id_user)
+    public function display(string $id, string $slug, int $id_user = null)
     {
         $post = $this->db->query("SELECT P.id_post, P.id_category, P.link AS p_link, P.title, P.description, P.content, P.author, P.published, P.date_add, P.date_upd, 
                                                   DATE_FORMAT(P.date_add, '%d %M %Y') AS date_add_fr, DATE_FORMAT(P.date_upd, '%d %M %Y') AS date_upd_fr, 
@@ -195,7 +195,7 @@ class PostsManager implements ManagersInterface
                                            WHERE P.id_post = ?", [$id])->fetch();
         if ($post->p_link) {
             if ($post->p_link === $id.'-'.$slug) {
-                if ($post->published == 1 || $post->published == 0 && $post->author == $id_user) {
+                if ($post->published == 1 || !is_null($id_user) && $post->published == 0 && $post->author == $id_user) {
                     return $post;
                 }
             }
