@@ -18,72 +18,80 @@
             <li class="nav-item">
                 <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true"><i class="fas fa-list"></i> Mes articles</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="categories-tab" data-toggle="tab" href="#categories" role="tab" aria-controls="categories" aria-selected="false"><i class="fas fa-tags"></i> Les catégories</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="followed_posts-tab" data-toggle="tab" href="#followed_posts" role="tab" aria-controls="followed_posts" aria-selected="false"><i class="fas fa-star"></i> Articles suivis</a>
-            </li>
+            {% if userL.id_group == 1 %}
+                <li class="nav-item">
+                    <a class="nav-link" id="categories-tab" data-toggle="tab" href="#categories" role="tab" aria-controls="categories" aria-selected="false"><i class="fas fa-tags"></i> Les catégories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="false"><i class="fas fa-comments"></i> Les commentaires</a>
+                </li>
+            {% endif %}
         </ul>
 
         <ul class="nav flex-column nav-fill mb-3 d-flex d-md-none" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true"><i class="fas fa-list"></i> Mes articles</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="categories-tab" data-toggle="tab" href="#categories" role="tab" aria-controls="categories" aria-selected="false"><i class="fas fa-tags"></i> Les catégories</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="followed_posts-tab" data-toggle="tab" href="#followed_posts" role="tab" aria-controls="followed_posts" aria-selected="false"><i class="fas fa-star"></i> Articles suivis</a>
-            </li>
+            {% if userL.id_group == 1 %}
+                <li class="nav-item">
+                    <a class="nav-link" id="categories-tab" data-toggle="tab" href="#categories" role="tab" aria-controls="categories" aria-selected="false"><i class="fas fa-tags"></i> Les catégories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="false"><i class="fas fa-comments"></i> Les commentaires</a>
+                </li>
+            {% endif %}
         </ul>
 
         <section class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/articles/creer"><i class="fas fa-plus-square"></i> Créer un article</a>
-                <table class="table table-hover table-responsive-md" id="posts">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th width="5%">#</th>
-                            <th width="30%">Titre</th>
-                            <th width="20%">Catégorie</th>
-                            <th width="20%">Dernière mise à jour</th>
-                            <th width="5%" class="text-center">Publié</th>
-                            <th width="10%">Commentaires</th>
-                            <th width="10%">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for post in posts %}
+                {% if posts|length > 0 %}
+                    <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/articles/creer"><i class="fas fa-plus-square"></i> Créer un article</a>
+                    <table class="table table-hover table-responsive-md" id="posts">
+                        <thead class="thead-dark">
                             <tr>
-                                <td>{{ post.id_post }}</td>
-                                <td><a href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank">{{ post.title }}</a></td>
-                                <td><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1" target="_blank">{{ post.name }}</a></td>
-                                <td>{% if post.date_add != post.date_upd %}{{ post.date_upd }}{% else %}{{ post.date_add }}{% endif %}</td>
-                                <td class="text-center">
-                                    {% if post.published == true %}
-                                        <i class="fas fa-check text-success post-published" data-state="{{ post.published ~ '#' ~ post.id_post }}" data-toggle="tooltip" data-placement="bottom" title="Dépublier ?"></i>
-                                    {% else %}
-                                        <i class="fas fa-times text-danger post-published" data-state="{{ post.published ~ '#' ~ post.id_post }}" data-toggle="tooltip" data-placement="bottom" title="Publié ?"></i>
-                                    {% endif %}
-                                </td>
-                                <td></td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item text-success" href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank"><i class="fas fa-eye"></i> Voir <i class="fas fa-external-link-alt"></i></a>
-                                            <a class="dropdown-item text-warning" href="{{ _path_  ~ '/articles/modifier/' ~ post.id_post }}"><i class="fas fa-edit"></i> Modifier</a>
-                                            <a class="dropdown-item text-danger link-delete" href="{{ _path_  ~ '/articles/supprimer/' ~ post.id_post }}"><i class="fas fa-minus-square"></i> Supprimer</a>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th width="5%">#</th>
+                                <th width="30%">Titre</th>
+                                <th width="20%">Catégorie</th>
+                                <th width="20%">Dernière mise à jour</th>
+                                <th width="5%" class="text-center">Publié</th>
+                                <th width="10%">Commentaires</th>
+                                <th width="10%">Actions</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for post in posts %}
+                                <tr>
+                                    <td>{{ post.id_post }}</td>
+                                    <td><a href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank">{{ post.title }}</a></td>
+                                    <td><a href="{{ _path_ ~ '/categories/' ~ post.c_link }}/1" target="_blank">{{ post.name }}</a></td>
+                                    <td>{% if post.date_add != post.date_upd %}{{ post.date_upd }}{% else %}{{ post.date_add }}{% endif %}</td>
+                                    <td class="text-center">
+                                        {% if post.published == true %}
+                                            <i class="fas fa-check text-success post-published" data-state="{{ post.published ~ '#' ~ post.id_post }}" data-toggle="tooltip" data-placement="bottom" title="Dépublier ?"></i>
+                                        {% else %}
+                                            <i class="fas fa-times text-danger post-published" data-state="{{ post.published ~ '#' ~ post.id_post }}" data-toggle="tooltip" data-placement="bottom" title="Publier ?"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item text-success" href="{{ _path_  ~ '/articles/' ~ post.p_link }}" target="_blank"><i class="fas fa-eye"></i> Voir <i class="fas fa-external-link-alt"></i></a>
+                                                <a class="dropdown-item text-warning" href="{{ _path_  ~ '/articles/modifier/' ~ post.id_post }}"><i class="fas fa-edit"></i> Modifier</a>
+                                                <a class="dropdown-item text-danger link-delete" href="{{ _path_  ~ '/articles/supprimer/' ~ post.id_post }}"><i class="fas fa-minus-square"></i> Supprimer</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-primary" role="alert">Vous n'avez pas encore créer d'article. Cliquez <a href="{{ _path_ }}/articles/creer" class="alert-link">ici</a> pour en créer un.</div>
+                {% endif %}
             </div>
             <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="categories-tab">
                 <a class="btn btn-theme float-right mb-3 btn-add" href="{{ _path_ }}/categories/creer"><i class="fas fa-plus-circle"></i> Créer une catégorie</a>
@@ -119,7 +127,48 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="followed_posts" role="tabpanel" aria-labelledby="followed_posts-tab">Articles suivis</div>
+            <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                {% if comments|length > 0 %}
+                    <table class="table table-hover table-responsive-md" id="comments">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="40%">Commentaire</th>
+                                <th width="20%">Autheur</th>
+                                <th width="10%" class="text-center">ID article</th>
+                                <th width="20%">Date d'ajout</th>
+                                <th width="5%" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for comment in comments %}
+                                <tr>
+                                    <td>{{ comment.id_comment }}</td>
+                                    <td>{{ comment.content }}</td>
+                                    <td>
+                                        {% if comment.id_user is not null %}
+                                            {{ comment.firstname ~ ' ' ~ comment.lastname }}
+                                        {% else %}
+                                            {{ comment.name }} (<a href="mailto:{{ comment.email }}">{{ comment.email }}</a>)
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ _path_  ~ '/articles/' ~ comment.post_link }}" class="badge badge-pill badge-success" target="_blank" data-toggle="tooltip" data-placement="bottom" title="{{ comment.post_title }}">
+                                            {{ comment.id_post }}
+                                        </a>
+                                    </td>
+                                    <td>{{ comment.date_add }}</td>
+                                    <td class="text-center">
+                                        <i class="fas fa-check text-warning comment-validated" data-id-comment="{{ comment.id_comment }}" data-toggle="tooltip" data-placement="bottom" title="Valider ?"></i>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-primary" role="alert">Il n'y a aucun commentaire à valider. <i class="fas fa-thumbs-up"></i></div>
+                {% endif %}
+            </div>
         </section>
     </div>
 {% endblock %}

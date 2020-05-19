@@ -51,13 +51,67 @@ $(document).ready(function () {
             success: function (d) {
                 switch (published) {
                     case '0':
-                        parent.html('<i class="fas fa-check text-success post-published" data-state="1#'+id_post+'" data-toggle="tooltip" data-placement="bottom" title="Publié ?"></i>');
+                        parent.html('<i class="fas fa-check text-success post-published" data-state="1#'+id_post+'" data-toggle="tooltip" data-placement="bottom" title="Publier ?"></i>');
                         break;
                     case '1':
-                        parent.html('<i class="fas fa-times text-danger post-published" data-state="0#'+id_post+'" data-toggle="tooltip" data-placement="bottom" title="Dépublié ?"></i>');
+                        parent.html('<i class="fas fa-times text-danger post-published" data-state="0#'+id_post+'" data-toggle="tooltip" data-placement="bottom" title="Dépublier ?"></i>');
                         break;
                 }
                 parent.children().tooltip('enable');
+            }
+        });
+    });
+
+    $(document).on('click', '.comment-validated', function () {
+        var obj = $(this);
+        obj.tooltip('hide');
+        var id_comment = obj.data('id-comment');
+        var parent = obj.parent();
+        parent.html('<i class="fas fa-spinner fa-spin"></i>');
+
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Validation du commentaire',
+            content: "Que souhaitez-vous faire ?",
+            type: 'orange',
+            buttons: {
+                cancel: {
+                    text: 'Annuler',
+                    btnClass: 'btn-default',
+                    action: function() {
+                        parent.html('<i class="fas fa-check text-warning comment-validated" data-id-comment="'+id_comment+'" data-toggle="tooltip" data-placement="bottom" title="Valider ?"></i>');
+                    }
+                },
+                delete: {
+                    text: 'Supprimer',
+                    btnClass: 'btn-red',
+                    action: function() {
+                        $.ajax({
+                            url: 'core/ajax/comments.php',
+                            dataType: 'json',
+                            method: 'POST',
+                            data: {action: 'delete', id_comment: id_comment},
+                            success: function (d) {
+                                parent.parent().remove();
+                            }
+                        });
+                    }
+                },
+                confirm: {
+                    text: 'Valider',
+                    btnClass: 'btn-green',
+                    action: function() {
+                        $.ajax({
+                            url: 'core/ajax/comments.php',
+                            dataType: 'json',
+                            method: 'POST',
+                            data: {action: 'validate', id_comment: id_comment},
+                            success: function (d) {
+                                parent.parent().remove();
+                            }
+                        });
+                    }
+                }
             }
         });
     });

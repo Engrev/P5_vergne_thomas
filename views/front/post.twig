@@ -15,6 +15,11 @@
     <link rel="stylesheet" type="text/css" href="{{ _path_ }}/public/css/posts.css">
 {% endblock %}
 
+{% block scripts %}
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdhVPQUAAAAAMWgEIy0r15HgmtjcBt1XPo2isEP"></script>
+    <script src="{{ _path_ }}/public/js/posts.js"></script>
+{% endblock %}
+
 {% block body %}
     <div class="container">
         <script type="application/ld+json">
@@ -57,5 +62,45 @@
             <h2 class="post-description">{{ post.description|raw }}</h2>
             <article class="post-content">{{ post.content|raw }}</article>
         </article>
+
+        <hr>
+
+        <section id="comments">
+            <h4>Laisser un commentaire</h4>
+            <form action="" method="POST" class="needs-validation" novalidate>
+                {% if not userL %}
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <input type="text" class="form-control mb-3" name="name" placeholder="Votre nom"{% if _post.name %} value="{{ _post.name }}"{% endif %} required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <input type="email" class="form-control mb-3" name="email" placeholder="Votre email"{% if _post.email %} value="{{ _post.email }}"{% endif %} required autocomplete="off" pattern="^[a-z0-9_.-]+@[a-z0-9_.-]{2,}\.[a-z]{2,4}$">
+                        </div>
+                    </div>
+                {% endif %}
+                <textarea class="form-control mb-3" name="comment" rows="3" placeholder="Votre commentaire" required>{% if _post.comment %}{{ _post.comment }}{% endif %}</textarea>
+                <input type="hidden" name="recaptcha_response" id="recaptcha_response">
+                <button type="submit" class="btn btn-theme">Envoyer</button>
+            </form>
+
+            <hr>
+
+            <h4>{{ comments|length }} {% if comments|length > 1 %}commentaires{% else %}commentaire{% endif %}</h4>
+            {% for comment in comments %}
+                <article class="comment" id="comment-{{ comment.id_comment }}">
+                    {% if comment.id_user is not null %}
+                        <img class="d-none d-sm-inline-block" src="{{ _path_ ~ '/uploads/u/' ~ comment.id_user ~ '.jpg' }}" alt="Photo de profil">
+                    {% endif %}
+                    <article class="comment-body{% if comment.id_user is not null %} user ml-0 ml-sm-4{% endif %}">
+                        {% if comment.id_user is not null %}
+                            <p class="comment-author">{{ comment.firstname ~ ' ' ~ comment.lastname }} <span class="text-muted font-weight-normal ml-2">{{ comment.date_add }}</span></p>
+                        {% else %}
+                            <p class="comment-author">{{ comment.name }} <span class="text-muted font-weight-normal ml-2">{{ comment.date_add }}</span></p>
+                        {% endif %}
+                        <p class="comment-content">{{ comment.content }}</p>
+                    </article>
+                </article>
+            {% endfor %}
+        </section>
     </div>
 {% endblock %}

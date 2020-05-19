@@ -2,7 +2,8 @@ h2 { margin: 60px 0 30px 0; line-height: 0.5; }
 h2::after { content: ''; border-bottom: 1px solid #ced4da; display: inline-block; width: 100%; }
 #myTab .nav-item .nav-link.active { color: var(--theme-color); }
 #myTabContent { margin-bottom: 30px; }
-#posts .post-published { cursor: pointer; }
+#posts .post-published, #comments .comment-validated { cursor: pointer; }
+#posts .alert-link:hover { text-decoration: underline; }
 table .dropdown-menu .dropdown-item:active { color: white!important; }
 @media screen AND (max-width: 576px) {
     .btn-add { display: block; width: 100%; margin: 10px 0 30px 0; }

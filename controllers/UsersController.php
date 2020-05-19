@@ -1,11 +1,11 @@
 <?php
-namespace App\Controllers;
-use App\Core\ReCaptcha;
-use App\core\Validator;
+namespace Blog\Controllers;
+use Blog\Core\ReCaptcha;
+use Blog\core\Validator;
 
 /**
  * Class UsersController
- * @package App\Controllers
+ * @package Blog\Controllers
  */
 class UsersController extends Controllers
 {
@@ -186,9 +186,11 @@ class UsersController extends Controllers
             } else {
                 $this->session->writeFlash('danger', "Certains champs sont vides.");
             }
-            $_post = $this->getPost($_POST);
-            $this->render('sign-in', ['head'=>['title'=>'Connexion', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
+        } else {
+            $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
+        $_post = $this->getPost($_POST);
+        $this->render('sign-in', ['head'=>['title'=>'Connexion', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : '']);
     }
 
     /**

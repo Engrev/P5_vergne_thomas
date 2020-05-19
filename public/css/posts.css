@@ -15,3 +15,13 @@
 .post .post-read-more::after { font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f054"; margin-left: -13px; opacity: 0; transition: var(--transition-duration); }
 .post .post-read-more:hover::after { margin-left: 6px; opacity: 1; }
 .post .post-read-more { min-width: 110px; }
+
+#comments { margin-bottom: 30px; }
+#comments h4 { margin-bottom: 20px; }
+#comments form textarea { resize: vertical; }
+#comments .comment { background-color: white; width: 100%; padding: 20px; margin-bottom: 20px; border: 1px solid #ced4da; }
+#comments .comment img { width: 80px; height: 80px; border-radius: 50%; }
+#comments .comment .comment-body.user { display: inline-block; }
+#comments .comment .comment-body p { margin-bottom: 0; }
+#comments .comment .comment-body .comment-author{ font-weight: bold; }
+#comments .comment .comment-body .comment-content { margin-top: 10px; }

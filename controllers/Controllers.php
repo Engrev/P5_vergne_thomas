@@ -1,14 +1,15 @@
 <?php
-namespace App\Controllers;
-use App\Core\Session;
-use App\Managers\CategoriesManager;
-use App\Managers\PostsManager;
-use App\Managers\UsersManager;
-use App\Core\Database;
+namespace Blog\Controllers;
+use Blog\Core\Session;
+use Blog\Managers\CategoriesManager;
+use Blog\Managers\PostsManager;
+use Blog\Managers\CommentsManager;
+use Blog\Managers\UsersManager;
+use Blog\Core\Database;
 
 /**
  * Class Controllers
- * @package App\Controllers
+ * @package Blog\Controllers
  */
 class Controllers
 {
@@ -16,6 +17,7 @@ class Controllers
     protected $twig;
     protected $categories_manager;
     protected $posts_manager;
+    protected $comments_manager;
     protected $users_manager;
 
     /**
@@ -27,6 +29,7 @@ class Controllers
         $this->twig = $this->session->read('Twig');
         $this->categories_manager = new CategoriesManager(Database::getInstance());
         $this->posts_manager = new PostsManager(Database::getInstance());
+        $this->comments_manager = new CommentsManager(Database::getInstance());
         $this->users_manager = new UsersManager(Database::getInstance());
     }
 
@@ -114,7 +117,7 @@ class Controllers
             $error         = $files['error'][0];
             $size          = $files['size'][0];
             $ext           = strtolower(pathinfo($uploaded_name, PATHINFO_EXTENSION));
-            $upload_name   = intval($id) . "." . $ext;
+            $upload_name   = intval($id) . ".jpg";
 
             switch ($type) {
                 case 'avatar':
@@ -166,7 +169,8 @@ class Controllers
                         }
                         $img = imagecreatetruecolor($width, $height);
                         imagecopyresampled($img, $img_upload, 0, 0, 0, 0, $width, $height, $width_upload, $height_upload);
-                        switch ($ext) {
+                        imagejpeg($img, $targetPath, 100);
+                        /*switch ($ext) {
                             case 'jpg':
                             case 'jpeg':
                                 imagejpeg($img, $targetPath, 100);
@@ -174,7 +178,7 @@ class Controllers
                             case 'png':
                                 imagepng($img, $targetPath, 100);
                                 break;
-                        }
+                        }*/
                         imagedestroy($img);
 
                         //move_uploaded_file($tmpName, $targetPath);

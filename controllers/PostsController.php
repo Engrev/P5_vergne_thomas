@@ -1,10 +1,10 @@
 <?php
-namespace App\Controllers;
-use App\Exceptions\ManagerException;
+namespace Blog\Controllers;
+use Blog\Exceptions\ManagerException;
 
 /**
  * Class PostsController
- * @package App\Controllers
+ * @package Blog\Controllers
  */
 class PostsController extends Controllers
 {
@@ -37,10 +37,14 @@ class PostsController extends Controllers
             $User = $this->session->read('User');
             $id_user = !is_null($User) ? $User->getIdUser() : null;
             $post = $this->posts_manager->display($id, $slug, $id_user);
+            $comments = $this->comments_manager->display($id);
+            foreach ($comments as $comment) {
+                $comment->date_add = $this->comments_manager->dateIntervalComments($comment->date_add);
+            }
         } catch (ManagerException $ManagerException) {
             $ManagerException->display(404, true);
         }
-        $this->render('post', ['head'=>['title'=>$post->title, 'meta_description'=>$post->description], 'post'=>$post]);
+        $this->render('post', ['head'=>['title'=>$post->title, 'meta_description'=>$post->description], 'post'=>$post, 'comments'=>$comments]);
     }
 
     /**

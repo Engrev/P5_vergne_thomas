@@ -11,10 +11,10 @@ $Twig->addGlobal('_path_', _PATH_);
 if ($Twig->isDebug() === true) {
     $Twig->addExtension(new Twig\Extension\DebugExtension());
 }
-$Session = App\Core\Session::getInstance();
+$Session = Blog\Core\Session::getInstance();
 $Session->write('Twig', $Twig);
-$Router = new App\Core\Router($_GET['url']);
-$Mail = new App\core\Mail();
+$Router = new Blog\Core\Router($_GET['url']);
+$Mail = new Blog\core\Mail();
 $Session->write('Mail', $Mail);
 
 // FRONT
@@ -22,6 +22,7 @@ $Router->get('/', 'Home#display');
 
 $Router->get('/derniers-articles', 'Posts#last');
 $Router->get('/articles/:id-:slug', 'Posts#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9\.]+');
+$Router->post('/articles/:id-:slug', 'Comments#createComment')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9\.]+');
 
 $Router->get('/categories/:id-:slug', 'Categories#redirectWithPage')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+');
 $Router->get('/categories/:id-:slug/:page', 'Categories#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+')->with('page', '[0-9]+');
@@ -66,6 +67,6 @@ $Router->get('/utilisateurs/supprimer/:id', 'Users#deleteUser')->with('id', '[0-
 try {
     // EXEC
     $Router->run();
-} catch (App\Exceptions\RouterException $RouterException) {
+} catch (Blog\Exceptions\RouterException $RouterException) {
     $RouterException->display(404);
 }

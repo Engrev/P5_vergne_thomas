@@ -1,9 +1,9 @@
 <?php
-namespace App\Controllers;
+namespace Blog\Controllers;
 
 /**
  * Class AdminController
- * @package App\Controllers
+ * @package Blog\Controllers
  */
 class AdminController extends Controllers
 {
@@ -46,7 +46,8 @@ class AdminController extends Controllers
         $User = $this->session->read('User');
         $posts = $this->posts_manager->listAll($User->getIdUser());
         $categories = $this->categories_manager->listAll();
-        $this->render('dashboard', ['head'=>['title'=>'Tableau de bord', 'meta_description'=>''], 'page'=>'dashboard', 'posts'=>$posts, 'categories'=>$categories], 'admin');
+        $comments = $this->comments_manager->listAll();
+        $this->render('dashboard', ['head'=>['title'=>'Tableau de bord', 'meta_description'=>''], 'page'=>'dashboard', 'posts'=>$posts, 'categories'=>$categories, 'comments'=>$comments], 'admin');
     }
 
     /**
