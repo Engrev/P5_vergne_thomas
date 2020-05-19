@@ -1,11 +1,11 @@
 <?php
-namespace App\Exceptions;
-use App\Core\Session;
-use App\Interfaces\HttpcodesInterface;
+namespace Blog\Exceptions;
+use Blog\Core\Session;
+use Blog\Interfaces\HttpcodesInterface;
 
 /**
  * Class ManagerException
- * @package App\Exceptions
+ * @package Blog\Exceptions
  */
 class ManagerException extends \PDOException implements HttpcodesInterface
 {

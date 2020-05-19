@@ -1,10 +1,10 @@
 <?php
-namespace App\Core;
+namespace Blog\Core;
 use PDO;
 
 /**
  * Class Database
- * @package App\Core
+ * @package Blog\Core
  */
 class Database extends PDO
 {

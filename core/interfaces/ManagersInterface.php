@@ -1,9 +1,9 @@
 <?php
-namespace App\Interfaces;
+namespace Blog\Interfaces;
 
 /**
  * Interface ManagersInterface
- * @package App\Interfaces
+ * @package Blog\Interfaces
  */
 interface ManagersInterface
 {

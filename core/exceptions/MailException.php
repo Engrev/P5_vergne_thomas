@@ -1,12 +1,12 @@
 <?php
-namespace App\Exceptions;
-use App\Core\Session;
-use App\Interfaces\HttpcodesInterface;
+namespace Blog\Exceptions;
+use Blog\Core\Session;
+use Blog\Interfaces\HttpcodesInterface;
 use PHPMailer\PHPMailer\Exception;
 
 /**
  * Class MailException
- * @package App\Exceptions
+ * @package Blog\Exceptions
  */
 class MailException extends Exception implements HttpcodesInterface
 {

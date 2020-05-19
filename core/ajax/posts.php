@@ -1,7 +1,7 @@
 <?php
 require 'autoload.php';
-$Db = App\Core\Database::getInstance();
-$PostsManager = new App\Managers\PostsManager($Db);
+$Db = Blog\Core\Database::getInstance();
+$PostsManager = new Blog\Managers\PostsManager($Db);
 $data = [];
 extract($_POST);
 

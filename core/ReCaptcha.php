@@ -1,10 +1,10 @@
 <?php
-namespace App\Core;
-use App\Traits\Libs;
+namespace Blog\Core;
+use Blog\Traits\Libs;
 
 /**
  * Class ReCaptcha
- * @package App\Core
+ * @package Blog\Core
  */
 class ReCaptcha
 {

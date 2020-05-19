@@ -1,12 +1,12 @@
 <?php
-namespace App\core;
+namespace Blog\core;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-use App\Exceptions\MailException;
+use Blog\Exceptions\MailException;
 
 /**
  * Class Mail
- * @package App\core
+ * @package Blog\core
  */
 class Mail extends PHPMailer
 {

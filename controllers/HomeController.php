@@ -1,9 +1,9 @@
 <?php
-namespace App\Controllers;
+namespace Blog\Controllers;
 
 /**
  * Class HomeController
- * @package App\Controllers
+ * @package Blog\Controllers
  */
 class HomeController extends Controllers
 {

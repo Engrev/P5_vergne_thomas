@@ -1,5 +1,5 @@
 <?php
-namespace App\Core;
+namespace Blog\Core;
 /*
 
 class.PaginationLinks.php

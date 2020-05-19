@@ -1,7 +1,7 @@
 <?php
 require 'autoload.php';
-$Db = App\Core\Database::getInstance();
-$UsersManager = new App\Managers\UsersManager($Db);
+$Db = Blog\Core\Database::getInstance();
+$UsersManager = new Blog\Managers\UsersManager($Db);
 $data = [];
 extract($_POST);
 

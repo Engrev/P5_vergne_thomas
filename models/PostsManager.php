@@ -1,11 +1,11 @@
 <?php
-namespace App\Managers;
-use App\Interfaces\ManagersInterface;
-use App\Exceptions\ManagerException;
+namespace Blog\Managers;
+use Blog\Interfaces\ManagersInterface;
+use Blog\Exceptions\ManagerException;
 
 /**
  * Class PostsManager
- * @package App\Managers
+ * @package Blog\Managers
  */
 class PostsManager implements ManagersInterface
 {

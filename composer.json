@@ -21,13 +21,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "App\\": "",
-            "App\\Core\\": "core/",
-            "App\\Exceptions\\": "core/exceptions/",
-            "App\\Controllers\\": "controllers/",
-            "App\\Managers\\": "models/",
-            "App\\Interfaces\\": "core/interfaces/",
-            "App\\Traits\\": "core/traits/"
+            "Blog\\": "",
+            "Blog\\Core\\": "core/",
+            "Blog\\Exceptions\\": "core/exceptions/",
+            "Blog\\Controllers\\": "controllers/",
+            "Blog\\Managers\\": "models/",
+            "Blog\\Interfaces\\": "core/interfaces/",
+            "Blog\\Traits\\": "core/traits/"
         }
     }
 }

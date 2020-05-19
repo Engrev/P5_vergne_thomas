@@ -1,11 +1,11 @@
 <?php
-namespace App\Exceptions;
-use App\Core\Session;
-use App\Interfaces\HttpcodesInterface;
+namespace Blog\Exceptions;
+use Blog\Core\Session;
+use Blog\Interfaces\HttpcodesInterface;
 
 /**
  * Class RouterException
- * @package App\Exceptions
+ * @package Blog\Exceptions
  *
  * To differentiate between code exceptions and routing exceptions.
  */

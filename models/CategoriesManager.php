@@ -1,11 +1,11 @@
 <?php
-namespace App\Managers;
-use App\Exceptions\ManagerException;
-use App\Interfaces\ManagersInterface;
+namespace Blog\Managers;
+use Blog\Exceptions\ManagerException;
+use Blog\Interfaces\ManagersInterface;
 
 /**
  * Class CategoriesManager
- * @package App\Managers
+ * @package Blog\Managers
  */
 class CategoriesManager implements ManagersInterface
 {

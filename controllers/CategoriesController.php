@@ -1,12 +1,12 @@
 <?php
-namespace App\Controllers;
-use App\Exceptions\ManagerException;
-use App\Core\Pagination;
-use App\Core\Database;
+namespace Blog\Controllers;
+use Blog\Exceptions\ManagerException;
+use Blog\Core\Pagination;
+use Blog\Core\Database;
 
 /**
  * Class CategoriesController
- * @package App\Controllers
+ * @package Blog\Controllers
  */
 class CategoriesController extends Controllers
 {

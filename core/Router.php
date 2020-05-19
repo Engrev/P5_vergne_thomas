@@ -1,10 +1,10 @@
 <?php
-namespace App\Core;
-use App\Exceptions\RouterException;
+namespace Blog\Core;
+use Blog\Exceptions\RouterException;
 
 /**
  * Class Router
- * @package App\Core
+ * @package Blog\Core
  */
 class Router
 {

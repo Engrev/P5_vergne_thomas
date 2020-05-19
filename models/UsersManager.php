@@ -1,12 +1,12 @@
 <?php
-namespace App\Managers;
-use App\Interfaces\ManagersInterface;
-use App\Core\Session;
-use App\Core\User;
+namespace Blog\Managers;
+use Blog\Interfaces\ManagersInterface;
+use Blog\Core\Session;
+use Blog\Core\User;
 
 /**
  * Class UsersManager
- * @package App\Managers
+ * @package Blog\Managers
  */
 class UsersManager implements ManagersInterface
 {

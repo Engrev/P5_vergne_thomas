@@ -1,9 +1,9 @@
 <?php
-namespace App\Core;
+namespace Blog\Core;
 
 /**
  * Class Validator
- * @package App\Core
+ * @package Blog\Core
  */
 class Validator
 {

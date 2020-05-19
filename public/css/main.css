@@ -10,9 +10,9 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 { font-family: 'Oswald', sans-serif; }
 h1,.h1 { margin: 30px 0; color: var(--theme-color); }
 a { color: black; transition: color var(--transition-duration); }
 a:hover { color: var(--theme-color); text-decoration: none; }
-.btn { border-radius: 0; }
 .btn-theme { color: white; background-color: var(--theme-color); border-color: var(--theme-color); }
 .btn-theme:hover { color: white; box-shadow: 0 0 0 .2rem var(--theme-color-alpha); }
+.btn, form .form-control { border-radius: 0; }
 form .form-control-file { cursor: pointer; }
 .alert-messages .alert:first-child { margin-top: 50px; }
 .alert-messages .alert:last-child { margin-bottom: 50px; }
@@ -22,3 +22,6 @@ footer h6 { font-size: 2rem; margin-bottom: 20px; }
 footer ul { padding-left: 0; list-style-type: none; font-size: 1.2rem; }
 footer ul li a { color: white; transition: margin-left var(--transition-duration); }
 footer ul li a:hover { margin-left: 10px; }
+#back-to-top::after { font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f077"; color: white; }
+#back-to-top { width: 40px; height: 40px; background-color: var(--theme-color); border: 0; position: fixed; bottom: 90px; right: 20px; opacity: 0; transition: opacity var(--transition-duration) ease-out; }
+#back-to-top.show { opacity: 1; }

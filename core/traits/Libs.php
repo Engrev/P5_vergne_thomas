@@ -1,9 +1,9 @@
 <?php
-namespace App\Traits;
+namespace Blog\Traits;
 
 /**
  * Trait Libs
- * @package App\Traits
+ * @package Blog\Traits
  */
 trait Libs
 {

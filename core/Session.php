@@ -1,9 +1,9 @@
 <?php
-namespace App\Core;
+namespace Blog\Core;
 
 /**
  * Class Session
- * @package App\Core
+ * @package Blog\Core
  */
 class Session
 {

@@ -1,9 +1,9 @@
 <?php
-namespace App\Core;
+namespace Blog\Core;
 
 /**
  * Class Route
- * @package App\Core
+ * @package Blog\Core
  *
  * Represents a route.
  */
@@ -86,7 +86,7 @@ class Route
     {
         if (is_string($this->callable)) {
             $params = explode('#', $this->callable);
-            $controller = 'App\\Controllers\\'.$params[0].'Controller';
+            $controller = 'Blog\\Controllers\\'.$params[0].'Controller';
             $Controller = new $controller();
             return call_user_func_array([$Controller, $params[1]], $this->matches);
         } else {
