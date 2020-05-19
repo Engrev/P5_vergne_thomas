@@ -6,22 +6,15 @@
 
 {% block body %}
     <div class="container">
-        <ul>
-            <li>nom et prénom</li>
-            <li>photo et/ou logo</li>
-            <li>phrase d'accroche</li>
-            <li>menu</li>
-            <li>
-                formulaire de contact, envoie d'un mail avec :
-                <ul>
-                    <li>nom/prénom</li>
-                    <li>email de contact</li>
-                    <li>message</li>
-                </ul>
-            </li>
-            <li>lien vers le CV en pdf</li>
-            <li>liens réseaux sociaux</li>
-            <li><strong>Attention :</strong> failles de sécurité (XSS, CSRF, SQL Injection, session hijacking, upload possible de script PHP…)</li>
-        </ul>
+        <section>
+            <img src="{{ _path_ }}/uploads/moi.jpg" alt="Thomas Vergne">
+            <h1>Thomas Vergne</h1>
+            <blockquote class="blockquote">
+                <p>La rigueur vient toujours à bout de l’obstacle.</p>
+                <article class="blockquote-footer"><cite>Leonard de Vinci</cite></article>
+            </blockquote>
+            <p>Si vous souhaitez me contacter, vous pouvez cliquer sur "Contact" ci-dessus pour accéder au <a href="{{ _path_ }}/contact">formulaire de contact</a>.</p>
+            <p>Voici mon <a href="{{ _path_ }}/uploads/cv.pdf" target="_blank">CV</a> et vous pouvez me retrouver sur les réseaux avec les liens en bas de page.</p>
+        </section>
     </div>
 {% endblock %}
