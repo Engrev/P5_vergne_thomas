@@ -144,4 +144,36 @@ class Mail extends PHPMailer
             $MailException->display(500, true, $this->ErrorInfo);
         }
     }
+
+    /**
+     * Sends an email from the contact form.
+     *
+     * @param string $name
+     * @param string $to
+     * @param string $message
+     *
+     * @throws MailException
+     */
+    public function contact(string $name, string $to, string $message)
+    {
+        $message = nl2br($message);
+        $body = "<p>De : $name</p>
+                 <br>
+                 <p>$message</p>";
+        $alt_body = "De : $name\n\n$message";
+        try {
+            $this->setFrom('no-reply@'.self::DOMAIN, 'Blog Engrev');
+            //$this->addAddress('tv-LMFT@srv1.mail-tester.com');
+            $this->addAddress('tvergne83@gmail.com', 'Thomas Vergne');
+            $this->addReplyTo($to);
+            $this->isHTML(true);
+            $this->Subject = 'Formulaire de contact';
+            $this->Body    = $body;
+            $this->AltBody = $alt_body;
+            $this->DKIM_identity = $this->From;
+            $this->send();
+        } catch (MailException $MailException) {
+            $MailException->display(500, true, $this->ErrorInfo);
+        }
+    }
 }

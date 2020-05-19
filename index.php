@@ -18,7 +18,7 @@ $Mail = new Blog\core\Mail();
 $Session->write('Mail', $Mail);
 
 // FRONT
-$Router->get('/', 'Home#display');
+$Router->get('/', 'Front#displayHome');
 
 $Router->get('/derniers-articles', 'Posts#last');
 $Router->get('/articles/:id-:slug', 'Posts#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9\.]+');
@@ -27,17 +27,18 @@ $Router->post('/articles/:id-:slug', 'Comments#createComment')->with('id', '[0-9
 $Router->get('/categories/:id-:slug', 'Categories#redirectWithPage')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+');
 $Router->get('/categories/:id-:slug/:page', 'Categories#one')->with('id', '[0-9]+')->with('slug', '[a-z\-0-9]+')->with('page', '[0-9]+');
 
-$Router->get('/connexion', 'Home#displaySignin');
+$Router->get('/connexion', 'Front#displaySignin');
 $Router->post('/connexion', 'Users#signIn');
 $Router->get('/deconnexion', 'Users#signOut');
 
-$Router->get('/mot-de-passe-oublie', 'Home#displayForgotPassword');
+$Router->get('/mot-de-passe-oublie', 'Front#displayForgotPassword');
 $Router->post('/mot-de-passe-oublie', 'Users#forgotPassword');
 
 $Router->get('/reinitialisation-mot-de-passe/:id-:token', 'Home#displayResetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
 $Router->post('/reinitialisation-mot-de-passe/:id-:token', 'Users#resetPassword')->with('id', '[0-9]+')->with('token', '[0-9a-zA-z]{60}');
 
-//$Router->get('/contact', 'Home#displayContact');
+$Router->get('/contact', 'Front#displayContact');
+$Router->post('/contact', 'Front#contact');
 
 // ADMIN
 $Router->get('/dashboard', 'Admin#displayDashboard');

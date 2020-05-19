@@ -57,6 +57,7 @@ class ReCaptcha
 
     public function addLog()
     {
+        unset($_POST['recaptcha_response']);
         $params = [
             'response' => $this->response,
             'success' => $this->success === true ? 1 : 0,
@@ -65,9 +66,10 @@ class ReCaptcha
             'challenge' => $this->challenge_ts,
             'hostname' => $this->hostname,
             'ip_address' => $this->getRemoteAddr(),
-            'error_codes' => !empty($this->error_codes) ? json_encode($this->error_codes) : null
+            'error_codes' => !empty($this->error_codes) ? json_encode($this->error_codes) : null,
+            '_post' => json_encode($_POST)
         ];
-        Database::getInstance()->query('INSERT INTO b_recaptcha_logs (response, success, score, action, challenge, hostname, ip_address, error_codes)
-                                              VALUES (:response, :success, :score, :action, :challenge, :hostname, :ip_address, :error_codes)', $params);
+        Database::getInstance()->query('INSERT INTO b_recaptcha_logs (response, success, score, action, challenge, hostname, ip_address, error_codes, _post)
+                                              VALUES (:response, :success, :score, :action, :challenge, :hostname, :ip_address, :error_codes, :_post)', $params);
     }
 }
