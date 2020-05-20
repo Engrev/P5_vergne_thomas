@@ -55,6 +55,9 @@ class ReCaptcha
         }
     }
 
+    /**
+     * Add Recaptcha response to logs.
+     */
     public function addLog()
     {
         unset($_POST['recaptcha_response']);

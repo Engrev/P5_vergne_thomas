@@ -1,7 +1,6 @@
 <?php
 namespace Blog\Core;
 /*
-
 class.PaginationLinks.php
 
 A class containing functions for creating pagination links
@@ -10,10 +9,12 @@ Created by Kate Morley - http://iamkate.com/ - and released under the terms of
 the CC0 1.0 Universal legal code:
 
 http://creativecommons.org/publicdomain/zero/1.0/legalcode
-
 */
 
-// A class containing functions for creating pagination links.
+/**
+ * Class Pagination
+ * @package Blog\Core
+ */
 class Pagination
 {
 
@@ -42,7 +43,9 @@ class Pagination
         $context    = 1,
         $linkFormat = '<li class="page-item"><a class="page-link" href="?%d">%d</a></li>',
         $pageFormat = '<li class="page-item active"><a class="page-link" href="javascript:void(0);">%d</a></li>',
-        $ellipsis   = '<li class="page-item"><a class="page-link" href="javascript:void(0);">&hellip;</a></li>'){
+        $ellipsis   = '<li class="page-item"><a class="page-link" href="javascript:void(0);">&hellip;</a></li>'
+    )
+    {
 
         // create the list of ranges
         $ranges = array(array(1, 1 + $context));
@@ -53,22 +56,17 @@ class Pagination
         $links = array();
 
         // loop over the ranges
-        foreach ($ranges as $range){
+        foreach ($ranges as $range) {
 
             // if there are preceeding links, append the ellipsis
             if (count($links) > 0) $links[] = $ellipsis;
 
             // merge in the new links
-            $links =
-                array_merge(
-                    $links,
-                    self::createLinks($range, $page, $linkFormat, $pageFormat));
-
+            $links = array_merge($links, self::createLinks($range, $page, $linkFormat, $pageFormat));
         }
 
         // return the links
         return implode(' ' , $links);
-
     }
 
     /* Merges a new range into a list of ranges, combining neighbouring ranges.
@@ -78,18 +76,18 @@ class Pagination
      * $start  - the start of the new range
      * $end    - the end of the new range
      */
-    private static function mergeRanges(&$ranges, $start, $end){
+    private static function mergeRanges(&$ranges, $start, $end)
+    {
 
         // determine the end of the previous range
         $endOfPreviousRange =& $ranges[count($ranges) - 1][1];
 
         // extend the previous range or add a new range as necessary
-        if ($start <= $endOfPreviousRange + 1){
+        if ($start <= $endOfPreviousRange + 1) {
             $endOfPreviousRange = $end;
-        }else{
+        } else {
             $ranges[] = array($start, $end);
         }
-
     }
 
     /* Create the links for a range. The parameters are:
@@ -99,26 +97,31 @@ class Pagination
      * $linkFormat - the format for links
      * $pageFormat - the format for the current page
      */
-    private static function createLinks($range, $page, $linkFormat, $pageFormat){
+    private static function createLinks($range, $page, $linkFormat, $pageFormat)
+    {
 
         // initialise the list of links
         $links = array();
 
         // loop over the pages, adding their links to the list of links
-        for ($index = $range[0]; $index <= $range[1]; $index ++){
-            $links[] =
-                sprintf(
-                    ($index == $page ? $pageFormat : $linkFormat),
-                    $index,
-                    $index);
+        for ($index = $range[0]; $index <= $range[1]; $index ++) {
+            $links[] = sprintf(($index == $page ? $pageFormat : $linkFormat), $index, $index);
         }
 
         // return the array of links
         return $links;
-
     }
 
-    public static function pagination($page = 1, $limite = 10) {
+    /**
+     * Create pagination params.
+     *
+     * @param int $page
+     * @param int $limite
+     *
+     * @return array
+     */
+    public static function pagination($page = 1, $limite = 10)
+    {
         $page = !empty($page) ? $page : 1;
         $pagination = array();
         $pagination['limit'] = $limite;

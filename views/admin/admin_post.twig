@@ -44,7 +44,7 @@
                     </select>
                 </div>
                 <div class="col-12 col-sm-2">
-                    <label for="publish" class="ml-3">Publier l'article <span class="text-danger">*</span></label>
+                    <label for="publish" class="mt-3 mt-sm-0 ml-sm-3">Publier l'article <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-sm-4">
                     <div class="custom-control custom-radio custom-control-inline">
@@ -59,11 +59,18 @@
                 </div>
             </div>
 
-            {% if post %}
-                <button type="submit" class="btn btn-theme btn-block mt-4">Mettre à jour l'article</button>
-            {% else %}
-                <button type="submit" class="btn btn-theme btn-block mt-4">Créer l'article</button>
-            {% endif %}
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <a href="{{ _path_ }}/dashboard" class="btn btn-secondary btn-block mt-4">Annuler</a>
+                </div>
+                <div class="col-12 col-sm-6">
+                    {% if post %}
+                        <button type="submit" class="btn btn-theme btn-block mt-4">Mettre à jour l'article</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-theme btn-block mt-4">Créer l'article</button>
+                    {% endif %}
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}

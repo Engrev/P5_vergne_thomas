@@ -32,7 +32,7 @@ class UsersManager implements ManagersInterface
      */
     public function checkUserExist(string $email)
     {
-        $user = $this->db->query('SELECT id_user FROM b_users WHERE email = ?', [$email])->fetch();
+        $user = $this->db->query('SELECT id_user FROM b_users WHERE email = ?', [strval($email)])->fetch();
         if (!$user) {
             return true;
         }
@@ -62,10 +62,10 @@ class UsersManager implements ManagersInterface
     {
         $password = $this->hashPassword($password);
         $params = [
-            'id_group' => $group,
-            'lastname' => $lastname,
-            'firstname' => $firstname,
-            'email' => $email,
+            'id_group' => intval($group),
+            'lastname' => htmlspecialchars($lastname),
+            'firstname' => htmlspecialchars($firstname),
+            'email' => htmlspecialchars($email),
             'password' => $password
         ];
         $this->db->query('INSERT INTO b_users (id_group, lastname, firstname, email, password) VALUES (:id_group, :lastname, :firstname, :email, :password)', $params);
@@ -134,10 +134,10 @@ class UsersManager implements ManagersInterface
             'website' => strval($infos['website']),
             'linkedin' => strval($infos['linkedin']),
             'github' => strval($infos['github']),
-            'id_user' => $id_user
+            'id_user' => intval($id_user)
         ];
         $this->db->query('UPDATE b_users_infos SET website = :website, linkedin = :linkedin, github = :github WHERE id_user = :id_user', $params);
-        $this->db->query('UPDATE b_users SET date_upd = NOW() WHERE id_user = ?', [$id_user]);
+        $this->db->query('UPDATE b_users SET date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
     }
 
     /**
@@ -151,8 +151,8 @@ class UsersManager implements ManagersInterface
         if (!is_null($email)) {
             $this->disconnect();
         }
-        $this->db->query('DELETE FROM b_users_infos WHERE id_user = ?', [$id_user]);
-        $this->db->query('DELETE FROM b_users WHERE id_user = ?', [$id_user]);
+        $this->db->query('DELETE FROM b_users_infos WHERE id_user = ?', [intval($id_user)]);
+        $this->db->query('DELETE FROM b_users WHERE id_user = ?', [intval($id_user)]);
         if (!is_null($email)) {
             $method = __FUNCTION__.'Account';
             Session::getInstance()->read('Mail')->$method($email);
@@ -169,10 +169,10 @@ class UsersManager implements ManagersInterface
     {
         switch ($state) {
             case 0:
-                $this->db->query('UPDATE b_users SET is_active = 1, date_upd = NOW() WHERE id_user = ?', [$id_user]);
+                $this->db->query('UPDATE b_users SET is_active = 1, date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
                 break;
             case 1:
-                $this->db->query('UPDATE b_users SET is_active = 0, date_upd = NOW() WHERE id_user = ?', [$id_user]);
+                $this->db->query('UPDATE b_users SET is_active = 0, date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
                 break;
         }
     }
@@ -186,7 +186,7 @@ class UsersManager implements ManagersInterface
      */
     public function getInfos(int $id_user)
     {
-        return $this->db->query('SELECT website, linkedin, github FROM b_users_infos WHERE id_user = ?', [$id_user])->fetch();
+        return $this->db->query('SELECT website, linkedin, github FROM b_users_infos WHERE id_user = ?', [intval($id_user)])->fetch();
     }
 
     /**
@@ -212,7 +212,7 @@ class UsersManager implements ManagersInterface
      */
     public function list(int $id_user)
     {
-        return $this->db->query('SELECT id_user, id_group, lastname, firstname, email, is_active FROM b_users WHERE id_user = ?', [$id_user])->fetch();
+        return $this->db->query('SELECT id_user, id_group, lastname, firstname, email, is_active FROM b_users WHERE id_user = ?', [intval($id_user)])->fetch();
     }
 
     /**
@@ -230,7 +230,7 @@ class UsersManager implements ManagersInterface
                                            FROM b_users AS U
                                            LEFT JOIN b_files AS F
                                              ON F.id_file = U.avatar
-                                           WHERE U.email = ?', [$email])->fetch();
+                                           WHERE U.email = ?', [strval($email)])->fetch();
         if (!empty($user)) {
             $is_active = $user->is_active == 1 ? true : false;
             if ($is_active) {
@@ -298,7 +298,7 @@ class UsersManager implements ManagersInterface
      */
     public function resetToken(string $email)
     {
-        $user = $this->db->query('SELECT id_user FROM b_users WHERE email = ?', [$email])->fetch();
+        $user = $this->db->query('SELECT id_user FROM b_users WHERE email = ?', [strval($email)])->fetch();
         if ($user) {
             $reset_token = $this->token(60);
             $this->db->query('UPDATE b_users SET reset_token = ?, date_reset_token = NOW() WHERE id_user = ?', [$reset_token, $user->id_user]);
@@ -321,7 +321,7 @@ class UsersManager implements ManagersInterface
     {
         return $this->db->query('SELECT email
                                           FROM b_users
-                                          WHERE id_user = ? AND reset_token IS NOT NULL AND reset_token = ? AND date_reset_token > DATE_SUB(NOW(), INTERVAL 30 MINUTE)', [$id_user, $token])->fetch();
+                                          WHERE id_user = ? AND reset_token IS NOT NULL AND reset_token = ? AND date_reset_token > DATE_SUB(NOW(), INTERVAL 30 MINUTE)', [intval($id_user), strval($token)])->fetch();
     }
 
     /**
@@ -347,9 +347,9 @@ class UsersManager implements ManagersInterface
     {
         $password = $this->hashPassword($new_password);
         if ($reset) {
-            $this->db->query('UPDATE b_users SET password = ?, reset_token = NULL, date_reset_token = NULL, date_upd = NOW() WHERE id_user = ?', [$password, $id_user]);
+            $this->db->query('UPDATE b_users SET password = ?, reset_token = NULL, date_reset_token = NULL, date_upd = NOW() WHERE id_user = ?', [$password, intval($id_user)]);
         } else {
-            $this->db->query('UPDATE b_users SET password = ?, date_upd = NOW() WHERE id_user = ?', [$password, $id_user]);
+            $this->db->query('UPDATE b_users SET password = ?, date_upd = NOW() WHERE id_user = ?', [$password, intval($id_user)]);
         }
     }
 
@@ -374,7 +374,7 @@ class UsersManager implements ManagersInterface
     public function remember(int $id_user)
     {
         $remember_token = $this->token(250);
-        $this->db->query('UPDATE b_users SET remember_token = ? WHERE id_user = ?', [$remember_token, $id_user]);
+        $this->db->query('UPDATE b_users SET remember_token = ? WHERE id_user = ?', [$remember_token, intval($id_user)]);
         setcookie('remember', $id_user . '#' . $remember_token . sha1($id_user . self::TOKEN_SHA1), time() + (30*24*3600), _COOKIE_PATH_, _COOKIE_DOMAIN_, false, true);
     }
 
@@ -388,6 +388,6 @@ class UsersManager implements ManagersInterface
         ];
         $this->db->query('INSERT INTO b_files (path, name, uploaded_name, date_add, date_upd) VALUES (:path, :name, :uploaded_name, NOW(), NOW())', $params);
         $id_file = $this->db->lastInsertId();
-        $this->db->query('UPDATE b_users SET avatar = ? WHERE id_user = ?', [$id_file, $id]);
+        $this->db->query('UPDATE b_users SET avatar = ? WHERE id_user = ?', [$id_file, intval($id)]);
     }
 }

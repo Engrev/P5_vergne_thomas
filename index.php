@@ -66,7 +66,6 @@ $Router->post('/utilisateurs/modifier/:id', 'Users#editUser')->with('id', '[0-9]
 $Router->get('/utilisateurs/supprimer/:id', 'Users#deleteUser')->with('id', '[0-9]+');
 
 try {
-    // EXEC
     $Router->run();
 } catch (Blog\Exceptions\RouterException $RouterException) {
     $RouterException->display(404);

@@ -18,7 +18,7 @@
                     | <span data-toggle="tooltip" data-placement="top" title="Publié le"><i class="fas fa-clock"></i> {{ post.date_add_fr }}</span>
                     {% if post.date_add != post.date_upd %} | <span data-toggle="tooltip" data-placement="top" title="Mis à jour le"><i class="fas fa-history"></i> {{ post.date_upd_fr }}</span>{% endif %}
                 </article>
-                <article class="post-preview">{{ post.description|slice(0,300)|raw }}{% if post.content|length > 300 %}...{% endif %}</article>
+                <article class="post-preview">{{ post.description|slice(0,300)|raw }}{% if post.description|length > 300 %}...{% endif %}</article>
                 <a href="{{ _path_ ~ '/articles/' ~ post.p_link }}" class="btn btn-theme post-read-more">Lire la suite</a>
             </article>
         {% endfor %}

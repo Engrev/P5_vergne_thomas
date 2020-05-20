@@ -20,7 +20,7 @@ class AdminController extends Controllers
      *
      * @param int|null $id_group
      */
-    public function restrict($id_group = null)
+    public function restrict(int $id_group = null)
     {
         $User = $this->session->read('User');
         if (!is_null($User)) {
@@ -106,6 +106,9 @@ class AdminController extends Controllers
         $this->render('admin_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>''], 'category_a'=>$category_a], 'admin');
     }
 
+    /**
+     * Displays users page.
+     */
     public function displayUsers()
     {
         $this->restrict(1);
@@ -113,6 +116,9 @@ class AdminController extends Controllers
         $this->render('users', ['head'=>['title'=>'Utilisateurs', 'meta_description'=>''], 'page'=>'utilisateurs', 'users'=>$users], 'admin');
     }
 
+    /**
+     * Displays admin user page.
+     */
     public function displayCreateUser()
     {
         $this->restrict(1);
@@ -120,6 +126,9 @@ class AdminController extends Controllers
         $this->render('admin_user', ['head'=>['title'=>'Création d\'un utilisateur', 'meta_description'=>''], 'groups'=>$groups], 'admin');
     }
 
+    /**
+     * Displays admin user page.
+     */
     public function displayEditUser(int $id_user)
     {
         $this->restrict(1);

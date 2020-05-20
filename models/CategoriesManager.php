@@ -55,7 +55,7 @@ class CategoriesManager implements ManagersInterface
         $params = [
             'name' => $name_e,
             'link' => $link,
-            'id_category' => $id_category
+            'id_category' => intval($id_category)
         ];
         $this->db->query('UPDATE b_categories SET name = :name, link = :link, date_upd = NOW() WHERE id_category = :id_category', $params);
     }
@@ -67,7 +67,7 @@ class CategoriesManager implements ManagersInterface
      */
     public function delete(int $id_category)
     {
-        $this->db->query('DELETE FROM b_categories WHERE id_category = ?', [$id_category]);
+        $this->db->query('DELETE FROM b_categories WHERE id_category = ?', [intval($id_category)]);
     }
 
     /**
@@ -131,7 +131,7 @@ class CategoriesManager implements ManagersInterface
      */
     public function display(string $id, string $slug)
     {
-        $category = $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories WHERE id_category = ?', [$id])->fetch();
+        $category = $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories WHERE id_category = ?', [intval($id)])->fetch();
         if ($category->link) {
             if ($category->link === $id.'-'.$slug) {
                 return $category;
@@ -151,8 +151,8 @@ class CategoriesManager implements ManagersInterface
     public function list(int $id)
     {
         $category = $this->db->query("SELECT id_category, link, name
-                                           FROM b_categories
-                                           WHERE id_category = ?", [$id])->fetch();
+                                               FROM b_categories
+                                               WHERE id_category = ?", [intval($id)])->fetch();
         if (!empty($category)) {
             return $category;
         }

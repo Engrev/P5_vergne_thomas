@@ -84,6 +84,6 @@ class FrontController extends Controllers
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
         $_post = $this->getPost($_POST);
-        $this->render('contact', ['head'=>['title'=>'Contact', 'meta_description'=>''], 'page'=>'contact', '_post'=>$_post]);
+        $this->render('contact', ['head'=>['title'=>'Contact', 'meta_description'=>''], 'page'=>'contact', '_post'=>isset($_post) ? $_post : '']);
     }
 }

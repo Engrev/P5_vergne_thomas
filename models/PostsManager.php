@@ -71,7 +71,7 @@ class PostsManager implements ManagersInterface
             'description' => $description,
             'content' => $posts['content'],
             'published' => $publish,
-            'id_post' => $id_post
+            'id_post' => intval($id_post)
         ];
         $this->db->query('UPDATE b_posts
                                    SET id_category = :id_category, link = :link, title = :title, description = :description, content = :content, published = :published, date_upd = NOW()
@@ -85,7 +85,7 @@ class PostsManager implements ManagersInterface
      */
     public function delete(int $id_post)
     {
-        $this->db->query('DELETE FROM b_posts WHERE id_post = ?', [$id_post]);
+        $this->db->query('DELETE FROM b_posts WHERE id_post = ?', [intval($id_post)]);
     }
 
     /**
@@ -192,7 +192,7 @@ class PostsManager implements ManagersInterface
                                              ON C.id_category = P.id_category
                                            INNER JOIN b_users AS U
                                              ON U.id_user = P.author
-                                           WHERE P.id_post = ?", [$id])->fetch();
+                                           WHERE P.id_post = ?", [intval($id)])->fetch();
         if ($post->p_link) {
             if ($post->p_link === $id.'-'.$slug) {
                 if ($post->published == 1 || !is_null($id_user) && $post->published == 0 && $post->author == $id_user) {
@@ -213,10 +213,10 @@ class PostsManager implements ManagersInterface
     {
         switch ($state) {
             case 0:
-                $this->db->query('UPDATE b_posts SET published = 1, date_upd = NOW() WHERE id_post = ?', [$id_post]);
+                $this->db->query('UPDATE b_posts SET published = 1, date_upd = NOW() WHERE id_post = ?', [intval($id_post)]);
                 break;
             case 1:
-                $this->db->query('UPDATE b_posts SET published = 0, date_upd = NOW() WHERE id_post = ?', [$id_post]);
+                $this->db->query('UPDATE b_posts SET published = 0, date_upd = NOW() WHERE id_post = ?', [intval($id_post)]);
                 break;
         }
     }
@@ -233,7 +233,7 @@ class PostsManager implements ManagersInterface
     {
         $post = $this->db->query("SELECT id_post, id_category, link, title, description, content, author, published
                                            FROM b_posts
-                                           WHERE id_post = ?", [$id])->fetch();
+                                           WHERE id_post = ?", [intval($id)])->fetch();
         if (!empty($post)) {
             return $post;
         }
@@ -265,7 +265,7 @@ class PostsManager implements ManagersInterface
                                             ON U.id_user = P.author
                                           WHERE P.id_category = ?
                                           ORDER BY P.id_post DESC
-                                          LIMIT {$limit}", [$id_category])->fetchAll();
+                                          LIMIT {$limit}", [intval($id_category)])->fetchAll();
     }
 
     /**
@@ -282,7 +282,7 @@ class PostsManager implements ManagersInterface
                                           INNER JOIN b_categories AS C
                                             ON C.id_category = P.id_category
                                           WHERE P.author = ?
-                                          ORDER BY P.date_add DESC", [$id_user])->fetchAll();
+                                          ORDER BY P.date_add DESC", [intval($id_user)])->fetchAll();
     }
 
     /**
@@ -292,12 +292,17 @@ class PostsManager implements ManagersInterface
      */
     public function deletedAuthor(int $id_author)
     {
-        $this->db->query('UPDATE b_posts SET author = 0 WHERE author = ?', [$id_author]);
+        $this->db->query('UPDATE b_posts SET author = 0 WHERE author = ?', [intval($id_author)]);
     }
 
+    /**
+     * Change the category of a post.
+     *
+     * @param int $id_category
+     */
     public function deletedCategory(int $id_category)
     {
-        $this->db->query('UPDATE b_posts SET id_category = 1 WHERE id_category = ?', [$id_category]);
+        $this->db->query('UPDATE b_posts SET id_category = 1 WHERE id_category = ?', [intval($id_category)]);
     }
 
     //Saves uploaded files to the database.

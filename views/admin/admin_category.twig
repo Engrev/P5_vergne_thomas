@@ -15,11 +15,18 @@
                 <div class="invalid-feedback">Ce champs doit être remplis.</div>
             </div>
 
-            {% if category_a %}
-                <button type="submit" class="btn btn-theme btn-block mt-4">Mettre à jour la catégorie</button>
-            {% else %}
-                <button type="submit" class="btn btn-theme btn-block mt-4">Créer la catégorie</button>
-            {% endif %}
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <a href="{{ _path_ }}/dashboard" class="btn btn-secondary btn-block mt-4">Annuler</a>
+                </div>
+                <div class="col-12 col-sm-6">
+                    {% if category_a %}
+                        <button type="submit" class="btn btn-theme btn-block mt-4">Mettre à jour la catégorie</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-theme btn-block mt-4">Créer la catégorie</button>
+                    {% endif %}
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}

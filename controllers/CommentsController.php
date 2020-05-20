@@ -59,6 +59,6 @@ class CommentsController extends Controllers
         }
         $_post = $this->getPost($_POST);
         $post = $this->posts_manager->display($id_post, $slug, $id_user);
-        $this->render('post', ['head'=>['title'=>$post->title, 'meta_description'=>$post->description], 'post'=>$post]);
+        $this->render('post', ['head'=>['title'=>$post->title, 'meta_description'=>$post->description], '_post'=>isset($_post) ? $_post : '', 'post'=>$post]);
     }
 }

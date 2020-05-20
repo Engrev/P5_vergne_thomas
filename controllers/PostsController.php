@@ -118,6 +118,7 @@ class PostsController extends Controllers
             $this->redirect('');
         }
         $this->posts_manager->delete($id_post);
+        $this->comments_manager->deletedPost($id_post);
         $this->session->writeFlash('success', "L'article a été supprimé avec succès.");
         $this->redirect('dashboard');
     }

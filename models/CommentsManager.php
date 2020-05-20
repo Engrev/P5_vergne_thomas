@@ -52,6 +52,16 @@ class CommentsManager implements ManagersInterface
     }
 
     /**
+     * Delete all comments of a post.
+     *
+     * @param int $id_post
+     */
+    public function deletedPost(int $id_post)
+    {
+        $this->db->query('DELETE FROM b_comments WHERE id_post = ?', [intval($id_post)]);
+    }
+
+    /**
      * Validate a comment.
      *
      * @param int $id_comment
