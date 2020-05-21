@@ -40,8 +40,8 @@ class Controllers
      */
     protected function redirect(string $page)
     {
-        $path = _PATH_.'/'.$page;
-        header('Location:'.$path);
+        $path = _PATH_ . '/' . $page;
+        header('Location:' . $path);
         exit();
     }
 
@@ -73,7 +73,7 @@ class Controllers
             }
             $data['categoriesL'] = $this->categories_manager->listAll();
             $data['number_posts'] = $this->posts_manager->countPostsCategory();
-            echo $this->twig->render($type.'/'.$template.'.twig', $data);
+            echo $this->twig->render($type . '/' . $template . '.twig', $data);
         }
     }
 

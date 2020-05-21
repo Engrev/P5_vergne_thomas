@@ -46,7 +46,7 @@ class PostsManager implements ManagersInterface
         $this->db->query('INSERT INTO b_posts (id_category, link, title, description, content, author, published, date_add, date_upd)
                                    VALUES (:id_category, :link, :title, :description, :content, :author, :published, NOW(), NOW())', $params);
         $id_post = $this->db->lastInsertId();
-        $link = strval($id_post).'-'.$link;
+        $link = strval($id_post) . '-' . $link;
         $this->db->query('UPDATE b_posts SET link = ? WHERE id_post = ?', [$link, $id_post]);
     }
 
@@ -63,7 +63,7 @@ class PostsManager implements ManagersInterface
         $id_category = intval($posts['categorie']);
         $publish = intval($posts['publish']);
         $link = $this->transformToUrl($posts['title']);
-        $link = strval($id_post).'-'.$link;
+        $link = strval($id_post) . '-' . $link;
         $params = [
             'id_category' => $id_category,
             'link' => $link,
@@ -125,7 +125,7 @@ class PostsManager implements ManagersInterface
         $str = iconv('utf-8', 'us-ascii//TRANSLIT', $str);
         $str = strtolower($str);
         $str = preg_replace('~[^-\w]+~', '', $str);
-        return $str.'.html';
+        return $str . '.html';
     }
 
     /**
@@ -158,17 +158,39 @@ class PostsManager implements ManagersInterface
     }
 
     /**
-     * Counts the number of posts by category.
+     * Get all of a user's posts.
+     *
+     * @param int $id_user
      *
      * @return array
      */
-    public function countPostsCategory()
+    public function listAll(int $id_user)
     {
-        $results = $this->db->query('SELECT id_category, COUNT(id_post) FROM b_posts GROUP BY id_category')->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);
-        foreach ($results as $key => $value) {
-            $results[$key] = $value[0];
+        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, IF(P.published = 1, true, false) AS published, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
+                                          FROM b_posts AS P
+                                          INNER JOIN b_categories AS C
+                                            ON C.id_category = P.id_category
+                                          WHERE P.author = ?
+                                          ORDER BY P.date_add DESC", [intval($id_user)])->fetchAll();
+    }
+
+    /**
+     * Get a post.
+     *
+     * @param string $id
+     *
+     * @return mixed
+     * @throws ManagerException
+     */
+    public function list(int $id)
+    {
+        $post = $this->db->query("SELECT id_post, id_category, link, title, description, content, author, published
+                                           FROM b_posts
+                                           WHERE id_post = ?", [intval($id)])->fetch();
+        if (!empty($post)) {
+            return $post;
         }
-        return $results;
+        throw new ManagerException('Cet article n\'existe pas');
     }
 
     /**
@@ -204,43 +226,6 @@ class PostsManager implements ManagersInterface
     }
 
     /**
-     * Enables or disables a post.
-     *
-     * @param int $state
-     * @param int $id_post
-     */
-    public function activate(int $state, int $id_post)
-    {
-        switch ($state) {
-            case 0:
-                $this->db->query('UPDATE b_posts SET published = 1, date_upd = NOW() WHERE id_post = ?', [intval($id_post)]);
-                break;
-            case 1:
-                $this->db->query('UPDATE b_posts SET published = 0, date_upd = NOW() WHERE id_post = ?', [intval($id_post)]);
-                break;
-        }
-    }
-
-    /**
-     * Get a post.
-     *
-     * @param string $id
-     *
-     * @return mixed
-     * @throws ManagerException
-     */
-    public function list(int $id)
-    {
-        $post = $this->db->query("SELECT id_post, id_category, link, title, description, content, author, published
-                                           FROM b_posts
-                                           WHERE id_post = ?", [intval($id)])->fetch();
-        if (!empty($post)) {
-            return $post;
-        }
-        throw new ManagerException('Cet article n\'existe pas');
-    }
-
-    /**
      * Get posts from a category with pagination.
      *
      * @param int        $id_category
@@ -269,20 +254,35 @@ class PostsManager implements ManagersInterface
     }
 
     /**
-     * Get all of a user's posts.
-     *
-     * @param int $id_user
+     * Counts the number of posts by category.
      *
      * @return array
      */
-    public function listAll(int $id_user)
+    public function countPostsCategory()
     {
-        return $this->db->query("SELECT P.id_post, P.link AS p_link, P.title, IF(P.published = 1, true, false) AS published, DATE_FORMAT(P.date_add, '%d/%m/%Y %H:%i') AS date_add, DATE_FORMAT(P.date_upd, '%d/%m/%Y %H:%i') AS date_upd, C.name, C.link AS c_link
-                                          FROM b_posts AS P
-                                          INNER JOIN b_categories AS C
-                                            ON C.id_category = P.id_category
-                                          WHERE P.author = ?
-                                          ORDER BY P.date_add DESC", [intval($id_user)])->fetchAll();
+        $results = $this->db->query('SELECT id_category, COUNT(id_post) FROM b_posts GROUP BY id_category')->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);
+        foreach ($results as $key => $value) {
+            $results[$key] = $value[0];
+        }
+        return $results;
+    }
+
+    /**
+     * Enables or disables a post.
+     *
+     * @param int $state
+     * @param int $id_post
+     */
+    public function activate(int $state, int $id_post)
+    {
+        switch ($state) {
+            case 0:
+                $this->db->query('UPDATE b_posts SET published = 1, date_upd = NOW() WHERE id_post = ?', [intval($id_post)]);
+                break;
+            case 1:
+                $this->db->query('UPDATE b_posts SET published = 0, date_upd = NOW() WHERE id_post = ?', [intval($id_post)]);
+                break;
+        }
     }
 
     /**

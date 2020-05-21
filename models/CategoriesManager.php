@@ -36,7 +36,7 @@ class CategoriesManager implements ManagersInterface
         ];
         $this->db->query('INSERT INTO b_categories (name, link, date_add, date_upd) VALUES (:name, :link, NOW(), NOW())', $params);
         $id_category = $this->db->lastInsertId();
-        $link = strval($id_category).'-'.$link;
+        $link = strval($id_category) . '-' . $link;
         $this->db->query('UPDATE b_categories SET link = ? WHERE id_category = ?', [$link, $id_category]);
     }
 
@@ -51,7 +51,7 @@ class CategoriesManager implements ManagersInterface
         $name_e = htmlspecialchars($name);
         $id_category = intval($id_category);
         $link = $this->transformToUrl($name);
-        $link = strval($id_category).'-'.$link;
+        $link = strval($id_category) . '-' . $link;
         $params = [
             'name' => $name_e,
             'link' => $link,
@@ -121,26 +121,6 @@ class CategoriesManager implements ManagersInterface
     }
 
     /**
-     * Display a category.
-     *
-     * @param string $id
-     * @param string $slug
-     *
-     * @return mixed
-     * @throws ManagerException
-     */
-    public function display(string $id, string $slug)
-    {
-        $category = $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories WHERE id_category = ?', [intval($id)])->fetch();
-        if ($category->link) {
-            if ($category->link === $id.'-'.$slug) {
-                return $category;
-            }
-        }
-        throw new ManagerException('Cette catégorie n\'existe pas');
-    }
-
-    /**
      * Get a category.
      *
      * @param string $id
@@ -155,6 +135,26 @@ class CategoriesManager implements ManagersInterface
                                                WHERE id_category = ?", [intval($id)])->fetch();
         if (!empty($category)) {
             return $category;
+        }
+        throw new ManagerException('Cette catégorie n\'existe pas');
+    }
+
+    /**
+     * Display a category.
+     *
+     * @param string $id
+     * @param string $slug
+     *
+     * @return mixed
+     * @throws ManagerException
+     */
+    public function display(string $id, string $slug)
+    {
+        $category = $this->db->query('SELECT id_category, link, name, date_add, date_upd FROM b_categories WHERE id_category = ?', [intval($id)])->fetch();
+        if ($category->link) {
+            if ($category->link === $id . '-' . $slug) {
+                return $category;
+            }
         }
         throw new ManagerException('Cette catégorie n\'existe pas');
     }

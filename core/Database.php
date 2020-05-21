@@ -30,7 +30,7 @@ class Database extends PDO
      *
      * @return Database
      */
-    static function getInstance()
+    public static function getInstance()
     {
         if (!self::$instance) {
             self::$instance = new Database();

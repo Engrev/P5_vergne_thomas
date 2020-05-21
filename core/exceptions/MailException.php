@@ -21,8 +21,8 @@ class MailException extends Exception implements HttpcodesInterface
     public function display($http_code, $use_message = false, $error_info = '')
     {
         if (is_int($http_code) && array_key_exists($http_code, self::codes)) {
-            header('HTTP/1.1 '.$http_code.' '.self::codes[$http_code]);
-            echo Session::getInstance()->read('Twig')->render('errors/'.$http_code.'.twig', ['error_message'=>['use'=>$use_message, 'message'=>$error_info]]);
+            header('HTTP/1.1 ' . $http_code . ' ' . self::codes[$http_code]);
+            echo Session::getInstance()->read('Twig')->render('errors/' . $http_code . '.twig', ['error_message'=>['use'=>$use_message, 'message'=>$error_info]]);
             exit();
         }
     }

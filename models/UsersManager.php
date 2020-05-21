@@ -40,16 +40,6 @@ class UsersManager implements ManagersInterface
     }
 
     /**
-     * Get all groups.
-     *
-     * @return array
-     */
-    public function getGroups()
-    {
-        return $this->db->query('SELECT id_group, name FROM b_groups ORDER BY name')->fetchAll();
-    }
-
-    /**
      * Creates an account.
      *
      * @param string $lastname
@@ -154,27 +144,19 @@ class UsersManager implements ManagersInterface
         $this->db->query('DELETE FROM b_users_infos WHERE id_user = ?', [intval($id_user)]);
         $this->db->query('DELETE FROM b_users WHERE id_user = ?', [intval($id_user)]);
         if (!is_null($email)) {
-            $method = __FUNCTION__.'Account';
+            $method = __FUNCTION__ . 'Account';
             Session::getInstance()->read('Mail')->$method($email);
         }
     }
 
     /**
-     * Enables or disables a user.
+     * Get all groups.
      *
-     * @param int $state
-     * @param int $id_user
+     * @return array
      */
-    public function activate(int $state, int $id_user)
+    public function getGroups()
     {
-        switch ($state) {
-            case 0:
-                $this->db->query('UPDATE b_users SET is_active = 1, date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
-                break;
-            case 1:
-                $this->db->query('UPDATE b_users SET is_active = 0, date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
-                break;
-        }
+        return $this->db->query('SELECT id_group, name FROM b_groups ORDER BY name')->fetchAll();
     }
 
     /**
@@ -287,6 +269,24 @@ class UsersManager implements ManagersInterface
     {
         Session::getInstance()->delete('User');
         setcookie('remember', null, -1);
+    }
+
+    /**
+     * Enables or disables a user.
+     *
+     * @param int $state
+     * @param int $id_user
+     */
+    public function activate(int $state, int $id_user)
+    {
+        switch ($state) {
+            case 0:
+                $this->db->query('UPDATE b_users SET is_active = 1, date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
+                break;
+            case 1:
+                $this->db->query('UPDATE b_users SET is_active = 0, date_upd = NOW() WHERE id_user = ?', [intval($id_user)]);
+                break;
+        }
     }
 
     /**

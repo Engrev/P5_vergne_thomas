@@ -114,22 +114,6 @@ class User
     /**
      * @return bool
      */
-    public function getOnline()
-    {
-        return $this->online;
-    }
-
-    /**
-     * @param bool $online
-     */
-    public function setOnline($online)
-    {
-        $this->online = boolval($online);
-    }
-
-    /**
-     * @return bool
-     */
     public function getAvatar()
     {
         return $this->avatar;
@@ -141,5 +125,21 @@ class User
     public function setAvatar($avatar)
     {
         $this->avatar = strval($avatar);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getOnline()
+    {
+        return $this->online;
+    }
+
+    /**
+     * @param bool $online
+     */
+    public function setOnline($online)
+    {
+        $this->online = boolval($online);
     }
 }

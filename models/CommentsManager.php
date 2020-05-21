@@ -52,23 +52,22 @@ class CommentsManager implements ManagersInterface
     }
 
     /**
-     * Delete all comments of a post.
+     * Get all comments of a post.
      *
-     * @param int $id_post
+     * @return array
      */
-    public function deletedPost(int $id_post)
+    public function listAll()
     {
-        $this->db->query('DELETE FROM b_comments WHERE id_post = ?', [intval($id_post)]);
-    }
-
-    /**
-     * Validate a comment.
-     *
-     * @param int $id_comment
-     */
-    public function validate(int $id_comment)
-    {
-        $this->db->query('UPDATE b_comments SET is_valid = 1, date_upd = NOW() WHERE id_comment = ?', [intval($id_comment)]);
+        return $this->db->query("SELECT C.id_comment, C.id_user, C.id_post, C.name, C.email, C.content, DATE_FORMAT(C.date_add, '%d/%m/%Y %H:%i:%s') AS date_add, 
+                                                 P.title AS post_title, P.link AS post_link, 
+                                                 U.lastname, U.firstname
+                                          FROM b_comments AS C
+                                          INNER JOIN b_posts AS P
+                                            ON P.id_post = C.id_post
+                                          LEFT JOIN b_users AS U
+                                            ON U.id_user = C.id_user
+                                          WHERE C.is_valid = 0
+                                          ORDER BY C.date_add")->fetchAll();
     }
 
     /**
@@ -89,22 +88,23 @@ class CommentsManager implements ManagersInterface
     }
 
     /**
-     * Get all comments of a post.
+     * Validate a comment.
      *
-     * @return array
+     * @param int $id_comment
      */
-    public function listAll()
+    public function validate(int $id_comment)
     {
-        return $this->db->query("SELECT C.id_comment, C.id_user, C.id_post, C.name, C.email, C.content, DATE_FORMAT(C.date_add, '%d/%m/%Y %H:%i:%s') AS date_add, 
-                                                 P.title AS post_title, P.link AS post_link, 
-                                                 U.lastname, U.firstname
-                                          FROM b_comments AS C
-                                          INNER JOIN b_posts AS P
-                                            ON P.id_post = C.id_post
-                                          LEFT JOIN b_users AS U
-                                            ON U.id_user = C.id_user
-                                          WHERE C.is_valid = 0
-                                          ORDER BY C.date_add")->fetchAll();
+        $this->db->query('UPDATE b_comments SET is_valid = 1, date_upd = NOW() WHERE id_comment = ?', [intval($id_comment)]);
+    }
+
+    /**
+     * Delete all comments of a post.
+     *
+     * @param int $id_post
+     */
+    public function deletedPost(int $id_post)
+    {
+        $this->db->query('DELETE FROM b_comments WHERE id_post = ?', [intval($id_post)]);
     }
 
     /**

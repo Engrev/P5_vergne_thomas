@@ -2,10 +2,10 @@
 require 'core/defines.php';
 require 'vendor/autoload.php';
 
-$Loader = new Twig\Loader\FilesystemLoader(__DIR__.'/views/');
+$Loader = new Twig\Loader\FilesystemLoader(__DIR__ . '/views/');
 $Twig = new Twig\Environment($Loader, [
     'debug' => true,
-    'cache' => false //__DIR__.'/cache'
+    'cache' => false //__DIR__ . '/cache'
 ]);
 $Twig->addGlobal('_path_', _PATH_);
 if ($Twig->isDebug() === true) {

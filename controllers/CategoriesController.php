@@ -26,8 +26,8 @@ class CategoriesController extends Controllers
      */
     public function redirectWithPage(string $id, string $slug)
     {
-        $path = _PATH_.'/categories/'.$id.'-'.$slug.'/1';
-        header('Location:'.$path);
+        $path = _PATH_ . '/categories/' . $id . '-' . $slug . '/1';
+        header('Location:' . $path);
         exit();
     }
 
@@ -47,7 +47,7 @@ class CategoriesController extends Controllers
             if (!empty($posts)) {
                 $nb_posts = Database::getInstance()->query("SELECT found_rows() as total")->fetch();
                 $nb_pages = ceil($nb_posts->total / $pagination['limit']);
-                $link_format = '<li class="page-item"><a class="page-link" href="'._PATH_.'/categories/'.$id.'-'.$slug.'/%d">%d</a></li>';
+                $link_format = '<li class="page-item"><a class="page-link" href="' . _PATH_ . '/categories/' . $id . '-' . $slug . '/%d">%d</a></li>';
                 $page_format = '<li class="page-item active"><a class="page-link" href="javascript:void(0);">%d</a></li>';
                 $ellipsis = '<li class="page-item"><a class="page-link" href="javascript:void(0);">&hellip;</a></li>';
             }
