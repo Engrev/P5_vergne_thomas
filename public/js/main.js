@@ -1,23 +1,23 @@
 $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip({ track: true });
+    $("[data-toggle='tooltip']").tooltip({ track: true });
 
-    if ($('#back-to-top').length) {
+    if ($("#back-to-top").length) {
         var scrollTrigger = 500, // px
             backToTop = function () {
                 var scrollTop = $(window).scrollTop();
                 if (scrollTop > scrollTrigger) {
-                    $('#back-to-top').addClass('show');
+                    $("#back-to-top").addClass("show");
                 } else {
-                    $('#back-to-top').removeClass('show');
+                    $("#back-to-top").removeClass("show");
                 }
             };
         backToTop();
-        $(window).on('scroll', function () {
+        $(window).on("scroll", function () {
             backToTop();
         });
-        $('#back-to-top').on('click', function (e) {
+        $("#back-to-top").on("click", function (e) {
             e.preventDefault();
-            $('html,body').animate({
+            $("html,body").animate({
                 scrollTop: 0
             }, 700);
         });
@@ -25,18 +25,18 @@ $(document).ready(function () {
 });
 
 (function() {
-    'use strict';
-    window.addEventListener('load', function() {
+    "use strict";
+    window.addEventListener("load", function() {
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName('needs-validation');
+        var forms = document.getElementsByClassName("needs-validation");
         // Loop over them and prevent submission
         var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
+            form.addEventListener("submit", function(event) {
                 if (form.checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
-                form.classList.add('was-validated');
+                form.classList.add("was-validated");
             }, false);
         });
     }, false);
