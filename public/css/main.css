@@ -1,7 +1,7 @@
 :root {
-    --theme-color: #CC0033;
-    --theme-color-alpha: rgba(204, 0, 51, 0.25);
-    --transition-duration: 250ms;
+  --theme-color: #CC0033;
+  --theme-color-alpha: rgba(204, 0, 51, 0.25);
+  --transition-duration: 250ms;
 }
 ::selection { color: white; background-color: var(--theme-color); }
 html { position: relative; height: 100%; }

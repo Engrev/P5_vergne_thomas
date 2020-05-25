@@ -6,7 +6,7 @@ label { font-size: 1.5rem; }
 #avatar:focus { border-color: #80bdff; box-shadow: 0 0 0 .2rem rgba(0,123,255,.25); }
 section:last-child { margin-bottom: 60px; }
 @media screen AND (max-width: 576px) {
-    .btn { display: block; width: 100%; margin-top: 20px; }
-    .jconfirm.jconfirm-light .jconfirm-box .jconfirm-buttons { float: none; }
-    .profil-avatar { margin: 0 auto 30px auto; }
+  .btn { display: block; width: 100%; margin-top: 20px; }
+  .jconfirm.jconfirm-light .jconfirm-box .jconfirm-buttons { float: none; }
+  .profil-avatar { margin: 0 auto 30px auto; }
 }
