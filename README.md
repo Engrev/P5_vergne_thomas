@@ -1,4 +1,4 @@
-# P5_vergne_thomas
+# P5_vergne_thomas [![Codacy Badge](https://app.codacy.com/project/badge/Grade/71a9b4201ed14d6097ae606f2e40ed29)](https://www.codacy.com/manual/Engrev/P5_vergne_thomas?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Engrev/P5_vergne_thomas&amp;utm_campaign=Badge_Grade)
 
 Get started :
 - Clone the repository with : _git clone https://github.com/Engrev/P5_vergne_thomas.git_.
