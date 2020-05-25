@@ -52,7 +52,12 @@ class PostsController extends Controllers
      */
     public function createPost()
     {
-        if (isset($_POST['title'], $_POST['description'], $_POST['content'], $_POST['categorie'], $_POST['publish'])) {
+        if ($this->issetPostSperglobal('title') &&
+            $this->issetPostSperglobal('description') &&
+            $this->issetPostSperglobal('content') &&
+            $this->issetPostSperglobal('categorie') &&
+            $this->issetPostSperglobal('publish'))
+        {
             $empty_field = 0;
             foreach ($_POST as $key => $post) {
                 if ($key !== 'publish' && empty(trim($post))) {
@@ -70,7 +75,7 @@ class PostsController extends Controllers
         } else {
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
-        $_post = $this->getPost($_POST);
+        $_post = $this->getSpecificPost($_POST);
         $categories = $this->categories_manager->listAll();
         $this->render('admin_post', ['head'=>['title'=>'Création d\'un article', 'meta_description'=>''], 'categories'=>$categories, '_post'=>isset($_post) ? $_post : ''], 'admin');
     }
@@ -82,7 +87,12 @@ class PostsController extends Controllers
      */
     public function editPost(int $id_post)
     {
-        if (isset($_POST['title'], $_POST['description'], $_POST['content'], $_POST['categorie'], $_POST['publish'])) {
+        if ($this->issetPostSperglobal('title') &&
+            $this->issetPostSperglobal('description') &&
+            $this->issetPostSperglobal('content') &&
+            $this->issetPostSperglobal('categorie') &&
+            $this->issetPostSperglobal('publish'))
+        {
             $empty_field = 0;
             foreach ($_POST as $key => $post) {
                 if ($key !== 'publish' && empty(trim($post))) {
@@ -99,7 +109,7 @@ class PostsController extends Controllers
         } else {
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
-        $_post = $this->getPost($_POST);
+        $_post = $this->getSpecificPost($_POST);
         $categories = $this->categories_manager->listAll();
         $this->render('admin_post', ['head'=>['title'=>'Modification d\'un article', 'meta_description'=>''], 'categories'=>$categories, '_post'=>isset($_post) ? $_post : ''], 'admin');
     }

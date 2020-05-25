@@ -64,7 +64,7 @@ class FrontController extends Controllers
      */
     public function contact()
     {
-        if (isset($_POST['name'], $_POST['email'], $_POST['message'])) {
+        if ($this->issetPostSperglobal('name') && $this->issetPostSperglobal('email') && $this->issetPostSperglobal('message')) {
             $empty_field = 0;
             foreach ($_POST as $key => $post) {
                 if (empty(trim($post))) {
@@ -72,9 +72,9 @@ class FrontController extends Controllers
                 }
             }
             if ($empty_field === 0) {
-                $ReCaptcha = new ReCaptcha($_POST['recaptcha_response']);
+                $ReCaptcha = new ReCaptcha($this->getPostSuperglobal('recaptcha_response'));
                 $method = __FUNCTION__;
-                $this->session->read('Mail')->$method($_POST['name'], $_POST['email'], $_POST['message']);
+                $this->session->read('Mail')->$method($this->getPostSuperglobal('name'), $this->getPostSuperglobal('email'), $this->getPostSuperglobal('message'));
                 $this->session->writeFlash('success', "Votre message a été envoyé avec succès.");
                 $this->redirect('contact');
             } else {
@@ -83,7 +83,7 @@ class FrontController extends Controllers
         } else {
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
-        $_post = $this->getPost($_POST);
+        $_post = $this->getSpecificPost($_POST);
         $this->render('contact', ['head'=>['title'=>'Contact', 'meta_description'=>''], 'page'=>'contact', '_post'=>isset($_post) ? $_post : '']);
     }
 }

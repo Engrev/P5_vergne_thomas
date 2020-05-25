@@ -65,8 +65,8 @@ class CategoriesController extends Controllers
      */
     public function createCategory()
     {
-        if (isset($_POST['name'])) {
-            $name = trim($_POST['name']);
+        if ($this->issetPostSperglobal('name')) {
+            $name = trim($this->getPostSuperglobal('name'));
             if (!empty($name)) {
                 $this->categories_manager->create($name);
                 $this->session->writeFlash('success', "La catégorie a été créée avec succès.");
@@ -77,7 +77,7 @@ class CategoriesController extends Controllers
         } else {
             $this->session->writeFlash('danger', "Certains champs sont manquants.");
         }
-        $_post = $this->getPost($_POST);
+        $_post = $this->getSpecificPost($_POST);
         $this->render('admin_category', ['head'=>['title'=>'Création d\'une catégorie', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : ''], 'admin');
     }
 
@@ -89,8 +89,8 @@ class CategoriesController extends Controllers
     public function editCategory(int $id_category)
     {
         if ($id_category != 1) {
-            if (isset($_POST['name'])) {
-                $name = trim($_POST['name']);
+            if ($this->issetPostSperglobal('name')) {
+                $name = trim($this->getPostSuperglobal('name'));
                 if (!empty($name)) {
                     $this->categories_manager->update($name, $id_category);
                     $this->session->writeFlash('success', "La catégorie a été modifiée avec succès.");
@@ -101,7 +101,7 @@ class CategoriesController extends Controllers
             } else {
                 $this->session->writeFlash('danger', "Certains champs sont manquants.");
             }
-            $_post = $this->getPost($_POST);
+            $_post = $this->getSpecificPost($_POST);
             $this->render('admin_category', ['head'=>['title'=>'Modification d\'une catégorie', 'meta_description'=>''], '_post'=>isset($_post) ? $_post : ''], 'admin');
         } else {
             $this->session->writeFlash('danger', "Cette catégorie ne peut pas être modifiée.");

@@ -27,10 +27,10 @@ class AdminController extends Controllers
             $restriction = !is_null($id_group) ? $id_group < $User->getIdGroup() : false;
         }
         if (is_null($User) || !$User->getOnline() || $restriction) {
-            if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+            if ($this->issetServerSperglobal('HTTP_X_REQUESTED_WITH')) {
                 exit();
             }
-            $link = array_reverse(explode('/', $_SERVER['REQUEST_URI']));
+            $link = array_reverse(explode('/', $this->getServerSuperglobal('REQUEST_URI')));
             $this->session->saveLink($link[0]);
             $this->session->writeFlash('danger', "Vous ne pouvez pas accéder à cette page.");
             $this->redirect('connexion');

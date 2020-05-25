@@ -1,5 +1,6 @@
 <?php
 namespace Blog\Controllers;
+use Blog\Traits\Libs;
 use Blog\Core\Session;
 use Blog\Managers\CategoriesManager;
 use Blog\Managers\PostsManager;
@@ -13,6 +14,7 @@ use Blog\Core\Database;
  */
 class Controllers
 {
+    use Libs;
     protected $session;
     protected $twig;
     protected $categories_manager;
@@ -78,13 +80,13 @@ class Controllers
     }
 
     /**
-     * Get the values of $_POST for forms.
+     * Get the values of specific $_POST for forms.
      *
      * @param array $_post
      *
      * @return mixed
      */
-    protected function getPost(array $_post)
+    protected function getSpecificPost(array $_post)
     {
         foreach ($_post as $key => $value) {
             if ($key !== 'recaptcha_response') {
