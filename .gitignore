@@ -6,3 +6,4 @@
 /dkim.private.key
 /dkim.public.key
 /core/mail.txt
+*.ini
