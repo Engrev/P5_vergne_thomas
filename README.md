@@ -8,6 +8,7 @@ Require :
 
 Get started :
 * Clone the repository with : _git clone https://github.com/Engrev/P5_vergne_thomas.git_.
+* Import _blog_structure.sql_ database file in your development environment.
 * Make a _composer install_.
 * Modify _PATH_, _COOKIE_DOMAIN_ and _COOKIE_PATH_ variables in _core/defines.php_ file according to your environment.
 * Modify constants in _core/Database.php_ file according to your environment.
