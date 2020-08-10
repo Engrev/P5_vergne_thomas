@@ -11,7 +11,7 @@ class Database extends PDO
     private static $instance;
     const HOST = 'localhost';
     const LOGIN = 'root';
-    const PASSWORD = '';
+    const PASSWORD = 'root';
     const DATABASE = 'blog';
 
     /**

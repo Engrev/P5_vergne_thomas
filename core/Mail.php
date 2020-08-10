@@ -10,7 +10,7 @@ use Blog\Exceptions\MailException;
  */
 class Mail extends PHPMailer
 {
-    const DOMAIN = _DOMAIN_NAME_;
+    const DOMAIN = 'engrev.fr';
 
     /**
      * Mail constructor.
